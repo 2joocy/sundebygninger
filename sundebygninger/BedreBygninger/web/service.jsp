@@ -1,3 +1,4 @@
+<%@page import="DbHandler.DBHandler"%>
 <%-- 
     Document   : firstPage
     Created on : 28-09-2016, 19:22:11
@@ -13,7 +14,6 @@ if(session.getAttribute("user") == null){
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    
     <head>
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
         <script src="script/scripts.js" type="text/javascript"></script>
@@ -37,7 +37,24 @@ if(session.getAttribute("user") == null){
 
 
         <div id="main2">
+            <div class="login">
+        
+
+        
+        <form action="POST" method="Front" class="login-container" >
+            <p><input type="bName" placeholder="Building Name"></p>
+            <p><input type="adress" placeholder="Address"></p>
+            <p><input type="mNumber" placeholder="Matrikel Nr."></p>
+            <p><input type="buildingM" placeholder="Building Space"></p>
             
+            <input name="methodForm" type="hidden" value="login" />
+            <p>Apply Plus Service<input type="checkbox" name="acuteService" value="Acute Service" placeholder="Acute Service Check"/></p>
+            <p><input type="submit" value="Apply For Service"></p>
+            
+        </form>
+
+    </div>
         </div>
     </body>
 </html>
+

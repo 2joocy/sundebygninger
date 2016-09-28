@@ -1,3 +1,4 @@
+<%@page import="DbHandler.DBHandler"%>
 <%-- 
     Document   : firstPage
     Created on : 28-09-2016, 19:22:11
@@ -13,7 +14,6 @@ if(session.getAttribute("user") == null){
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    
     <head>
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
         <script src="script/scripts.js" type="text/javascript"></script>
@@ -37,7 +37,19 @@ if(session.getAttribute("user") == null){
 
 
         <div id="main2">
-            
+            <div class="login">
+        
+
+        <h2 class="login-header">Log in</h2>
+        <form action="POST" method="Front" class="login-container" >
+            <p>
+            A serviceman will look at your service form, and send a notice as fast as possible! If you choose our Acute Service, you may notice a extra fee on your billing info!
+            </p>
+        </form>
+
+    </div>
         </div>
     </body>
 </html>
+
+

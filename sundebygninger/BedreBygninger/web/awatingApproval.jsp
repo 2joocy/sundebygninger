@@ -1,18 +1,43 @@
 <%@page import="DbHandler.DBHandler"%>
+<%-- 
+    Document   : firstPage
+    Created on : 28-09-2016, 19:22:11
+    Author     : William-PC
+--%>
+<%
+
+if(session.getAttribute("user") == null){
+    response.sendRedirect("index.jsp");
+}
+
+%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html >
+<html>
     <head>
-        <meta charset="UTF-8">
-        <title>Login Form</title>
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
         <script src="script/scripts.js" type="text/javascript"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
     </head>
-
     <body>
-    <center>
-        <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
-    </center>    
-    <div class="login">
+        <div id="main">
+            <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
+        </div>
+        <div id="mySidenav" class="sidenav">
+            <p>Display Usernane</p>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="#">Estates</a>
+            <a href="service.jsp">Apply Service</a>
+            <a href="#">Order History</a>
+            <a href="#">Account Management</a>
+            <a href="#">Help</a>
+        </div>
+        <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
+
+
+        <div id="main2">
+            <div class="login">
         
 
         <h2 class="login-header">Log in</h2>
@@ -23,8 +48,8 @@
         </form>
 
     </div>
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<p style="padding-top: 100px;" />
-    <center>Having issues? Contact us on 666-666-666-666</center>
-</body>
+        </div>
+    </body>
 </html>
+
+
