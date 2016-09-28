@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -23,80 +24,58 @@ import javax.swing.JOptionPane;
  */
 public class DBHandler {
 
-    public User checkLogin(String usrname, String pssword) {
+    public User checkLogin(String username, String password) {
         User newUser = null;
-        pssword = this.encryptPassword(pssword);
+        password = encryptPassword(password);
         try {
-            int count = 0;
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection myConn = DriverManager.getConnection("jdbc:mysql://77.66.117.72:3306/pfaffeeu_projects", "pfaffeeu_william", "william1O");
-            java.sql.Statement mySt = myConn.createStatement();
-            String rs = "SELECT id, email, businessName, confirmed FROM user WHERE username='" + usrname + "'AND password='" + pssword + "'";
-
-            System.out.println(rs);
-            ResultSet myRS = mySt.executeQuery(rs);
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT id, email, businessName, confirmed FROM user WHERE username=? AND password=?";
+            System.out.println(sql);
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, username);
+            prepared.setString(2, password);
+            ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 newUser = new User(myRS.getString("email"), myRS.getString("businessName"), myRS.getBoolean("confirmed"));
-                count++;
             }
-
-            if (count == 0) {
-                return newUser;
-            }
-
-            if (count == 1) {
-                return newUser;
-            }
-            myConn.close();
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return newUser;
     }
 
-    public void registerUser(String businessName, String pssword, String email, boolean confirmed) {
-        pssword = this.encryptPassword(pssword);
+    public void registerUser(String businessName, String password, String email, boolean confirmed) {
+        password = encryptPassword(password);
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection myConn = DriverManager.getConnection("jdbc:mysql://77.66.117.72:3306/pfaffeeu_projects", "pfaffeeu_william", "william1O");
+            Connection myConn = DBConnection.getConnection();
             java.sql.Statement mySt = myConn.createStatement();
-
-            String myRS = "INSERT INTO user (email, password, businessName, confirmed)"
-                    + "VALUES ('" + email + "', '" + pssword + "', '" + businessName + "', '" + confirmed + "')";
-
-            mySt.executeUpdate(myRS);
-
-            mySt.close();
+            String sql = "INSERT INTO user (email, password, businessName, confirmed)"
+                        + "VALUES (?, ?, ?, ?)";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, email);
+            prepared.setString(2, password);
+            prepared.setString(3, businessName);
+            prepared.setBoolean(4, confirmed);
+            prepared.executeQuery();
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public String encryptPassword(String password) {
-
         String encryptedPassword = null;
         try {
-
             MessageDigest md = MessageDigest.getInstance("MD5");
-
             md.update(password.getBytes());
-
             byte[] bytes = md.digest();
-
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < bytes.length; i++) {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
-
             encryptedPassword = sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
         return encryptedPassword;
     }
 }
