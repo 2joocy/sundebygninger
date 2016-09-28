@@ -15,13 +15,17 @@
     <div class="login">
         
 
-        <h2 class="login-header">Log in</h2>
+        <h2 class="login-header">Register</h2>
         <form action="POST" method="Front" class="login-container" >
+            <p><input type="businessName" placeholder="Business Name"></p>
+            
             <p><input type="email" placeholder="Email"></p>
+            
             <p><input type="password" placeholder="Password"></p>
-            <input name="methodForm" type="hidden" value="login" />
-            <center><p><a href="register.jsp">Apply For Registry Here</a></p></center>
-            <p><input type="submit" value="Log in"></p>
+            
+            <input name="methodForm" type="hidden" value="register" />
+            <center><p><a href="index.jsp">Already Have A Account?</a></p></center>
+            <p><input type="submit" value="Apply"></p>
         </form>
 
     </div>

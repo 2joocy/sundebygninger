@@ -65,7 +65,8 @@ a{
 }
 
 .login input[type="email"],
-.login input[type="password"] {
+.login input[type="password"],
+.login input[type="businessName"]{
     background: #F5F5F5;
     border-radius: 3px 3px 3px 3px;
     border-color: white;
