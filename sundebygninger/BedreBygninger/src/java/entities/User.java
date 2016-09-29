@@ -10,18 +10,26 @@ package entities;
  * @author William-PC
  */
 public class User {
-    private String businessName, email;
-    private boolean confirmed;
+    
+    private final String businessName, email;
+    private final boolean confirmed;
     
     public User(String strName, String strEmail, boolean tempCon){
         this.businessName = strName;
         this.email = strEmail;
         this.confirmed = tempCon;
     }
-    
-    public User(){
-        this.businessName = "";
-        this.email = "";
-        this.confirmed = false;
+
+    public String getBusinessName() {
+        return businessName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+    
 }

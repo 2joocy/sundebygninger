@@ -43,11 +43,12 @@ public class Front extends HttpServlet {
         String method = request.getParameter("methodForm");
         switch (method) {
             case "login":
-                
                 if(db.checkLogin(username, password) == null){
+                    //Try to make a pop-up declaring the error (user login incorrect).
+                    //After confirmation from user on the pop-up, redirect to login page, again.
                     response.sendRedirect("index.jsp");
-                }else{
-                response.sendRedirect("firstPage.jsp");
+                } else{
+                    response.sendRedirect("firstPage.jsp");
                 }
                 break;
             case "register":
