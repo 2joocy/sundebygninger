@@ -6,6 +6,7 @@
 package servletHandler;
 
 import DbHandler.DBHandler;
+import entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -43,11 +45,14 @@ public class Front extends HttpServlet {
         String method = request.getParameter("methodForm");
         switch (method) {
             case "login":
-                if(db.checkLogin(username, password) == null){
+                User user = db.checkLogin(username, password);
+                if(user == null) {
                     //Try to make a pop-up declaring the error (user login incorrect).
                     //After confirmation from user on the pop-up, redirect to login page, again.
                     response.sendRedirect("index.jsp");
-                } else{
+                } else {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
                 }
                 break;
