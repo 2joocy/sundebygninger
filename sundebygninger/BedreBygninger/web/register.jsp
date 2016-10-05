@@ -16,12 +16,12 @@
         
 
         <h2 class="login-header">Register</h2>
-        <form action="POST" method="Front" class="login-container" >
-            <p><input type="businessName" placeholder="Business Name"></p>
+        <form action="Front" method="POST" class="login-container" >
+            <p><input type="text" name="businessName" placeholder="Business Name"></p>
             
-            <p><input type="email" placeholder="Email"></p>
+            <p><input type="email" name="email" placeholder="Email"></p>
             
-            <p><input type="password" placeholder="Password"></p>
+            <p><input type="password" name="password" placeholder="Password"></p>
             
             <input name="methodForm" type="hidden" value="register" />
             <center><p><a href="index.jsp">Already Have A Account?</a></p></center>

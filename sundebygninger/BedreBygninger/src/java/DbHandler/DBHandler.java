@@ -77,6 +77,10 @@ public class DBHandler {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
+    
+    public void addHouse(){
+    
+    }
 
     public String encryptPassword(String password) {
         String encryptedPassword = null;

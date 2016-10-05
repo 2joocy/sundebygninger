@@ -49,27 +49,27 @@ public class Front extends HttpServlet {
            
           
             case "login":
-                user = db.checkLogin(email, password);
-                if (user == null) {
-                    //Try to make a pop-up declaring the error (user login incorrect).
-                    //After confirmation from user on the pop-up, redirect to login page, again.
-                    failure = "Account was not found. Please check the entered data!";
-                    request.getSession().setAttribute("failure", failure);
-                    response.sendRedirect("index.jsp");
-                } else if (user.getConfirmed().equals("not")) {
-                    failure = "Your membership is still under review. If this has been the case for more than 48 hours, please contact Polygon support!";
-                    request.getSession().setAttribute("failure", failure);
-                    response.sendRedirect("index.jsp");
-                } else {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", user);
-                    response.sendRedirect("firstPage.jsp");
-
-                }
+//                user = db.checkLogin(email, password);
+//                if (user == null) {
+//                    //Try to make a pop-up declaring the error (user login incorrect).
+//                    //After confirmation from user on the pop-up, redirect to login page, again.
+//                    failure = "Account was not found. Please check the entered data!";
+//                    request.getSession().setAttribute("failure", failure);
+//                    response.sendRedirect("index.jsp");
+//                } else if (user.getConfirmed().equals("not")) {
+//                    failure = "Your membership is still under review. If this has been the case for more than 48 hours, please contact Polygon support!";
+//                    request.getSession().setAttribute("failure", failure);
+//                    response.sendRedirect("index.jsp");
+//                } else {
+//                    HttpSession session = request.getSession();
+//                    session.setAttribute("user", user);
+//                    response.sendRedirect("firstPage.jsp");
+//
+//                }
                 out.print(email + password);
                 break;
             case "register":
-                db.registerUser(businessName, password, email, false);
+//                db.registerUser(businessName, password, email, false);
                 response.sendRedirect("index.jsp");
                 break;
         }
