@@ -22,7 +22,7 @@ public class DBConnection {
         if (con == null) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://77.66.117.72:3306/pfaffeeu_projects?autoReconnect=true", "pfaffeeu_william", "william1O");
+                con = DriverManager.getConnection("jdbc:mysql://77.66.117.72:3306/pfaffeeu_projects", "pfaffeeu_william", "william1O");
             } catch (Exception ex) {
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }

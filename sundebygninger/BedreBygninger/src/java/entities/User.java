@@ -11,15 +11,20 @@ package entities;
  */
 public class User {
     
-    private final String businessName, email;
-    private final boolean confirmed;
+    private final String businessName, email, confirmed;
+    private final int id;
     
-    public User(String strName, String strEmail, boolean tempCon){
+    public User(int id, String strName, String strEmail, String tempCon){
+        this.id = id;
         this.businessName = strName;
         this.email = strEmail;
         this.confirmed = tempCon;
     }
 
+    public int getID(){
+        return id;
+    }
+    
     public String getBusinessName() {
         return businessName;
     }
@@ -28,7 +33,7 @@ public class User {
         return email;
     }
 
-    public boolean isConfirmed() {
+    public String getConfirmed() {
         return confirmed;
     }
     

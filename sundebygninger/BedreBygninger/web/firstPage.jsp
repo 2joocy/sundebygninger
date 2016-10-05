@@ -3,8 +3,11 @@
     Created on : 28-09-2016, 19:22:11
     Author     : William-PC
 --%>
+<%@page import="entities.User"%>
 <%
 
+    User user = (User) session.getAttribute("user");
+    
 if(session.getAttribute("user") == null){
     response.sendRedirect("index.jsp");
 }
@@ -25,7 +28,10 @@ if(session.getAttribute("user") == null){
             <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
         </div>
         <div id="mySidenav" class="sidenav">
-            <p>Display Usernane</p>
+            
+            Welcome <%user.getBusinessName();
+            %>
+            
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <a href="#">Estates</a>
             <a href="service.jsp">Apply Service</a>

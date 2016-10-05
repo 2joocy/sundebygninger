@@ -29,14 +29,12 @@ public class DBHandler {
         password = encryptPassword(password);
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT id, email, businessName, confirmed FROM user WHERE username=? AND password=?";
+            String sql = "SELECT id, email, businessName, confirmed FROM user WHERE email='" + username + "' AND password='" + password + "'";
             System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
-            prepared.setString(1, username);
-            prepared.setString(2, password);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-                newUser = new User(myRS.getInt("id"), myRS.getString("email"), myRS.getString("businessName"), myRS.getBoolean("confirmed"));
+                newUser = new User(myRS.getInt("id"), username, myRS.getString("businessName"), myRS.getString("confirmed"));
             }
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -44,7 +42,7 @@ public class DBHandler {
         return newUser;
     }
 
-    public int countUnconfirmed() {
+    public int countUnConfirmed() {
         int count = 0;
         try {
             Connection myConn = DBConnection.getConnection();
