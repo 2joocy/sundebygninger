@@ -36,12 +36,30 @@ public class DBHandler {
             prepared.setString(2, password);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-                newUser = new User(myRS.getString("email"), myRS.getString("businessName"), myRS.getBoolean("confirmed"));
+                newUser = new User(myRS.getInt("id"), myRS.getString("email"), myRS.getString("businessName"), myRS.getBoolean("confirmed"));
             }
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
         return newUser;
+    }
+
+    public int countUnconfirmed() {
+        int count = 0;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT id FROM user WHERE confirmed=?";
+            System.out.println(sql);
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setBoolean(1, false);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                count++;
+            }
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return count;
     }
 
     public void registerUser(String businessName, String password, String email, boolean confirmed) {
@@ -50,7 +68,7 @@ public class DBHandler {
             Connection myConn = DBConnection.getConnection();
             java.sql.Statement mySt = myConn.createStatement();
             String sql = "INSERT INTO user (email, password, businessName, confirmed)"
-                        + "VALUES (?, ?, ?, ?)";
+                    + "VALUES (?, ?, ?, ?)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.setString(2, password);
