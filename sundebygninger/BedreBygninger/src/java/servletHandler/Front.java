@@ -81,7 +81,9 @@ public class Front extends HttpServlet {
                 db.confirmUser(id);
                 response.sendRedirect("overviewUsers.jsp");
                 break;
-                
+            case "forgotPass":
+                out.println("Resetting pass to: " + db.forgotPass(email, businessName));
+                break;
         }
 
     }

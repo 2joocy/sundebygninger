@@ -9,6 +9,7 @@ import entities.User;
 import java.awt.HeadlessException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -33,11 +34,13 @@ public class DBHandler {
 
     public User checkLogin(String username, String password) {
         User newUser = null;
-//        password = encryptPassword(password);
+        password = encryptPassword(password);
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT id, email, businessName, confirmed FROM user WHERE email='" + username + "' AND password='" + password + "'";
+            String sql = "SELECT id, email, businessName, confirmed FROM user WHERE email=? AND password=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, username);
+            prepared.setString(2, password);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 newUser = new User(myRS.getInt("id"), username, myRS.getString("businessName"), myRS.getString("confirmed"));
@@ -68,9 +71,9 @@ public class DBHandler {
     public void confirmUser(String id) {
         try {
             Connection myConn = DBConnection.getConnection();
-            java.sql.Statement mySt = myConn.createStatement();
-            String sql = "UPDATE user set confirmed='customer' where id=" + Integer.parseInt(id);
+            String sql = "UPDATE user set confirmed='customer' where id=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, Integer.parseInt(id));
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -116,7 +119,6 @@ public class DBHandler {
     public void registerUser(String businessName, String password, String email, String confirmed) {
         try {
             Connection myConn = DBConnection.getConnection();
-            java.sql.Statement mySt = myConn.createStatement();
             String sql = "INSERT INTO user (email, password, businessName, confirmed)"
                     + "VALUES (?, ?, ?, ?)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
@@ -134,32 +136,42 @@ public class DBHandler {
 
     }
 
-    public void forgotPass(String email, String password, String businessName) {
-        String to = email;
-
-        String from = "bingobango@børneporno.dk";
-
-        String host = "localhost";
-        Properties properties = System.getProperties();
-        properties.setProperty("mail.smtp.host", host);
-        Session session = Session.getDefaultInstance(properties);
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Password Reset Request - Sundere Bygninger");
-            message.setText("Hello " + businessName + ". \n You've recently requested "
+    public void updatePassword(String username, String password) {
+         try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "UPDATE user set password=? where email=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, password);
+            prepared.setString(2, username);
+            prepared.executeUpdate();
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+    }
+    
+    public String forgotPass(String email, String businessName) {
+        String subject = "Password Reset Request - Sundere Bygninger";
+        String randomPass = randomString(12);
+        String message = "Hello " + businessName + ". \n You've recently requested "
                     + "that you've forgotten your password. This email will contain your password. "
                     + "Should you change feel like changing it, you can do it under "
-                    + "account management after logging in. \n Password: " + password);
-            Transport.send(message);
-            System.out.println("Sent message successfully....");
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
+                    + "account management after logging in. \n Password: " + randomPass;
+        String status = SendMailTLS.sendMessage(email, subject, message);
+        String encrypted = encryptPassword(randomPass);
+        updatePassword(email, encrypted);
+        return randomPass + "      hashed: " + encrypted + "                        " + status;
     }
 
+    String randomString(int len){
+        String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        SecureRandom rnd = new SecureRandom();
+        StringBuilder sb = new StringBuilder(len);
+        for(int i = 0; i < len; i++) {
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        }
+        return sb.toString();
+    }   
+    
     public String encryptPassword(String password) {
         String encryptedPassword = null;
         try {
