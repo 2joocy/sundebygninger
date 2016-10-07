@@ -26,11 +26,10 @@ public class DBHandler {
 
     public User checkLogin(String username, String password) {
         User newUser = null;
-        password = encryptPassword(password);
+//        password = encryptPassword(password);
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "SELECT id, email, businessName, confirmed FROM user WHERE email='" + username + "' AND password='" + password + "'";
-            System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
@@ -46,10 +45,9 @@ public class DBHandler {
         int count = 0;
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT id FROM user WHERE confirmed=?";
+            String sql = "SELECT id FROM user WHERE confirmed='not'";
             System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
-            prepared.setBoolean(1, false);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 count++;
@@ -59,9 +57,56 @@ public class DBHandler {
         }
         return count;
     }
+    
+    public void confirmUser(int id){
+        try {
+            Connection myConn = DBConnection.getConnection();
+            java.sql.Statement mySt = myConn.createStatement();
+            String sql = "UPDATE user set confirmed='customer' where id=" + id;
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.executeQuery();
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    public String getUnConfirmed() {
+        String tableData = "<table class='table table-hover'>\n"
+                + "    <thead>\n"
+                + "      <tr>\n"
+                + "        <th>ID</th>\n"
+                + "        <th>Email</th>\n"
+                + "        <th>Business Name</th>\n"
+                + "         <th></th>\n"
+                + "      </tr>\n"
+                + "    </thead>\n"
+                + "    <tbody>";
+        String email = "";
+        String businessName = "";
+        int id = 0;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT id, email, businessName FROM user WHERE confirmed='not'";
+            System.out.println(sql);
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                email = myRS.getString("email");
+                businessName = myRS.getString("businessName");
+                id = myRS.getInt("id");
 
-    public void registerUser(String businessName, String password, String email, boolean confirmed) {
-        password = encryptPassword(password);
+                tableData += "<tr><form method ='POST' action='Front'><td>" + id + "</td><td>" + email + "</td><td>" + businessName + "</td><td><button type='submit'>Confirm User</button></td></form></tr>";
+
+            }
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        tableData += "</tbody>\n"
+                + "  </table>";
+        return tableData;
+    }
+
+    public void registerUser(String businessName, String password, String email, String confirmed) {
         try {
             Connection myConn = DBConnection.getConnection();
             java.sql.Statement mySt = myConn.createStatement();
@@ -71,15 +116,15 @@ public class DBHandler {
             prepared.setString(1, email);
             prepared.setString(2, password);
             prepared.setString(3, businessName);
-            prepared.setBoolean(4, confirmed);
+            prepared.setString(4, confirmed);
             prepared.executeQuery();
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
-    
-    public void addHouse(){
-    
+
+    public void addHouse() {
+
     }
 
     public String encryptPassword(String password) {
