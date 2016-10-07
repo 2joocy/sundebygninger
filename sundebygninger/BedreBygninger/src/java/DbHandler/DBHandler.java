@@ -21,22 +21,32 @@ import javax.swing.JOptionPane;
  * @author William-PC
  */
 public class DBHandler {
+    
+    private boolean showJoptionPanes = false;
 
     public User checkLogin(String username, String password) {
         User newUser = null;
         password = encryptPassword(password);
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT id, email, businessName, confirmed FROM user WHERE email=? AND password=?";
+            String sql = "SELECT idUser, email, businessName, status FROM user WHERE email=? AND password=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, username);
             prepared.setString(2, password);
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, "Using username: " + username + ", password: " + password);
+            }
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-                newUser = new User(myRS.getInt("id"), username, myRS.getString("businessName"), myRS.getString("confirmed"));
+                newUser = new User(myRS.getInt("idUser"), username, myRS.getString("businessName"), myRS.getString("status"));
+            }
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, newUser == null ? "User is null!" : "User found, " + newUser.getEmail());
             }
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
         return newUser;
     }
@@ -45,7 +55,7 @@ public class DBHandler {
         int count = 0;
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT id FROM user WHERE confirmed='not'";
+            String sql = "SELECT idUser FROM user WHERE status='not'";
             System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
@@ -53,7 +63,9 @@ public class DBHandler {
                 count++;
             }
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
         return count;
     }
@@ -61,12 +73,14 @@ public class DBHandler {
     public void confirmUser(String id) {
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "UPDATE user set confirmed='customer' where id=?";
+            String sql = "UPDATE user set status='customer' where idUser=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setInt(1, Integer.parseInt(id));
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
     }
 
@@ -86,20 +100,22 @@ public class DBHandler {
         int id = 0;
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT id, email, businessName FROM user WHERE confirmed='not'";
+            String sql = "SELECT idUser, email, businessName FROM user WHERE status='not'";
             System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 email = myRS.getString("email");
                 businessName = myRS.getString("businessName");
-                id = myRS.getInt("id");
+                id = myRS.getInt("idUser");
 
                 tableData += "<tr><form method ='POST' action='Front'><td>" + id + "</td><td>" + email + "</td><td>" + businessName + "<input type='hidden' name='methodForm' value='confirmUsers'><input type='hidden' name='userID' value='" + id + "'></td><td><button type='submit'>Confirm User</button></td></form></tr>";
 
             }
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
         tableData += "</tbody>\n"
                 + "  </table>";
@@ -109,7 +125,7 @@ public class DBHandler {
     public void registerUser(String businessName, String password, String email, String confirmed) {
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "INSERT INTO user (email, password, businessName, confirmed)"
+            String sql = "INSERT INTO user (email, password, businessName, status)"
                     + "VALUES (?, ?, ?, ?)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, email);
@@ -118,12 +134,14 @@ public class DBHandler {
             prepared.setString(4, confirmed);
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
     }
 
-    public void addHouse() {
-
+    public void addBuilding() {
+        
     }
 
     public void updatePassword(String username, String password) {
@@ -178,4 +196,5 @@ public class DBHandler {
         }
         return encryptedPassword;
     }
+    
 }

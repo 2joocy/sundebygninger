@@ -49,19 +49,18 @@ public class Front extends HttpServlet {
         switch (method) {
 
             case "login":
-                User user = null;
-                user = db.checkLogin(email, password);
+                User user = db.checkLogin(email, password);
                 if (user == null) {
                     //Try to make a pop-up declaring the error (user login incorrect).
                     //After confirmation from user on the pop-up, redirect to login page, again.
                     failure = "Account was not found. Please check the entered data!";
                     request.getSession().setAttribute("failure", failure);
                     response.sendRedirect("index.jsp");
-                } else if (user.getConfirmed().equals("not")) {
+                } else if (user.getStatus().equals("not")) {
                     failure = "Your membership is still under review. If this has been the case for more than 48 hours, please contact Polygon support!";
                     request.getSession().setAttribute("failure", failure);
                     response.sendRedirect("index.jsp");
-                } else if (user.getConfirmed().equalsIgnoreCase("worker")) {
+                } else if (user.getStatus().equalsIgnoreCase("worker")) {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     response.sendRedirect("workerPage.jsp");
@@ -71,7 +70,7 @@ public class Front extends HttpServlet {
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
                 }
-                out.print(email + password);
+                //out.print(user == null ? "User == null" : user.getEmail());
                 break;
             case "register":
                 db.registerUser(businessName, password, email, "not");

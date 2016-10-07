@@ -11,14 +11,14 @@ package entities;
  */
 public class User {
     
-    private final String businessName, email, confirmed;
+    private final String businessName, email, status;
     private final int id;
     
-    public User(int id, String strName, String strEmail, String tempCon){
+    public User(int id, String username, String businessName, String status){
         this.id = id;
-        this.businessName = strName;
-        this.email = strEmail;
-        this.confirmed = tempCon;
+        this.businessName = businessName;
+        this.email = username;
+        this.status = status;
     }
 
     public int getID(){
@@ -33,8 +33,8 @@ public class User {
         return email;
     }
 
-    public String getConfirmed() {
-        return confirmed;
+    public String getStatus() {
+        return status;
     }
     
 }
