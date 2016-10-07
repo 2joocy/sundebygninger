@@ -40,6 +40,7 @@ public class Front extends HttpServlet {
         String username = request.getParameter("username");
         String failure = "";
         String password = request.getParameter("password");
+        String id = request.getParameter("userID");
         String email = request.getParameter("email");
         String businessName = request.getParameter("businessName");
         String method = request.getParameter("methodForm");
@@ -76,6 +77,11 @@ public class Front extends HttpServlet {
                 db.registerUser(businessName, password, email, "not");
                 response.sendRedirect("index.jsp");
                 break;
+            case "confirmUsers":
+                db.confirmUser(id);
+                response.sendRedirect("overviewUsers.jsp");
+                break;
+                
         }
 
     }

@@ -21,6 +21,8 @@
             <p><input type="password" name="password" placeholder="Password"></p>
             <input name="methodForm" type="hidden" value="login" />
             <center><p><a href="register.jsp">Apply For Registry Here</a></p></center>
+            <center></center>
+            <center><p><a href="forgotPass.jsp">Forgot Password?</a></p></center>
             <%
             
             if (session.getAttribute("failure") == null ) {
