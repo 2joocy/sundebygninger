@@ -149,18 +149,6 @@ public class DBUserHandler {
         return "";
     }
     
-    public String getReportField(int reportID, String fieldName) {
-        try {
-            Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT ? FROM report where ";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     public void updatePassword(String username, String password) {
          try {
             Connection myConn = DBConnection.getConnection();

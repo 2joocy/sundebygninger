@@ -18,7 +18,20 @@ import javax.swing.JOptionPane;
 
 
 public class DBBuildingHandler {
+    
     public void addBuilding() {
         
+    }
+    
+     public String getReportField(int reportID, String fieldName) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT ? FROM report where ";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
