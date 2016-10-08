@@ -51,6 +51,22 @@ public class DBHandler {
         return newUser;
     }
 
+    public boolean userExists(String username) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT * FROM user WHERE email=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, username);
+            ResultSet result = prepared.executeQuery();
+            if (result.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public int countUnConfirmed() {
         int count = 0;
         try {
@@ -122,7 +138,10 @@ public class DBHandler {
         return tableData;
     }
 
-    public void registerUser(String businessName, String password, String email, String confirmed) {
+    public String registerUser(String businessName, String password, String email, String confirmed) {
+        if (userExists(email)) {
+            return "Error, email already in use.";
+        }
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO user (email, password, businessName, status)"
@@ -138,6 +157,7 @@ public class DBHandler {
                 JOptionPane.showMessageDialog(null, ex);
             }
         }
+        return "";
     }
 
     public void addBuilding() {

@@ -3,7 +3,7 @@
 <html >
     <head>
         <meta charset="UTF-8">
-        <title>Login Form</title>
+        <title>Forgotten password</title>
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
         <script src="script/scripts.js" type="text/javascript"></script>
     </head>

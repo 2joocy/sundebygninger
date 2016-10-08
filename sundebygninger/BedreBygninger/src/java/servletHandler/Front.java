@@ -37,7 +37,7 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String username = request.getParameter("username");
+        //String username = request.getParameter("username");
         String failure = "";
         String password = request.getParameter("password");
         String id = request.getParameter("userID");
@@ -47,7 +47,6 @@ public class Front extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         switch (method) {
-
             case "login":
                 User user = db.checkLogin(email, password);
                 if (user == null) {
@@ -73,7 +72,11 @@ public class Front extends HttpServlet {
                 //out.print(user == null ? "User == null" : user.getEmail());
                 break;
             case "register":
-                db.registerUser(businessName, password, email, "not");
+                String message = db.registerUser(businessName, password, email, "not");
+                if (message.contains("Error, ")) {
+                    request.getSession().setAttribute("failure", message);
+                    response.sendRedirect("register.jsp");
+                }
                 response.sendRedirect("index.jsp");
                 break;
             case "confirmUsers":
@@ -81,7 +84,12 @@ public class Front extends HttpServlet {
                 response.sendRedirect("overviewUsers.jsp");
                 break;
             case "forgotPass":
-                out.println("Resetting pass to: " + db.forgotPass(email, businessName));
+                if (!db.userExists(email)) {
+                    out.println("No such user exists.");
+                    return;
+                }
+                out.println("Email sent to " + email + " with new password.");
+                db.forgotPass(email, businessName);
                 break;
         }
 
