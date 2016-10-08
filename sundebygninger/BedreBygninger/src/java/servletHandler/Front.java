@@ -5,7 +5,7 @@
  */
 package servletHandler;
 
-import DbHandler.DBHandler;
+import DbHandler.DBUserHandler;
 import entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "Front", urlPatterns = {"/Front"})
 public class Front extends HttpServlet {
 
-    private final DBHandler db = new DBHandler();
+    private final DBUserHandler db = new DBUserHandler();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
