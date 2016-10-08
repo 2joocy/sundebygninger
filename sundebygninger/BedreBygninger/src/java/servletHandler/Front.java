@@ -74,7 +74,7 @@ public class Front extends HttpServlet {
             case "register":
                 String message = db.registerUser(businessName, password, email, "not");
                 if (message.contains("Error, ")) {
-                    request.getSession().setAttribute("failure", message);
+                    //request.getSession().setAttribute("failure", message);
                     response.sendRedirect("register.jsp");
                 }
                 response.sendRedirect("index.jsp");

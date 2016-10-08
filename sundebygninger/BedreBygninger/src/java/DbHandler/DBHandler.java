@@ -33,15 +33,9 @@ public class DBHandler {
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, username);
             prepared.setString(2, password);
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, "Using username: " + username + ", password: " + password);
-            }
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 newUser = new User(myRS.getInt("idUser"), username, myRS.getString("businessName"), myRS.getString("status"));
-            }
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, newUser == null ? "User is null!" : "User found, " + newUser.getEmail());
             }
         } catch (SQLException | HeadlessException ex) {
             if (showJoptionPanes) {
@@ -164,6 +158,18 @@ public class DBHandler {
         
     }
 
+    public String getReportField(int reportID, String fieldName) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT ? FROM report where ";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public void updatePassword(String username, String password) {
          try {
             Connection myConn = DBConnection.getConnection();
@@ -182,7 +188,7 @@ public class DBHandler {
         String randomPass = randomString(12);
         String message = "Hello " + businessName + ". \n You've recently requested "
                     + "that you've forgotten your password. This email will contain your password. "
-                    + "Should you change feel like changing it, you can do it under "
+                    + "Should you feel like changing it, you can do it under "
                     + "account management after logging in. \n Password: " + randomPass;
         String status = SendMailTLS.sendMessage(email, subject, message);
         String encrypted = encryptPassword(randomPass);
