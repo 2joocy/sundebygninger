@@ -21,31 +21,31 @@ import java.util.ArrayList;
 
 public class DBBuildingHandler {
     
-    public void addBuilding(int idBuilding, String address, String cadastral, String buildingGrade, 
+    public void addBuilding( String address, String cadastral, String buildingGrade, 
                     String area, String zipcode, String city, String condition, String service, 
                     String extraText, double buildingArea, int builtYear, int fk_idUser, 
                     int fk_MainPicture, int fk_idReport, Date dateCreated) {
        
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "INSERT INTO building (idBuilding, address, cadastral, builtYear, area, zipcode, city, condition, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)"
+            String sql = "INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, condition, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)"
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
-            prepared.setInt(1, idBuilding);
-            prepared.setString(2, address);
-            prepared.setString(3, cadastral);
-            prepared.setInt(4, builtYear);
-            prepared.setString(5, area);
-            prepared.setString(6, zipcode);
-            prepared.setString(7, city);
-            prepared.setString(8, condition);
-            prepared.setString(9, service);
-            prepared.setString(10, cadastral);
-            prepared.setString(11, extraText);
-            prepared.setDate(12, dateCreated);
-            prepared.setInt(13, fk_idUser);
-            prepared.setInt(14, fk_MainPicture);
-            prepared.setInt(15, fk_idReport);
+           
+            prepared.setString(1, address);
+            prepared.setString(2, cadastral);
+            prepared.setInt(3, builtYear);
+            prepared.setString(4, area);
+            prepared.setString(5, zipcode);
+            prepared.setString(6, city);
+            prepared.setString(7, condition);
+            prepared.setString(8, service);
+            prepared.setString(9, cadastral);
+            prepared.setString(10, extraText);
+            prepared.setDate(11, dateCreated);
+            prepared.setInt(12, fk_idUser);
+            prepared.setInt(13, fk_MainPicture);
+            prepared.setInt(14, fk_idReport);
             
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {

@@ -5,10 +5,14 @@
  */
 package servletHandler;
 
+import DbHandler.DBBuildingHandler;
 import DbHandler.DBUserHandler;
 import entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +28,7 @@ import javax.servlet.http.HttpSession;
 public class Front extends HttpServlet {
 
     private final DBUserHandler db = new DBUserHandler();
-
+    private final DBBuildingHandler dbB = new DBBuildingHandler();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,9 +46,22 @@ public class Front extends HttpServlet {
         String password = request.getParameter("password");
         String id = request.getParameter("userID");
         String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String fullName = request.getParameter("fullName");
         String businessName = request.getParameter("businessName");
         String method = request.getParameter("methodForm");
-
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date datePre = new Date();
+        String address = request.getParameter("address");
+        String cadastral = request.getParameter("cadastral");
+        String builtYear = request.getParameter("builtYear");
+        String area = request.getParameter("area");
+        String zipcode = request.getParameter("zipcode");
+        String city = request.getParameter("city");
+        String condition = request.getParameter("condition");
+        String extraText = request.getParameter("extraText");
+        
+        
         PrintWriter out = response.getWriter();
         switch (method) {
             case "login":
@@ -72,7 +89,8 @@ public class Front extends HttpServlet {
                 //out.print(user == null ? "User == null" : user.getEmail());
                 break;
             case "register":
-                String message = db.registerUser(businessName, password, email, "not");
+                
+                String message = db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
                 if (message.contains("Error, ")) {
                     //request.getSession().setAttribute("failure", message);
                     response.sendRedirect("register.jsp");
@@ -90,6 +108,13 @@ public class Front extends HttpServlet {
                 }
                 out.println("Email sent to " + email + " with new password.");
                 db.forgotPass(email, businessName);
+                break;
+            case "registerBuilding":
+                /*
+                
+                Need to take up discussion whether building table should have as many foreign keys as it has.
+                */
+//                dbB.addBuilding();
                 break;
         }
 

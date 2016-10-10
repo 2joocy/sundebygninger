@@ -14,23 +14,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 public class DBUserHandler {
     
     private boolean showJoptionPanes = false;
 
-    public User checkLogin(String username, String password) {
+    public User checkLogin(String email, String password) {
         User newUser = null;
         password = encryptPassword(password);
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser, email, businessName, status FROM user WHERE email=? AND password=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
-            prepared.setString(1, username);
+            prepared.setString(1, email);
             prepared.setString(2, password);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-                newUser = new User(myRS.getInt("idUser"), username, myRS.getString("businessName"), myRS.getString("status"));
+                newUser = new User(myRS.getInt("idUser"), myRS.getString("email"), myRS.getString("businessName"), myRS.getString("phone"), myRS.getString("status"), myRS.getString("fullName"), myRS.getString("createdDate"));
             }
         } catch (SQLException | HeadlessException ex) {
             if (showJoptionPanes) {
@@ -38,6 +41,36 @@ public class DBUserHandler {
             }
         }
         return newUser;
+    }
+    
+    public String registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date datePre = new Date();
+        
+        if (userExists(email)) {
+            return "Error, email already in use.";
+        }
+        
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "INSERT INTO user (email, password, businessName, phone, status, fullName, createdDate)"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, email);
+            prepared.setString(2, password);
+            prepared.setString(3, businessName);
+            prepared.setString(4, phone);
+            prepared.setString(5, status);
+            prepared.setString(6, fullName);
+            prepared.setString(7, dateFormat.format(datePre));
+            
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+        return "";
     }
 
     public boolean userExists(String username) {
@@ -125,28 +158,6 @@ public class DBUserHandler {
         tableData += "</tbody>\n"
                 + "  </table>";
         return tableData;
-    }
-
-    public String registerUser(String businessName, String password, String email, String confirmed) {
-        if (userExists(email)) {
-            return "Error, email already in use.";
-        }
-        try {
-            Connection myConn = DBConnection.getConnection();
-            String sql = "INSERT INTO user (email, password, businessName, status)"
-                    + "VALUES (?, ?, ?, ?)";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.setString(2, password);
-            prepared.setString(3, businessName);
-            prepared.setString(4, confirmed);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
-        return "";
     }
     
     public void updatePassword(String username, String password) {

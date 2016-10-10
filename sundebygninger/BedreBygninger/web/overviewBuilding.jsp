@@ -35,13 +35,14 @@ if(session.getAttribute("user") == null){
         %>
         <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
 
-
-        <div id="main2">
         
+        <div id="main2">
+        <center>
         <%
         out.print(db.getBuildings(user.getID()));
         %>
         <a href="addBuilding.jsp">Add Building</a>
+        </center>
         </div>
     </body>
 </html>

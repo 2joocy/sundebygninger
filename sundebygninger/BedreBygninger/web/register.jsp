@@ -1,4 +1,8 @@
-<%@page import="DbHandler.DBHandler"%>
+
+<%@page import="entities.Building"%>
+<%@page import="entities.User"%>
+<%@page import="DbHandler.DBBuildingHandler"%>
+<%@page import="DbHandler.DBUserHandler"%>
 <!DOCTYPE html>
 <html >
     <head>
@@ -23,6 +27,9 @@
             
             <p><input type="password" name="password" placeholder="Password"></p>
             
+            <p><input type="text" name="phone" placeholder="Phone Number"></p>
+            
+            <p><input type="text" name="fullName" placeholder="Full Name"></p>
             <input name="methodForm" type="hidden" value="register" />
             <center><p><a href="index.jsp">Already Have A Account?</a></p></center>
             <p><input type="submit" value="Apply"></p>

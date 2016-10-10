@@ -64,8 +64,12 @@
                     <br />
                     <p><input type="text" name="extraText" placeholder="Extra Text"></p>
                     <br />
-                    <p><input type="hidden" name="dateCreated" value="<%dateFormat.format(date);%>"></p>
-                    <input name="methodForm" type="hidden" value="registerHouse" />
+                    <%
+                    int userID = user.getIdUser();
+                    
+                    out.print("<p><input type='hidden' name='userID' value='"+userID+"'></p>");
+                    %>
+                    <input name="methodForm" type="hidden" value="registerBuilding" />
                     <center><p><a href="overviewBuilding.jsp">Go Back</a></p></center>
                     <p><input type="submit" value="Apply"></p>
                 </form>

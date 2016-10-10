@@ -1,4 +1,3 @@
-<%@page import="DbHandler.DBHandler"%>
 <!DOCTYPE html>
 <html >
     <head>

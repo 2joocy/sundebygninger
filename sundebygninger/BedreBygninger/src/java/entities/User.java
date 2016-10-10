@@ -5,28 +5,43 @@
  */
 package entities;
 
+import java.util.Date;
+
 /**
  *
  * @author William-PC
  */
 public class User {
+    private final String date;
+    private final String businessName, fullName, phone, email, status;
+    private final int idUser;
     
-    private final String businessName, email, status;
-    private final int id;
+    public User(int idUser, String email, String businessName, String phone, String status, String fullName, String dateCreated){
+       this.idUser = idUser;
+       this.email = email;
+       this.businessName = businessName;
+       this.phone = phone;
+       this.status = status;
+       this.fullName = fullName;
+       this.date = dateCreated;
+    }
     
-    public User(int id, String username, String businessName, String status){
-        this.id = id;
-        this.businessName = businessName;
-        this.email = username;
-        this.status = status;
+    
+    
+    public String getDate() {
+        return date;
     }
 
-    public int getID(){
-        return id;
-    }
-    
     public String getBusinessName() {
         return businessName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public String getEmail() {
@@ -36,5 +51,10 @@ public class User {
     public String getStatus() {
         return status;
     }
+
+    public int getIdUser() {
+        return idUser;
+    }
+    
     
 }
