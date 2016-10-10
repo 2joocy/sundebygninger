@@ -1,4 +1,11 @@
-<%@page import="DbHandler.DBHandler"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="entities.Building"%>
+<%@page import="entities.User"%>
+<%@page import="DbHandler.DBBuildingHandler"%>
+<%@page import="DbHandler.DBUserHandler"%>
+
 <%-- 
     Document   : firstPage
     Created on : 28-09-2016, 19:22:11
@@ -6,9 +13,11 @@
 --%>
 <%
 
-if(session.getAttribute("user") == null){
-    response.sendRedirect("index.jsp");
-}
+    DBBuildingHandler db = new DBBuildingHandler();
+    User user = (User) session.getAttribute("user");
+    if (session.getAttribute("user") == null) {
+        response.sendRedirect("index.jsp");
+    }
 
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -24,36 +33,46 @@ if(session.getAttribute("user") == null){
         <div id="main">
             <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
         </div>
-        <div id="mySidenav" class="sidenav">
-            <p>Display Usernane</p>
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a href="#">Estates</a>
-            <a href="service.jsp">Apply Service</a>
-            <a href="#">Order History</a>
-            <a href="#">Account Management</a>
-            <a href="#">Help</a>
-        </div>
+        <%            out.print(db.createMenu(user.getStatus()));
+        %>
         <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
 
 
         <div id="main2">
             <div class="login">
-        
 
-        
-        <form action="POST" method="Front" class="login-container" >
-            <p><input type="bName" placeholder="Building Name"></p>
-            <p><input type="adress" placeholder="Address"></p>
-            <p><input type="mNumber" placeholder="Matrikel Nr."></p>
-            <p><input type="buildingM" placeholder="Building Space"></p>
-            
-            <input name="methodForm" type="hidden" value="login" />
-            <p>Apply Plus Service<input type="checkbox" name="acuteService" value="Acute Service" placeholder="Acute Service Check"/></p>
-            <p><input type="submit" value="Apply For Service"></p>
-            
-        </form>
+                <%
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    
+                %>
+                <h2 class="login-header">Register Building</h2>
+                <form action="Front" method="POST" class="login-container" >
+                    <p><input type="text" name="address" placeholder="Address"></p>
+                    <br />
+                    <p><input type="text" name="cadastral" placeholder="Cadastral"></p>
+                    <br />
+                    <p><input type="text" name="builtYear" placeholder="Year Built"></p>
+                    <br />
+                    <p><input type="text" name="area" placeholder="Area"></p>
+                    <br />
+                    <p><input type="text" name="zipcode" placeholder="Zipcode"></p>
+                    <br />
+                    <p><input type="text" name="city" placeholder="City"></p>
+                    <br />
+                    <p><input type="text" name="condition" placeholder="Condition"></p>
+                    <br />
+                    <p><input type="text" name="extraText" placeholder="Extra Text"></p>
+                    <br />
+                    <p><input type="hidden" name="dateCreated" value="<%dateFormat.format(date);%>"></p>
+                    <input name="methodForm" type="hidden" value="registerHouse" />
+                    <center><p><a href="overviewBuilding.jsp">Go Back</a></p></center>
+                    <p><input type="submit" value="Apply"></p>
+                </form>
 
-    </div>
+            </div>
+            <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
         </div>
     </body>
 </html>
