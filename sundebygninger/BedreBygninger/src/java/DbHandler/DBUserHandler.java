@@ -50,14 +50,14 @@ public class DBUserHandler {
         if (userExists(email)) {
             return "Error, email already in use.";
         }
-        
+       
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO user (email, password, businessName, phone, status, fullName, createdDate)"
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, email);
-            prepared.setString(2, password);
+            prepared.setString(2, this.encryptPassword(password));
             prepared.setString(3, businessName);
             prepared.setString(4, phone);
             prepared.setString(5, status);
