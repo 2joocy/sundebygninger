@@ -1,4 +1,4 @@
-<%@page import="DbHandler.DBHandler"%>
+<%@page import="DbHandler.DBUserHandler"%>
 <%-- 
     Document   : firstPage
     Created on : 28-09-2016, 19:22:11
