@@ -3,13 +3,14 @@
     Created on : 28-09-2016, 19:22:11
     Author     : William-PC
 --%>
+<%@page import="DbHandler.DBBuildingHandler"%>
 <%@page import="entities.User"        %>
-<%@page import = "DbHandler.DBHandler"%>
+<%@page import = "DbHandler.DBUserHandler"%>
 <%
-    DBHandler db = new DBHandler();
+    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
-
-    if (!user.getConfirmed().equalsIgnoreCase("worker")) {
+    DBBuildingHandler dbB = new DBBuildingHandler();
+    if (!user.getStatus().equalsIgnoreCase("worker")) {
         response.sendRedirect("index.jsp");
     }
 
@@ -37,14 +38,9 @@
         </div>
         <div id="mySidenav" class="sidenav">
 
-            Welcome <%user.getBusinessName();
-            %>
-
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a href="#">Estates</a>
-            <a href="#">Order History</a>
-            <a href="overviewUsers.jsp">Account Management(<% out.print(db.countUnConfirmed()); %>)</a>
-            <a href="#">Help</a>
+            <center><a href="#">Welcome <br /> <%out.print(user.getBusinessName());%></a></center>
+            
+            <%out.print(dbB.createMenu(user.getStatus())); %>
         </div>
         <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
 

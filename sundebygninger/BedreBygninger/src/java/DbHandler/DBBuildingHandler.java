@@ -119,11 +119,25 @@ public class DBBuildingHandler {
     public String createMenu(String status){
         String menu = "";
         if(status.equalsIgnoreCase("customer")){
-            menu = "<div id='mySidenav' class='sidenav'>Welcome <%user.getBusinessName();%><a href='javascript:void(0)' class='closebtn' onclick='closeNav()'>&times;</a><a href='overviewBuilding.jsp'>Estates</a><a href='service.jsp'>Apply Service</a><a href='orderHistory.jsp'>Order History</a><a href='overviewAccount.jsp'>Account Management</a><a href='contact.jsp'>Help</a></div>"; 
+            
+            return "<div id='mySidenav' class='sidenav'>Welcome <%user.getBusinessName();%>"
+                    + "<a href='javascript:void(0)' class='closebtn' onclick='closeNav()'>&times;</a>"
+                    + "<a href='overviewBuilding.jsp'>Estates</a>"
+                    + "<a href='service.jsp'>Apply Service</a>"
+                    + "<a href='orderHistory.jsp'>Order History</a>"
+                    + "<a href='overviewAccount.jsp'>Account Management</a>"
+                    + "<a href='contact.jsp'>Help</a></div>"; 
         }else if(status.equalsIgnoreCase("worker")){
-            menu = "<div id='mySidenav' class='sidenav'>Welcome <%user.getBusinessName();%><a href='javascript:void(0)' class='closebtn' onclick='closeNav()'>&times;</a><a href='overviewBuilding.jsp'>Estates</a><a href='overviewUsers.jsp'>Account Management(<% out.print(db.countUnConfirmed());%>)</a><a href='orderHistory.jsp'>Order History</a><a href='overviewAccount.jsp'>Account Management</a><a href='contact.jsp'>Help</a></div>"; 
+            
+            return "<div id='mySidenav' class='sidenav'>Welcome <%out.print(user.getBusinessName());%>"
+                    + "<a href='javascript:void(0)' class='closebtn' onclick='closeNav()'>&times;</a>"
+                    + "<a href='overviewBuilding.jsp'>Estates</a>"
+                    + "<a href='overviewUsers.jsp'>Account Management(<% out.print(db.countUnConfirmed());%>)</a>"
+                    + "<a href='orderHistory.jsp'>Order History</a>"
+                    + "<a href='overviewAccount.jsp'>Account Management</a>"
+                    + "<a href='contact.jsp'>Help</a></div>"; 
         }
-        return menu;
+        return "";
     }
     
      public String getReportField(int reportID, String fieldName) {

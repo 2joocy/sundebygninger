@@ -27,7 +27,7 @@ public class DBUserHandler {
         password = encryptPassword(password);
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT idUser, email, businessName, status FROM user WHERE email=? AND password=?";
+            String sql = "SELECT idUser, email, businessName, phone, status, fullName, createdDate FROM user WHERE email=? AND password=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.setString(2, password);

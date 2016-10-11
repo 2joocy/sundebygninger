@@ -24,8 +24,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="style/style.css" rel="stylesheet" type="text/css"/>
         <script src="script/scripts.js" type="text/javascript"></script>
+        <link href="style/style.css" rel="stylesheet" type="text/css"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
@@ -39,12 +39,26 @@
 
 
         <div id="main2">
-            <div class="login">
+
+            <!-- Trigger/Open The Modal -->
+            <button id="myBtn">Open Modal</button>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">×</span>
+                        <h2>Modal Header</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="login">
 
                 <%
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                     Date date = new Date();
-                    
+
                 %>
                 <h2 class="login-header">Register Building</h2>
                 <form action="Front" method="POST" class="login-container" >
@@ -64,10 +78,9 @@
                     <br />
                     <p><input type="text" name="extraText" placeholder="Extra Text"></p>
                     <br />
-                    <%
-                    int userID = user.getIdUser();
-                    
-                    out.print("<p><input type='hidden' name='userID' value='"+userID+"'></p>");
+                    <%                        int userID = user.getIdUser();
+
+                        out.print("<p><input type='hidden' name='userID' value='" + userID + "'></p>");
                     %>
                     <input name="methodForm" type="hidden" value="registerBuilding" />
                     <center><p><a href="overviewBuilding.jsp">Go Back</a></p></center>
@@ -75,6 +88,14 @@
                 </form>
 
             </div>
+                    </div>
+                    <div class="modal-footer">
+                        <h3>Modal Footer</h3>
+                    </div>
+                </div>
+
+            </div>
+            
             <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
         </div>

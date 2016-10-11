@@ -66,6 +66,7 @@ public class Front extends HttpServlet {
         switch (method) {
             case "login":
                 User user = db.checkLogin(email, password);
+                
                 if (user == null) {
                     //Try to make a pop-up declaring the error (user login incorrect).
                     //After confirmation from user on the pop-up, redirect to login page, again.
@@ -80,7 +81,6 @@ public class Front extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     response.sendRedirect("workerPage.jsp");
-
                 } else {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
@@ -91,10 +91,10 @@ public class Front extends HttpServlet {
             case "register":
                 
                 String message = db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
-                if (message.contains("Error, ")) {
-                    //request.getSession().setAttribute("failure", message);
-                    response.sendRedirect("register.jsp");
-                }
+//                if (message.contains("Error, ")) {
+//                    //request.getSession().setAttribute("failure", message);
+//                    response.sendRedirect("register.jsp");
+//                }
                 response.sendRedirect("index.jsp");
                 break;
             case "confirmUsers":

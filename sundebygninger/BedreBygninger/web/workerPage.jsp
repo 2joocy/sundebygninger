@@ -1,15 +1,16 @@
+
+<%@page import="DbHandler.DBUserHandler"%>
 <%-- 
     Document   : firstPage
     Created on : 28-09-2016, 19:22:11
     Author     : William-PC
 --%>
 <%@page import="entities.User"        %>
-<%@page import = "DbHandler.DBHandler"%>
 <%
-    DBHandler db = new DBHandler();
+    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
 
-    if (!user.getConfirmed().equalsIgnoreCase("worker")) {
+    if (!user.getStatus().equalsIgnoreCase("worker")) {
         response.sendRedirect("index.jsp");
     }
 
