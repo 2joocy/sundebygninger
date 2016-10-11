@@ -1,4 +1,4 @@
-<%@page import="DbHandler.DBHandler"%>
+<%@page import="DbHandler.DBUserHandler"%>
 <!DOCTYPE html>
 <html >
     <head>

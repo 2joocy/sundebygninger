@@ -95,7 +95,7 @@ public class Front extends HttpServlet {
 //                    //request.getSession().setAttribute("failure", message);
 //                    response.sendRedirect("register.jsp");
 //                }
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("awaitingApproval.jsp");
                 break;
             case "confirmUsers":
                 db.confirmUser(id);

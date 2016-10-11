@@ -120,7 +120,7 @@ public class DBBuildingHandler {
         String menu = "";
         if(status.equalsIgnoreCase("customer")){
             
-            return "<div id='mySidenav' class='sidenav'>Welcome <%user.getBusinessName();%>"
+            return "<div id='mySidenav' class='sidenav'>"
                     + "<a href='javascript:void(0)' class='closebtn' onclick='closeNav()'>&times;</a>"
                     + "<a href='overviewBuilding.jsp'>Estates</a>"
                     + "<a href='service.jsp'>Apply Service</a>"
@@ -129,7 +129,7 @@ public class DBBuildingHandler {
                     + "<a href='contact.jsp'>Help</a></div>"; 
         }else if(status.equalsIgnoreCase("worker")){
             
-            return "<div id='mySidenav' class='sidenav'>Welcome <%out.print(user.getBusinessName());%>"
+            return "<div id='mySidenav' class='sidenav'>%>"
                     + "<a href='javascript:void(0)' class='closebtn' onclick='closeNav()'>&times;</a>"
                     + "<a href='overviewBuilding.jsp'>Estates</a>"
                     + "<a href='overviewUsers.jsp'>Account Management(<% out.print(db.countUnConfirmed());%>)</a>"
