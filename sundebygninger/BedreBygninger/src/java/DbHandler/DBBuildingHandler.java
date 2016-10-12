@@ -126,7 +126,8 @@ public class DBBuildingHandler {
                     + "<a href='service.jsp'>Apply Service</a>"
                     + "<a href='orderHistory.jsp'>Order History</a>"
                     + "<a href='overviewAccount.jsp'>Account Management</a>"
-                    + "<a href='contact.jsp'>Help</a></div>"; 
+                    + "<a href='contact.jsp'>Help</a>"
+                    + "</div>"; 
         }else if(status.equalsIgnoreCase("worker")){
             
             return "<div id='mySidenav' class='sidenav'>%>"
@@ -135,7 +136,8 @@ public class DBBuildingHandler {
                     + "<a href='overviewUsers.jsp'>Account Management(<% out.print(db.countUnConfirmed());%>)</a>"
                     + "<a href='orderHistory.jsp'>Order History</a>"
                     + "<a href='overviewAccount.jsp'>Account Management</a>"
-                    + "<a href='contact.jsp'>Help</a></div>"; 
+                    + "<a href='contact.jsp'>Help</a>"
+                    + "</div>"; 
         }
         return "";
     }

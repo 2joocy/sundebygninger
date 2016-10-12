@@ -91,11 +91,14 @@ public class Front extends HttpServlet {
             case "register":
                 
                 String message = db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
-//                if (message.contains("Error, ")) {
-//                    //request.getSession().setAttribute("failure", message);
-//                    response.sendRedirect("register.jsp");
-//                }
+                if (message.contains("Error, ")) {
+                    //request.getSession().setAttribute("failure", message);
+                    response.sendRedirect("register.jsp");
+                }else{
+                db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
                 response.sendRedirect("awaitingApproval.jsp");
+                }
+                
                 break;
             case "confirmUsers":
                 db.confirmUser(id);

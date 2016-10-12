@@ -34,21 +34,30 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
+    
     <body>
-        <%            out.print(db.createMenu(user.getStatus()));
-        %>
         <div id="main">
             <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
         </div>
-        
+        <%            
+        out.print(db.createMenu(user.getStatus()));
+        %>
         <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
 
 
         <div id="main2">
+            <div class="login">
+        
 
+        <h2 class="login-header">Log in</h2>
+        <form action="POST" method="Front" class="login-container" >
+            <p>
+            A serviceman will look at your service form, and send a notice as fast as possible! If you choose our Acute Service, you may notice a extra fee on your billing info!
+            </p>
+        </form>
+
+    </div>
         </div>
-        <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
-</body>
+    </body>
 </html>
 

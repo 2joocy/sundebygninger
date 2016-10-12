@@ -4,13 +4,6 @@
     Created on : 28-09-2016, 19:22:11
     Author     : William-PC
 --%>
-<%
-
-if(session.getAttribute("user") == null){
-    response.sendRedirect("index.jsp");
-}
-
-%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
