@@ -1,38 +1,30 @@
-<%@page import="DbHandler.DBUserHandler"%>
-<%-- 
-    Document   : firstPage
-    Created on : 28-09-2016, 19:22:11
-    Author     : William-PC
---%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html >
     <head>
+        <meta charset="UTF-8">
+        <title>Sundere Bygninger</title>
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
-        <script src="script/scripts.js" type="text/javascript"></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
     </head>
+
     <body>
-        <div id="main">
-            <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
-        </div>
-
-
-        <div id="main2">
-            <div class="login">
-        
-
-        <h2 class="login-header">Log in</h2>
-        <form action="POST" method="Front" class="login-container" >
-            <p>
-            Your account has been registered, however, it will not be functional untill a admin has reviewed your application! If your problem is urgent, we recommend calling our guideline: 666-666-666-666!    
+    <center style="padding-top: 45px;">
+        <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
+    </center>  
+    <div class="inner-container">
+        <div class="box">
+            <h1>Welcome!</h1>
+            <p style="padding: 18px; font-size: 20px;">
+            Your account has been registered, however, it will not be functional untill a admin has reviewed your application!<br /><br /> If your problem is urgent, we recommend calling our guideline:<br /> <center style="font-size: 20px;">666-666-666-666!<br /><br /><a href="index.jsp">Click here to be redirected!</a> </center>   
             </p>
-        </form>
-
-    </div>
         </div>
-    </body>
+    </div>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <script src="js/index.js"></script>
+
+
+
+</body>
 </html>
 
 

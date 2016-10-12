@@ -13,14 +13,13 @@
     </head>
 
     <body>
-    <center>
+    <center style="padding-top: 45px;">
         <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
     </center>    
-    <div class="login">
-        
-
-        <h2 class="login-header">Register</h2>
-        <form action="Front" method="POST" class="login-container" >
+    <div class="inner-container-register">
+        <div class="box-register">
+        <form action="Front" method="POST">
+            <h1>Register</h1>
             <p><input type="text" name="businessName" placeholder="Business Name"></p>
             
             <p><input type="email" name="email" placeholder="Email"></p>
@@ -32,12 +31,11 @@
             <p><input type="text" name="fullName" placeholder="Full Name"></p>
             <input name="methodForm" type="hidden" value="register" />
             <center><p><a href="index.jsp">Already Have A Account?</a></p></center>
-            <p><input type="submit" value="Apply"></p>
+            <p><button type="submit">Register</button></p>
         </form>
-
+        </div>
     </div>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<p style="padding-top: 100px;" />
-    <center>Having issues? Contact us on 666-666-666-666</center>
+
 </body>
 </html>

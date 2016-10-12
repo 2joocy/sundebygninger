@@ -15,7 +15,7 @@
     </head>
     <body>
         <div id="main">
-            <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
+            <img href="firstPage.jsp" src="pictures/logo-sunde-bygninger-property.png" alt=""/>
         </div>
         <div id="mySidenav" class="sidenav">
             <p>Display Usernane</p>
@@ -30,16 +30,10 @@
 
 
         <div id="main2">
-            <div class="login">
-        
-
-        <h2 class="login-header">Log in</h2>
-        <form action="POST" method="Front" class="login-container" >
+           
             <p>
             A serviceman will look at your service form, and send a notice as fast as possible! If you choose our Acute Service, you may notice a extra fee on your billing info!
             </p>
-        </form>
-
     </div>
         </div>
     </body>
