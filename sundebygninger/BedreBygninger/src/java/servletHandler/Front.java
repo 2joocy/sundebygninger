@@ -52,6 +52,7 @@ public class Front extends HttpServlet {
         String method = request.getParameter("methodForm");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date datePre = new Date();
+        String date = dateFormat.format(datePre);
         String address = request.getParameter("address");
         String cadastral = request.getParameter("cadastral");
         String builtYear = request.getParameter("builtYear");
@@ -113,11 +114,7 @@ public class Front extends HttpServlet {
                 db.forgotPass(email, businessName);
                 break;
             case "registerBuilding":
-                /*
-                
-                Need to take up discussion whether building table should have as many foreign keys as it has.
-                */
-//                dbB.addBuilding();
+               dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
                 break;
         }
 

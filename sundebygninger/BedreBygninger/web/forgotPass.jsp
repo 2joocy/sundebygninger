@@ -1,23 +1,71 @@
+
+<%@page import="entities.Building"%>
+<%@page import="entities.User"%>
+<%@page import="DbHandler.DBBuildingHandler"%>
 <%@page import="DbHandler.DBUserHandler"%>
+
 <!DOCTYPE html>
 <html >
     <head>
+        <link rel="icon" href="http://sundebygninger.dk/wp-content/uploads/favicon.png" type="image/png">
         <meta charset="UTF-8">
-        <title>Forgotten password</title>
-        <link href="style/style.css" rel="stylesheet" type="text/css"/>
-        <script src="script/scripts.js" type="text/javascript"></script>
+        <title>Sunde Bygninger</title>
+        <link href="style/styleLogin.css" rel="stylesheet" type="text/css"/>
+        <style>
+            .login button{
+                width: 260px;
+                height: 35px;
+                background: #fff;
+                border: 1px solid #fff;
+                cursor: pointer;
+                border-radius: 2px;
+                color: #a18d6c;
+                font-family: 'Exo', sans-serif;
+                font-size: 16px;
+                font-weight: 400;
+                padding: 6px;
+                margin-top: 10px;
+            }
+
+            .login button:hover{
+                opacity: 0.8;
+                transition: opacity .25s ease-in-out;
+                -moz-transition: opacity .25s ease-in-out;
+                -webkit-transition: opacity .25s ease-in-out;
+                text-decoration: none;
+
+            }
+
+            .login button:active{
+                opacity: 0.6;
+            }
+
+            .login button:focus{
+                outline: none;
+            }
+
+            ::-webkit-input-placeholder{
+                color: rgba(255,255,255,0.6);
+            }
+
+            ::-moz-input-placeholder{
+                color: rgba(255,255,255,0.6);
+            }
+        </style>
     </head>
 
-    <body>
-    <center>
-        <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
-    </center>    
-    <div class="login">
 
+    <body onload="document.getElementById(body).style.opacity='1'">
 
-        <h2 class="login-header">Forgot Password</h2>
-        <form action="Front" method="POST" class="login-container" >
-            <p><input type="text" name="email" placeholder="Email"></p>
+        <div class="body" style="background-image: url(pictures/bghd.jpg);"></div>
+        <div class="grad"></div>
+        <br>
+        <center>
+            <div class="backgroundRegister">
+        <div class="register">
+            <form action="Front" method="POST" class="login-container" >
+            <img src="pictures/forgotpass.png" alt="" style="float: left;"/>
+            <input type="text" name="email" placeholder="Email">
             <input name="methodForm" type="hidden" value="forgotPass" />
             <center><p><a href="index.jsp">Didn't forget your password anyway?</a></p></center>
             <%
@@ -31,10 +79,13 @@
         %>
             <p><input type="submit" value="Send Request"></p>
         </form>
-        
-    </div>
-   
-    <p style="padding-top: 100px;" />
-    <center>Having issues? Contact us on 666-666-666-666</center>
-</body>
+        </form>
+
+
+        </div>
+                </div>
+            </center>
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    </body>
 </html>
+

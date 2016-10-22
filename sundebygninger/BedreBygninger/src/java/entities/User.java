@@ -26,7 +26,10 @@ public class User {
        this.date = dateCreated;
     }
     
-    
+    @Override
+    public String toString(){
+        return this.email + " : "+ this.businessName + " : " + this.fullName;
+    }
     
     public String getDate() {
         return date;
