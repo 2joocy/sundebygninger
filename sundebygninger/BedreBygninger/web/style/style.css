@@ -498,6 +498,17 @@ a{
     color: #000000;
 }
 
+.container-building{
+    padding-top: 60px;
+    background: rgba(64, 64, 64, 0.3);
+    height: 100%;
+}
+
+.container-building p {
+    font-weight: bold;
+    color: #000000;
+}
+
 
 ul.topnav {
     position: fixed;
