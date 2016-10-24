@@ -29,7 +29,7 @@ public class DBBuildingHandler {
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)"
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,(select id from user where idUser = ?),?,?)";
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
 
             prepared.setString(1, address);

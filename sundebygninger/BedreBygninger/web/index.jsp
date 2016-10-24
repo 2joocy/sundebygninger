@@ -71,10 +71,12 @@
             <a style="padding-left: 50px;" href="register.jsp">Apply For Membership</a><br><br>
             <a style="padding-left: 65px;" href="forgotPass.jsp">Forgot Password?</a><br>
             <%
-
+                
+                String failureTestString = (String) request.getAttribute("failureTest");
                 if (session.getAttribute("failure") == null) {
-
+                    out.print("<script>alert('No failure')</script>");
                 } else {
+                    out.print("<script>alert('" + failureTestString + "')</script>");
                     out.print("<script>alert('" + session.getAttribute("failure") + "')</script>");
                     session.setAttribute("failure", null);
                 }

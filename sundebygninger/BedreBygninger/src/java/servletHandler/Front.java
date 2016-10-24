@@ -83,8 +83,9 @@ public class Front extends HttpServlet {
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
                 } else if(user.getStatus().equalsIgnoreCase("denied")){
-                    failure = "Your membership has been denied due to illegitimate info credidencials. \n" + 
-                              "If you are unsatisfied with these terms, please contact our support staff.";
+                    failure = "Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff.";
+                    request.setAttribute("failureTest", "Test123");
+                    
                     request.getSession().setAttribute("failure", failure);
                     response.sendRedirect("index.jsp");
                 } else{
@@ -95,7 +96,7 @@ public class Front extends HttpServlet {
                 //out.print(user == null ? "User == null" : user.getEmail());
                 break;
             case "register":
-                
+
                 String message = db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
                 if (message.contains("Error, ")) {
                     //request.getSession().setAttribute("failure", message);
@@ -132,7 +133,7 @@ public class Front extends HttpServlet {
         }
 
     }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
