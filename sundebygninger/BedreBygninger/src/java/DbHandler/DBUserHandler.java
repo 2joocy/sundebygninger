@@ -122,6 +122,20 @@ public class DBUserHandler {
         }
     }
 
+    public void denyUser(String id) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "UPDATE user set status='denied' where idUser=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, Integer.parseInt(id));
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
+    
     public String getUnConfirmed() {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"

@@ -83,10 +83,11 @@ public class Front extends HttpServlet {
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
                 } else if(user.getStatus().equalsIgnoreCase("denied")){
-                failure = "Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff!";
+                    failure = "Your membership has been denied due to illegitimate info credidencials. \n" + 
+                              "If you are unsatisfied with these terms, please contact our support staff.";
                     request.getSession().setAttribute("failure", failure);
                     response.sendRedirect("index.jsp");
-                }else{
+                } else{
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
