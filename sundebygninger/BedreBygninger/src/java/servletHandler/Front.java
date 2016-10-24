@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,6 +44,7 @@ public class Front extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         //String username = request.getParameter("username");
         String failure = "";
+        String action = request.getParameter("action");
         String password = request.getParameter("password");
         String id = request.getParameter("userID");
         String email = request.getParameter("email");
@@ -61,7 +63,10 @@ public class Front extends HttpServlet {
         String city = request.getParameter("city");
         String condition = request.getParameter("condition");
         String extraText = request.getParameter("extraText");
-        
+        String idBuilding = request.getParameter("idBuilding");
+            
+                                                                        
+         
         
         PrintWriter out = response.getWriter();
         switch (method) {
@@ -128,6 +133,14 @@ public class Front extends HttpServlet {
                 request.getSession().setAttribute("failure", failure);
                 response.sendRedirect("index.jsp");
                 
+                break;
+            case "editBuilding":
+                
+                break;
+                
+            case "deleteBuilding":
+                dbB.removeBuilding(Integer.parseInt(idBuilding));
+                response.sendRedirect("overviewBuilding.jsp");
                 break;
         }
 

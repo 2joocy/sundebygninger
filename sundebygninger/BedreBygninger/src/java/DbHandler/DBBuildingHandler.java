@@ -32,8 +32,6 @@ public class DBBuildingHandler {
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,(select idUser from user where idUser=?),null,null)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
 
-            JOptionPane.showMessageDialog(null, "[DBBuilding] " + fk_idUser);
-            
             prepared.setString(1, address);
             prepared.setString(2, cadastral);
             prepared.setString(3, builtYear);
@@ -59,9 +57,12 @@ public class DBBuildingHandler {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
                 + "      <tr>\n"
+                + "        <th>Thumbnail</th>\n"
                 + "        <th>Address</th>\n"
+                + "        <th>Zipcode</th>\n"
                 + "        <th>City</th>\n"
-                + "        <th>Building Year</th>\n"
+                + "        <th>Edit Building</th>\n"
+                + "        <th>Remove Building</th>\n"
                 + "      </tr>\n"
                 + "    </thead>\n"
                 + "    <tbody>";
@@ -78,12 +79,22 @@ public class DBBuildingHandler {
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setInt(1, idUser);
             ResultSet myRS = prepared.executeQuery();
+            int id = 1;
             while (myRS.next()) {
                 int idBuilding = myRS.getInt("idBuilding");
                 String address = myRS.getString("address");
                 String city = myRS.getString("city");
-                int builtYear = myRS.getInt("builtYear");
-                tableData += "<tr><form method ='POST' action='Front'><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "<input type='hidden' name='methodForm' value='serviceBuilding'><input type='hidden' name='idBuilding' value='" + idBuilding + "'></td></tr>";
+                String zipcode = myRS.getString("zipcode");
+                tableData += "<tr><td><img src='http://cdn.technicpack.net/platform2/pack-icons/879003.png?1470098482'</img>" +
+                             "<td>" + address + "</td><td>" + zipcode + "</td><td>" + city +
+                             "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editBuilding'><td><button class='editbtn' type='submit'>Show/Edit</button></td>" + 
+                             "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>" +
+                             "</form>" +
+                             "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='deleteBuilding'><td><button class='dltbtn' type='submit'>Delete</button></td>" +
+                             "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>" +
+                             "</form>" +
+                             "</tr>";
+                id++;
             }
         } catch (SQLException | HeadlessException ex) {
 
@@ -181,4 +192,17 @@ public class DBBuildingHandler {
         }
         return null;
     }
+
+    public void removeBuilding(int id) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "DELETE FROM building WHERE idBuilding=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, id);
+            prepared.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
