@@ -84,8 +84,6 @@ public class Front extends HttpServlet {
                     response.sendRedirect("firstPage.jsp");
                 } else if(user.getStatus().equalsIgnoreCase("denied")){
                     failure = "Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff.";
-                    request.setAttribute("failureTest", "Test123");
-                    
                     request.getSession().setAttribute("failure", failure);
                     response.sendRedirect("index.jsp");
                 } else{
@@ -119,8 +117,9 @@ public class Front extends HttpServlet {
                 out.println("Email sent to " + email + " with new password.");
                 db.forgotPass(email, businessName);
                 break;
-            case "registerBuilding":
-               dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
+            case "registerBuilding":                          
+                dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
+                response.sendRedirect("overviewBuilding.jsp");
                 break;
             case "logout":
                  

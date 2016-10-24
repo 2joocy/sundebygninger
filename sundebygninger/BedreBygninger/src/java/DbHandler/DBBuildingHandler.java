@@ -29,9 +29,11 @@ public class DBBuildingHandler {
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)"
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,(select idUser from user where idUser=?),null,null)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
 
+            JOptionPane.showMessageDialog(null, "[DBBuilding] " + fk_idUser);
+            
             prepared.setString(1, address);
             prepared.setString(2, cadastral);
             prepared.setString(3, builtYear);
@@ -41,14 +43,14 @@ public class DBBuildingHandler {
             prepared.setString(7, conditionText);
             prepared.setString(8, service);
             prepared.setString(9, extraText);
-            prepared.setString(11, dateCreated);
-            prepared.setInt(12, fk_idUser);
-            prepared.setInt(13, fk_idMainPicture);
-            prepared.setInt(14, fk_idReport);
+            prepared.setString(10, dateCreated);
+            prepared.setInt(11, fk_idUser);
+            //prepared.setInt(12, fk_idMainPicture);
+            //prepared.setInt(13, fk_idReport);
 
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showConfirmDialog(null, ex);
+            JOptionPane.showMessageDialog(null, "[DBBuiling.addBuilding] " + ex);
         }
 
     }
@@ -72,7 +74,7 @@ public class DBBuildingHandler {
              */
 
             Connection myConn = DBConnection.getConnection();
-            String sql = "SELECT idBuilding, address, cadastral, builtYear, area, zipcode, city, condition, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport FROM building WHERE fk_idUser=?";
+            String sql = "SELECT * FROM building WHERE fk_idUser=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setInt(1, idUser);
             ResultSet myRS = prepared.executeQuery();
@@ -81,27 +83,7 @@ public class DBBuildingHandler {
                 String address = myRS.getString("address");
                 String city = myRS.getString("city");
                 int builtYear = myRS.getInt("builtYear");
-
                 tableData += "<tr><form method ='POST' action='Front'><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "<input type='hidden' name='methodForm' value='serviceBuilding'><input type='hidden' name='idBuilding' value='" + idBuilding + "'></td></tr>";
-
-//                Building building = new Building(myRS.getInt("idBuilding"), 
-//                                                 myRS.getString("address"),
-//                                                 myRS.getString("cadastral"),
-//                                                 myRS.getString("buildingGrade"),
-//                                                 myRS.getString("area"),
-//                                                 myRS.getString("zipcode"),
-//                                                 myRS.getString("city"),
-//                                                 myRS.getString("condition"),
-//                                                 myRS.getString("service"),
-//                                                 myRS.getString("extraText"),
-//                                                 myRS.getDouble("buildingArea"),
-//                                                 myRS.getInt("builtYear"),
-//                                                 myRS.getInt("fk_idUser"),
-//                                                 myRS.getInt("fk_MainPicture"),
-//                                                 myRS.getInt("fk_idReport"),
-//                                                 myRS.getDate("dateCreated")
-//                                                );
-//                buildingList.add(building);
             }
         } catch (SQLException | HeadlessException ex) {
 
