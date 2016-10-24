@@ -17,44 +17,40 @@
 
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="entities.User"%>
+<%@page import="DbHandler.DBBuildingHandler"%>
 <!DOCTYPE html>
-<html>
+<%
+    
+    
+DBBuildingHandler dbB = new DBBuildingHandler();
 
+if(user == null){
+    response.sendRedirect("index.jsp");
+    }
+%>
+<html lang="en">
     <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link href="style/style.css" rel="stylesheet" type="text/css"/>
+        <meta charset="utf-8">
+        <link rel="icon" href="http://sundebygninger.dk/wp-content/uploads/favicon.png" type="image/png">
+        <meta charset="UTF-8">
+        <title>Sunde Bygninger - Start Side</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="script/scripts.js" type="text/javascript"></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <link href="style/style.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body >
-        <%      if (db.countUnConfirmed() < 0) {
-                out.print("<script>alert('You have new unconfirmed accounts to review!(" + db.countUnConfirmed() + ")');</script>");
-            }
+    <body style="height: 92%;">
 
-        %>
-        <div id="main" onclick="closeNav()">
-            <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
-        </div>
-        <div id="mySidenav" class="sidenav">
-
-            Welcome <%user.getBusinessName();
+        <ul class="topnav">
+            <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
+            <%
+            out.print(dbB.createMenu(user.getStatus()));
             %>
+        </ul>
 
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a href="#">Estates</a>
-            <a href="#">Order History</a>
-            <a href="overviewUsers.jsp">Account Management(<% out.print(db.countUnConfirmed());%>)</a>
-            <a href="#">Help</a>
+        <div class="container">
+            <p>harr</P>
         </div>
-        <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
 
-
-        <div id="main2" onclick="closeNav()">
-
-        </div>
     </body>
 </html>
+

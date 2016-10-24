@@ -81,8 +81,12 @@ public class Front extends HttpServlet {
                 } else if (user.getStatus().equalsIgnoreCase("worker")) {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
-                    response.sendRedirect("workerPage.jsp");
-                } else {
+                    response.sendRedirect("firstPage.jsp");
+                } else if(user.getStatus().equalsIgnoreCase("denied")){
+                failure = "Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff!";
+                    request.getSession().setAttribute("failure", failure);
+                    response.sendRedirect("index.jsp");
+                }else{
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
@@ -115,6 +119,14 @@ public class Front extends HttpServlet {
                 break;
             case "registerBuilding":
                dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
+                break;
+            case "logout":
+                 
+                request.getSession().invalidate();
+                failure = "You have successfully been logged out!";
+                request.getSession().setAttribute("failure", failure);
+                response.sendRedirect("index.jsp");
+                
                 break;
         }
 

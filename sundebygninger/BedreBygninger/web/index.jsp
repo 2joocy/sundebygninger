@@ -51,7 +51,10 @@
 
     <body onload="document.getElementById(body).style.opacity='1'">
 
-        <div class="body" style="background-image: url(pictures/bghd.jpg);"></div>
+        <div class="body" style="background-image: url(pictures/bghd.jpg); -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;"></div>
         <div class="grad"></div>
         <div class="header">
             <img src="pictures/nylogo.png" alt=""/>

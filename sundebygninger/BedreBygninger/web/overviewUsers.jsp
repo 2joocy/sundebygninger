@@ -1,56 +1,46 @@
-<%-- 
-    Document   : firstPage
-    Created on : 28-09-2016, 19:22:11
-    Author     : William-PC
---%>
+<%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
-<%@page import="entities.User"        %>
-<%@page import = "DbHandler.DBUserHandler"%>
+<%@page import="DbHandler.DBUserHandler"%>
+<!DOCTYPE html>
 <%
     DBUserHandler db = new DBUserHandler();
-    User user = (User) session.getAttribute("user");
     DBBuildingHandler dbB = new DBBuildingHandler();
-    if (!user.getStatus().equalsIgnoreCase("worker")) {
-        response.sendRedirect("index.jsp");
-    }
 
-
+    User user = (User) session.getAttribute("user");
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-
+<html lang="en">
     <head>
-        <link href="style/style.css" rel="stylesheet" type="text/css"/>
-        <script src="script/scripts.js" type="text/javascript"></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <link rel="icon" href="http://sundebygninger.dk/wp-content/uploads/favicon.png" type="image/png">
         
-        <title>JSP Page</title>
+        <meta charset="UTF-8">
+        <title>Sunde Bygninger - Start Side</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style/style.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body >
-        <%      if (db.countUnConfirmed() < 0) {
-                out.print("<script>alert('You have new unconfirmed accounts to review!(" + db.countUnConfirmed() + ")');</script>");
-            }
+    <body style="height: 92%;">
+        
+        <ul class="topnav">
+            <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
+                <%
+                    out.print(dbB.createMenu(user.getStatus()));
+                %>
+        </ul>
 
-        %>
-        <div id="main" onclick="closeNav()">
-            <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>
-        </div>
-        <div id="mySidenav" class="sidenav">
-
-            <center><a href="#">Welcome <br /> <%out.print(user.getBusinessName());%></a></center>
-            
-            <%out.print(dbB.createMenu(user.getStatus())); %>
-        </div>
-        <span onclick="openNav()"><h3>&#9776; Menu</h3></span>
-
-
-        <div id="main2" onclick="closeNav()">
-            <center>
+        <div class="container">
+            <center style="padding-top: 3%;">
             <%
-                out.print(db.getUnConfirmed());
+            out.print(db.getUnConfirmed());
             %>
             </center>
         </div>
+
     </body>
 </html>
+
+
+
+
+
+
+
