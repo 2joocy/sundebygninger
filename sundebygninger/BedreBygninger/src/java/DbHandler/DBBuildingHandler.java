@@ -8,15 +8,22 @@ package DbHandler;
 import entities.Building;
 import entities.User;
 import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.Statement;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.servlet.http.Part;
 import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
@@ -203,6 +210,51 @@ public class DBBuildingHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public Image getImage(){
+        Connection myConn = DBConnection.getConnection();
+        String sql = "SELECT * FROM picture WHERE idPicture=?";
+        try{
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            ResultSet rs = prepared.executeQuery();
+            while (rs.next()){
+                Blob blob = rs.getBlob("image");
+                InputStream inputStream = blob.getBinaryStream();
+                BufferedImage image = ImageIO.read(inputStream);
+                return image;
+            }
+        }
+        catch(Exception e){
+            
+        }
+        return null;
+    }
+    
+    public int uploadImage(String description,String type, Part filePart ,int id){
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "INSERT INTO picture (description, type, image, fk_idBuilding) VALUES (?, ?, ?, (select idBuilding from building where idBuilding=?))";
+            PreparedStatement prepared = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            InputStream inputStream = null;
+            if (filePart != null){
+                inputStream = filePart.getInputStream();
+            }
+            if (inputStream != null){
+                    prepared.setString(1, description);
+                    prepared.setString(2, type);
+                    prepared.setBlob(3, inputStream);
+                    prepared.setInt(4, id);
+                    prepared.executeUpdate();
+                    ResultSet rs = prepared.getGeneratedKeys();
+                    while (rs.next()){
+                        return rs.getInt(1);
+                    }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
     
 }

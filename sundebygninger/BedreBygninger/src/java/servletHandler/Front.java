@@ -9,16 +9,19 @@ import DbHandler.DBBuildingHandler;
 import DbHandler.DBUserHandler;
 import entities.User;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,6 +29,7 @@ import javax.swing.JOptionPane;
  * @author William-PC
  */
 @WebServlet(name = "Front", urlPatterns = {"/Front"})
+@MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
 public class Front extends HttpServlet {
 
     private final DBUserHandler db = new DBUserHandler();
@@ -64,8 +68,6 @@ public class Front extends HttpServlet {
         String condition = request.getParameter("condition");
         String extraText = request.getParameter("extraText");
         String idBuilding = request.getParameter("idBuilding");
-            
-                                                                        
          
         
         PrintWriter out = response.getWriter();
@@ -141,6 +143,16 @@ public class Front extends HttpServlet {
             case "deleteBuilding":
                 dbB.removeBuilding(Integer.parseInt(idBuilding));
                 response.sendRedirect("overviewBuilding.jsp");
+                break;
+                
+            case "uploadPicture":               
+                Part filePart = request.getPart("picture");
+                int imageId = dbB.uploadImage("", filePart.getContentType(), filePart, 8);
+                String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
+                request.getSession().setAttribute("imageMessage", "" + imageMessage);
+                request.getSession().setAttribute("imageId", "" + imageId);
+                request.getSession().setAttribute("imageTest", dbB.getImage());
+                response.sendRedirect("FileConf.jsp");
                 break;
         }
 
