@@ -212,6 +212,10 @@ public class DBBuildingHandler {
         }
     }
     
+    public String getImageHTML(int id) {
+        return "<img src=\"ImageServlet?id=" + id + "\"/>";
+    }
+    
     public Image getImage(){
         Connection myConn = DBConnection.getConnection();
         String sql = "SELECT * FROM picture WHERE idPicture=?";
