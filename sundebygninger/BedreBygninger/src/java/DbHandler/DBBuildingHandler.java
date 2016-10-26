@@ -267,8 +267,12 @@ public class DBBuildingHandler {
             e.printStackTrace();
         }
     }
-
-    public Image getImage() {
+    
+    public String getImageHTML(int id) {
+        return "<img src=\"ImageServlet?id=" + id + "\"/>";
+    }
+    
+    public Image getImage(){
         Connection myConn = DBConnection.getConnection();
         String sql = "SELECT * FROM picture WHERE idPicture=?";
         try {
