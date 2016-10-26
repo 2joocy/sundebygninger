@@ -15,27 +15,25 @@ import java.sql.Date;
  */
 public class Building {
 
-    private int idBuilding, fk_idUser, fk_idMainPicture, fk_idReport, builtYear;
-    private String address, cadastral, buildingGrade, area, zipcode, city, condition, service, extraText;
-    private Date dateCreated;
+    private int idBuilding, fk_idUser, fk_idMainPicture, fk_idReport;
+    private String address, cadastral, area, zipcode, city, condition, service, extraText,builtYear;
+    private String dateCreated;
     private double buildingArea;
 
-    public Building(int idBuilding, String address, String cadastral, String buildingGrade, 
+    public Building(int idBuilding, String address, String cadastral,
                     String area, String zipcode, String city, String condition, String service, 
-                    String extraText, double buildingArea, int builtYear, int fk_idUser, 
-                    int fk_MainPicture, int fk_idReport, Date dateCreated) {
+                    String extraText, String builtYear, int fk_idUser, 
+                    int fk_MainPicture, int fk_idReport, String dateCreated) {
            
         this.idBuilding = idBuilding;
         this.address = address;
         this.cadastral = cadastral;
-        this.buildingGrade = buildingGrade;
         this.area = area;
         this.zipcode = zipcode;
         this.city = city;
         this.condition = condition;
         this.service = service;
         this.extraText = extraText;
-        this.buildingArea = buildingArea;
         this.builtYear = builtYear;
         this.fk_idUser = fk_idUser;
         this.fk_idReport = fk_idReport;
@@ -45,4 +43,65 @@ public class Building {
         
     }
 
+    public int getIdBuilding() {
+        return idBuilding;
+    }
+
+    public int getFk_idUser() {
+        return fk_idUser;
+    }
+
+    public int getFk_idMainPicture() {
+        return fk_idMainPicture;
+    }
+
+    public int getFk_idReport() {
+        return fk_idReport;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCadastral() {
+        return cadastral;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public String getExtraText() {
+        return extraText;
+    }
+
+    public String getBuiltYear() {
+        return builtYear;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public double getBuildingArea() {
+        return buildingArea;
+    }
+    
+    
 }

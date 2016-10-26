@@ -68,6 +68,7 @@ public class Front extends HttpServlet {
         String condition = request.getParameter("condition");
         String extraText = request.getParameter("extraText");
         String idBuilding = request.getParameter("idBuilding");
+        String idBuilding2 = request.getParameter("buildingID");
          
         
         PrintWriter out = response.getWriter();
@@ -136,9 +137,17 @@ public class Front extends HttpServlet {
                 response.sendRedirect("index.jsp");
                 
                 break;
-            case "editBuilding":
                 
+            case "editBuilding":
+                request.getSession().setAttribute("building", dbB.getBuilding(Integer.parseInt(idBuilding)));
+                response.sendRedirect("editBuilding.jsp");
                 break;
+            
+            case "editBuildingFinal":
+               
+                dbB.editBuilding(address, cadastral, builtYear, area, zipcode, city, condition, extraText, Integer.parseInt(idBuilding2));
+                response.sendRedirect("overviewBuilding.jsp");
+                break;    
                 
             case "deleteBuilding":
                 dbB.removeBuilding(Integer.parseInt(idBuilding));

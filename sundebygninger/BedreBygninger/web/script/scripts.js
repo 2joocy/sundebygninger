@@ -13,6 +13,19 @@ function closeNav() {
 // Get the modal
 var modal = document.getElementById('myModal');
 
+var lockbtn = document.getElementById('lockInput');
+var address = document.getElementById("address");
+var cadastral = document.getElementById("cadastral");
+var zipcode = document.getElementById("zipcode");
+var builtYear = document.getElementById("builtYear");
+var area = document.getElementById("area");
+var city = document.getElementById("city");
+var condition = document.getElementById("condition");
+var extraText = document.getElementById("extraText");
+var isLocked = true;
+
+
+
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
 
@@ -35,7 +48,3 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 };
-
-function editBuilding(buildingID) {
-    
-}

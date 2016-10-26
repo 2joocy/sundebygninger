@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
 
-    public void addBuilding(String address, String cadastral, String builtYear, 
+    public void addBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String conditionText,
             String service, String extraText, String dateCreated, int fk_idUser,
             int fk_idMainPicture, int fk_idReport) {
@@ -92,15 +92,15 @@ public class DBBuildingHandler {
                 String address = myRS.getString("address");
                 String city = myRS.getString("city");
                 String zipcode = myRS.getString("zipcode");
-                tableData += "<tr><td><img src='http://cdn.technicpack.net/platform2/pack-icons/879003.png?1470098482'</img>" +
-                             "<td>" + address + "</td><td>" + zipcode + "</td><td>" + city +
-                             "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editBuilding'><td><button class='editbtn' type='submit'>Show/Edit</button></td>" + 
-                             "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>" +
-                             "</form>" +
-                             "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='deleteBuilding'><td><button class='dltbtn' type='submit'>Delete</button></td>" +
-                             "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>" +
-                             "</form>" +
-                             "</tr>";
+                tableData += "<tr><td><img src='http://cdn.technicpack.net/platform2/pack-icons/879003.png?1470098482'</img>"
+                        + "<td>" + address + "</td><td>" + zipcode + "</td><td>" + city
+                        + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editBuilding'><td><button class='editbtn' type='submit'>Show/Edit</button></td>"
+                        + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
+                        + "</form>"
+                        + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='deleteBuilding'><td><button class='dltbtn' type='submit'>Delete</button></td>"
+                        + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
+                        + "</form>"
+                        + "</tr>";
                 id++;
             }
         } catch (SQLException | HeadlessException ex) {
@@ -110,8 +110,64 @@ public class DBBuildingHandler {
                 + "  </table>";
         return tableData;
     }
+
+    public Building getBuilding(int idUser) {
+        Building building = null;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT * FROM building WHERE idBuilding=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, idUser);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                building = new Building(
+                        myRS.getInt("idBuilding"),
+                        myRS.getString("address"),
+                        myRS.getString("cadastral"),
+                        myRS.getString("area"),
+                        myRS.getString("zipcode"),
+                        myRS.getString("city"),
+                        myRS.getString("conditionText"),
+                        myRS.getString("service"),
+                        myRS.getString("extraText"),
+                        myRS.getString("builtYear"),
+                        myRS.getInt("fk_idUser"),
+                        myRS.getInt("fk_idMainPicture"),
+                        myRS.getInt("fk_idReport"),
+                        myRS.getString("dateCreated")
+                );
+            }
+
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+        return building;
+    }
     
-        public String getService(int idUser) {
+    public void editBuilding(String address, String cadastral, String builtYear,
+            String area, String zipcode, String city, String condition, String extraText, int userID){
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, address);
+            prepared.setString(2, cadastral);
+            prepared.setString(3, builtYear);
+            prepared.setString(4, area);
+            prepared.setString(5, zipcode);
+            prepared.setString(6, city);
+            prepared.setString(7, condition);
+            prepared.setString(8, extraText);
+            prepared.setInt(9, userID);
+            prepared.executeUpdate();
+            
+
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+    }
+
+    public String getService(int idUser) {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
                 + "      <tr>\n"
@@ -173,16 +229,16 @@ public class DBBuildingHandler {
         DBUserHandler db = new DBUserHandler();
         String menu = "";
         if (status.equalsIgnoreCase("customer")) {
-            return "<li><a href='overviewBuilding.jsp'>Estate</a></li>\n" +
-"            <li><a href='service.jsp'>Service Overview</a></li>\n" +
-"            <li><a href='account.jsp'>Account Management</a></li>\n" +
-"            <li><a href='contact.jsp'>Contact Staff</a></li>";
+            return "<li><a href='overviewBuilding.jsp'>Estate</a></li>\n"
+                    + "            <li><a href='service.jsp'>Service Overview</a></li>\n"
+                    + "            <li><a href='account.jsp'>Account Management</a></li>\n"
+                    + "            <li><a href='contact.jsp'>Contact Staff</a></li>";
         } else if (status.equalsIgnoreCase("worker")) {
-            return "<li><a href='overviewBuilding.jsp'>Estates</a></li>\n" +
-"            <li><a href='service.jsp'>Service Overview</a></li>\n" +
-"            <li><a href='overviewUsers.jsp'>Account Management("+ db.countUnConfirmed() + ")</a></li>\n" +
-"            <li><a href='contact.jsp'>Contact Staff</a></li>";
-        }else if(status == null){
+            return "<li><a href='overviewBuilding.jsp'>Estates</a></li>\n"
+                    + "            <li><a href='service.jsp'>Service Overview</a></li>\n"
+                    + "            <li><a href='overviewUsers.jsp'>Account Management(" + db.countUnConfirmed() + ")</a></li>\n"
+                    + "            <li><a href='contact.jsp'>Contact Staff</a></li>";
+        } else if (status == null) {
             return "Unspecified Login. Please retry!";
         }
         return "";
@@ -211,50 +267,49 @@ public class DBBuildingHandler {
             e.printStackTrace();
         }
     }
-    
-    public Image getImage(){
+
+    public Image getImage() {
         Connection myConn = DBConnection.getConnection();
         String sql = "SELECT * FROM picture WHERE idPicture=?";
-        try{
+        try {
             PreparedStatement prepared = myConn.prepareStatement(sql);
             ResultSet rs = prepared.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 Blob blob = rs.getBlob("image");
                 InputStream inputStream = blob.getBinaryStream();
                 BufferedImage image = ImageIO.read(inputStream);
                 return image;
             }
-        }
-        catch(Exception e){
-            
+        } catch (Exception e) {
+
         }
         return null;
     }
-    
-    public int uploadImage(String description,String type, Part filePart ,int id){
+
+    public int uploadImage(String description, String type, Part filePart, int id) {
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO picture (description, type, image, fk_idBuilding) VALUES (?, ?, ?, (select idBuilding from building where idBuilding=?))";
             PreparedStatement prepared = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             InputStream inputStream = null;
-            if (filePart != null){
+            if (filePart != null) {
                 inputStream = filePart.getInputStream();
             }
-            if (inputStream != null){
-                    prepared.setString(1, description);
-                    prepared.setString(2, type);
-                    prepared.setBlob(3, inputStream);
-                    prepared.setInt(4, id);
-                    prepared.executeUpdate();
-                    ResultSet rs = prepared.getGeneratedKeys();
-                    while (rs.next()){
-                        return rs.getInt(1);
-                    }
+            if (inputStream != null) {
+                prepared.setString(1, description);
+                prepared.setString(2, type);
+                prepared.setBlob(3, inputStream);
+                prepared.setInt(4, id);
+                prepared.executeUpdate();
+                ResultSet rs = prepared.getGeneratedKeys();
+                while (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
     }
-    
+
 }

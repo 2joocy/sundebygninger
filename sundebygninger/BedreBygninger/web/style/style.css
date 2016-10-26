@@ -113,9 +113,31 @@ a{
     color: #555;
 }
 
-
-
 .login input:focus {
+    border-color: white;
+}
+
+.edit input {
+    box-sizing: border-box;
+    display: block;
+    width: 20%;
+    border-width: 1px;
+    border-style: solid;
+    padding: 16px;
+    outline: 0;
+    font-size: 0.95em;
+}
+
+.edit input{
+    background: #F5F5F5;
+    border-radius: 3px 3px 3px 3px;
+    border-color: white;
+    color: #555;
+}
+
+
+
+.edit input:focus {
     border-color: white;
 }
 
