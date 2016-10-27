@@ -40,8 +40,11 @@ if(user == null){
             %>
         </ul>
 
-        <div class="container">
-            <p>harr</P>
+        <div class="edit" style="margin-top: 4%; padding-left: 10px;">
+            <br>
+            <center><p><h2>Statistics:</h2></P>
+        <p><h3>Estates Owned: <%out.print(db.getBuildingCount(user.getIdUser())); %></h3></P> 
+        </center>
         </div>
 
     </body>

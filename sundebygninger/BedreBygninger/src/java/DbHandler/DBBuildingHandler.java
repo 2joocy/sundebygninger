@@ -70,6 +70,7 @@ public class DBBuildingHandler {
                 + "        <th>City</th>\n"
                 + "        <th>Edit Building</th>\n"
                 + "        <th>Remove Building</th>\n"
+                + "        <th>Service Building</th>\n"
                 + "      </tr>\n"
                 + "    </thead>\n"
                 + "    <tbody>";
@@ -98,6 +99,9 @@ public class DBBuildingHandler {
                         + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
                         + "</form>"
                         + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='deleteBuilding'><td><button class='dltbtn' type='submit'>Delete</button></td>"
+                        + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
+                        + "</form>"
+                        + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='getService'><td><button class='srvbtn' type='submit'>Service</button></td>"
                         + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
                         + "</form>"
                         + "</tr>";
@@ -143,9 +147,56 @@ public class DBBuildingHandler {
         }
         return building;
     }
-    
+
+    public void submitReport(String buildingUsage, String roofRemarks,
+            int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_icPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES(?,?,?,?,?,?,?,?)";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, buildingUsage);
+            prepared.setString(2, roofRemarks);
+            prepared.setInt(3, fk_idPictureRoof);
+            prepared.setString(4, roofText);
+            prepared.setBoolean(5, outerWallRemarks);
+            prepared.setInt(6, fk_idPictureOuterRoof);
+            prepared.setString(7, outerWallText);
+            prepared.setInt(8, fk_idEmployee);
+            prepared.setString(9, buildingResponsible);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showConfirmDialog(null, "(Submit Report) - Fejl her!");
+        }
+    }
+
+    public String getRooms(int id) {
+        String roomData = "";
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT idRoomBuilding, roomDescribtion from roomBuilding where fk_idBuilding=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, id);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                int roomID = myRS.getInt("idRoomBuilding");
+                String roomDesc = myRS.getString("roomDescribtion");
+
+                roomData += "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='serviceRoom'><h4 style='color: white;'>" + roomDesc + "</h4><br><p style='color:white;'><button class='.btn-success' type='submit'>Service Room</button>"
+                        + "<input type='hidden' name='idRoom' value='" + roomID + "'></td>"
+                        + "</form>"
+                        + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editRoom'><p style='color:white;'><button class='.btn-success' type='submit'>Edit Room</button>"
+                        + "<input type='hidden' name='idRoom' value='" + roomID + "'></td>"
+                        + "</form><br>";
+            }
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+        return roomData;
+    }
+
     public void editBuilding(String address, String cadastral, String builtYear,
-            String area, String zipcode, String city, String condition, String extraText, int userID){
+            String area, String zipcode, String city, String condition,
+            String extraText, int userID) {
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?";
@@ -160,11 +211,27 @@ public class DBBuildingHandler {
             prepared.setString(8, extraText);
             prepared.setInt(9, userID);
             prepared.executeUpdate();
-            
 
         } catch (SQLException | HeadlessException ex) {
 
         }
+    }
+
+    public int getBuildingCount(int id) {
+        int count = 0;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT idBuilding FROM building WHERE fk_idUser=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, id);
+            ResultSet myRS = prepared.executeQuery();
+            while(myRS.next()){
+                count++;
+            }
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+        return count;
     }
 
     public String getService(int idUser) {
@@ -267,12 +334,12 @@ public class DBBuildingHandler {
             e.printStackTrace();
         }
     }
-    
+
     public String getImageHTML(int id) {
         return "<img src=\"ImageServlet?id=" + id + "\"/>";
     }
-    
-    public Image getImage(){
+
+    public Image getImage() {
         Connection myConn = DBConnection.getConnection();
         String sql = "SELECT * FROM picture WHERE idPicture=?";
         try {

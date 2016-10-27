@@ -34,6 +34,7 @@ public class Front extends HttpServlet {
 
     private final DBUserHandler db = new DBUserHandler();
     private final DBBuildingHandler dbB = new DBBuildingHandler();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -69,13 +70,32 @@ public class Front extends HttpServlet {
         String extraText = request.getParameter("extraText");
         String idBuilding = request.getParameter("idBuilding");
         String idBuilding2 = request.getParameter("buildingID");
-         
-        
+        String typeDmg = request.getParameter("typeDmg");
+        String remarks = request.getParameter("remarks");
+        String dmg = request.getParameter("damage");
+        String dateDmg = request.getParameter("dateOfDamage");
+        String placeDmg = request.getParameter("placementOfDmg");
+        String descDmg = request.getParameter("descDmg");
+        String reasonDmg = request.getParameter("reasonDmg");
+        String hasWallRemark = request.getParameter("hasWallRemarks");
+        String wallRemark = request.getParameter("wallRemark");
+        String hasRoofRemarks = request.getParameter("hasRoofRemarks");
+        String roofRemarks = request.getParameter("roofRemarks");
+        String hasFloorRemarks = request.getParameter("hasFloorRemarks");
+        String floorRemarks = request.getParameter("floorRemarks");
+        String hasMoistureRemark = request.getParameter("hasMoistureRemark");
+        String moistureDesc = request.getParameter("moistureDesc");
+        String moistureMeasure = request.getParameter("moistureMeasure");
+        String conclusion = request.getParameter("conclusion");
+        String idRoom = request.getParameter("idRoom");
+        String newPassword = request.getParameter("newPass");
+        String newEmail = request.getParameter("newEmail");
+
         PrintWriter out = response.getWriter();
         switch (method) {
             case "login":
                 User user = db.checkLogin(email, password);
-                
+
                 if (user == null) {
                     //Try to make a pop-up declaring the error (user login incorrect).
                     //After confirmation from user on the pop-up, redirect to login page, again.
@@ -90,11 +110,11 @@ public class Front extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
-                } else if(user.getStatus().equalsIgnoreCase("denied")){
+                } else if (user.getStatus().equalsIgnoreCase("denied")) {
                     failure = "Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff.";
                     request.getSession().setAttribute("failure", failure);
                     response.sendRedirect("index.jsp");
-                } else{
+                } else {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     response.sendRedirect("firstPage.jsp");
@@ -107,11 +127,11 @@ public class Front extends HttpServlet {
                 if (message.contains("Error, ")) {
                     //request.getSession().setAttribute("failure", message);
                     response.sendRedirect("register.jsp");
-                }else{
-                db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
-                response.sendRedirect("awaitingApproval.jsp");
+                } else {
+                    db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
+                    response.sendRedirect("awaitingApproval.jsp");
                 }
-                
+
                 break;
             case "confirmUsers":
                 db.confirmUser(id);
@@ -125,36 +145,36 @@ public class Front extends HttpServlet {
                 out.println("Email sent to " + email + " with new password.");
                 db.forgotPass(email, businessName);
                 break;
-            case "registerBuilding":                          
+            case "registerBuilding":
                 dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
             case "logout":
-                 
+
                 request.getSession().invalidate();
                 failure = "You have successfully been logged out!";
                 request.getSession().setAttribute("failure", failure);
                 response.sendRedirect("index.jsp");
-                
+
                 break;
-                
+
             case "editBuilding":
                 request.getSession().setAttribute("building", dbB.getBuilding(Integer.parseInt(idBuilding)));
                 response.sendRedirect("editBuilding.jsp");
                 break;
-            
+
             case "editBuildingFinal":
-               
+
                 dbB.editBuilding(address, cadastral, builtYear, area, zipcode, city, condition, extraText, Integer.parseInt(idBuilding2));
                 response.sendRedirect("overviewBuilding.jsp");
-                break;    
-                
+                break;
+
             case "deleteBuilding":
                 dbB.removeBuilding(Integer.parseInt(idBuilding));
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
-                
-            case "uploadPicture":               
+
+            case "uploadPicture":
                 Part filePart = request.getPart("picture");
                 int imageId = dbB.uploadImage("", filePart.getContentType(), filePart, 8);
                 String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
@@ -163,10 +183,44 @@ public class Front extends HttpServlet {
                 request.getSession().setAttribute("imageTest", dbB.getImage());
                 response.sendRedirect("FileConf.jsp");
                 break;
+            case "getService":
+                request.getSession().setAttribute("idBuilding", idBuilding);
+                response.sendRedirect("service.jsp");
+                break;
+            case "submitReport":
+                Part filePart2 = request.getPart("picture");
+                int imageId2 = dbB.uploadImage("", filePart2.getContentType(), filePart2, 8);
+                String imageMessage2 = (imageId2 == -1 ? "Image failed to upload." : "Image uploaded to the database.");
+                request.getSession().setAttribute("imageMessage", "" + imageMessage2);
+                request.getSession().setAttribute("imageId", "" + imageId2);
+                request.getSession().setAttribute("imageTest", dbB.getImage());
+                break;
+            case "serviceRoom":
+                response.sendRedirect("service.jsp");
+                break;
+            case "editRoom":
+                request.getSession().setAttribute("idRoom", idRoom);
+                response.sendRedirect("editRoom.jsp");
+                break;
+            case "changeEmail":
+                user = (User) request.getSession().getAttribute("user");
+                db.updateEmail(newEmail, user.getIdUser());
+                response.sendRedirect("account.jsp");
+                break;
+            case "changePass":
+                if (db.correctPass(password, email) == true) {
+                    db.updatePassword(email, newPassword);
+                    request.getSession().setAttribute("failure", "Password has been successfully changed!");
+                    response.sendRedirect("account.jsp");
+                } else {
+                    request.getSession().setAttribute("failure", "Password has not been changed due to incorrect password. Please double check your info before typing!");
+                    response.sendRedirect("account.jsp");
+                }
+                break;
         }
 
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

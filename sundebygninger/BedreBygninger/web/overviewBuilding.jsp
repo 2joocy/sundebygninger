@@ -55,8 +55,8 @@ if(user == null){
             %>
         </ul>
 
-        <div class="container-building">
-            <p> <%
+        <div id="edit" style="margin-top: 4%;">
+            <%
             out.print(db.getBuildings(user.getIdUser()));
             %>
             <br />
@@ -69,7 +69,7 @@ if(user == null){
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4>Register Building</h4>
+                            <center><h4>Register Building</h4></center>
                         </div>
                         <div class="modal-body">
 
@@ -100,7 +100,7 @@ if(user == null){
                                         out.print("<p><input type='hidden' name='userID' value='" + userID + "'></p>");
                                     %>
                                     <input name="methodForm" type="hidden" value="registerBuilding" />
-                                    <p><input type="submit" value="Apply"></p>
+                                    <p><input style="border: 1px solid silver; border-radius: 3px; background-color: white; padding: 10px;" type="submit" value="Apply"></p>
                                 </form>
                             </center>
                             <div class="modal-footer">

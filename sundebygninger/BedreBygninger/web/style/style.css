@@ -16,15 +16,38 @@ a{
 } 
 
 .dltbtn {
+    margin-top: 13px;
+    border-radius: 2px;
     border: 0px solid black;
     background-color: #FF0000;
     color: white;
 }
 
+.edit{
+    width: 100%;
+    background-color: white;
+    height: 100%;
+    
+}
+
+
 .editbtn {
+    margin-top: 13px;
+    border-radius: 2px;
     border: 0px solid black;
     background-color: #0000FF;
     color: white;
+}
+
+
+
+.srvbtn{
+    margin-top: 13px;
+    border-radius: 2px;
+    border: 0px solid black;
+    background-color: orange;
+    color: white;
+    
 }
 
 .login {
@@ -132,7 +155,7 @@ a{
     background: #F5F5F5;
     border-radius: 3px 3px 3px 3px;
     border-color: white;
-    color: #555;
+    
 }
 
 
@@ -164,66 +187,6 @@ a{
 
 
 .login input[type="submit"]:focus {
-    border-color: #05a;
-}
-
-.modal-body p {
-    padding: 12px;
-}
-
-.modal-body{
-    background:rgba(0,0,0,0.13);
-
-}
-
-.modal-body input {
-    box-sizing: border-box;
-    display: block;
-    width: 100%;
-    border-width: 1px;
-    border-style: solid;
-    padding: 16px;
-    outline: 0;
-    font-size: 0.95em;
-}
-
-.modal-body input{
-    background: #F5F5F5;
-    border-radius: 3px 3px 3px 3px;
-    border-color: white;
-    color: #555;
-}
-
-
-
-.modal-body input:focus {
-    border-color: white;
-}
-
-.modal-body input[type="submit"] {
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7abcff+0,60abf8+44,4096ee+100;Blue+3D+%2314 */
-    background: rgb(122,188,255); /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(122,188,255,1) 0%, rgba(96,171,248,1) 44%, rgba(64,150,238,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
-    border-color: transparent;
-    color: #fff;
-    cursor: pointer;
-}
-
-.modal-body input[type="submit"]:hover {
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ebf1f6+0,abd3ee+50,89c3eb+51,d5ebfb+100;Blue+Gloss+%234 */
-    background: rgb(235,241,246); /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(235,241,246,1) 0%, rgba(171,211,238,1) 50%, rgba(137,195,235,1) 51%, rgba(213,235,251,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf1f6', endColorstr='#d5ebfb',GradientType=0 ); /* IE6-9 */
-
-}
-
-
-.modal-body input[type="submit"]:focus {
     border-color: #05a;
 }
 
@@ -312,6 +275,17 @@ a{
 
 }
 
+.roomSideBar p{
+    color: white;
+    
+}
+
+.roomSideBar button{
+    border: 0px solid black;
+    border-radius: 2px;
+    background-color: #f2f2f2;
+    
+}
 
 .inner-container{
     width:400px;
@@ -458,19 +432,55 @@ a{
 
 }
 
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+/*::-webkit-input-placeholder {  WebKit, Blink, Edge 
     color:    #F2F2F2;
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+:-moz-placeholder {  Mozilla Firefox 4 to 18 
     color:    #F2F2F2;
     opacity:  1;
 }
-::-moz-placeholder { /* Mozilla Firefox 19+ */
+::-moz-placeholder {  Mozilla Firefox 19+ 
     color:    #F2F2F2;
     opacity:  1;
 }
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder {  Internet Explorer 10-11 
     color:    #F2F2F2;
+}*/
+
+.edit input::-webkit-input-placeholder {
+  color: #666;
+}
+
+.content input::-webkit-input-placeholder {
+  color: blue;
+}
+
+.modal-body input::-webkit-input-placeholder{
+    color: #dddddd;
+    
+}
+/*
+.edit::-webkit-input-placeholder {  WebKit, Blink, Edge 
+    color:    black;
+}
+.edit:-moz-placeholder {  Mozilla Firefox 4 to 18 
+    color:    black;
+    opacity:  1;
+}
+.edit::-moz-placeholder {  Mozilla Firefox 19+ 
+    color:    black;
+    opacity:  1;
+}
+.edit:-ms-input-placeholder {  Internet Explorer 10-11 
+    color:    black;
+}*/
+
+.modal-body input[type="text"]{
+    color: #666;
+    border: 1px solid #666;
+    border-radius: 3px;
+    padding: 5px;
+    
 }
 
 .box-register input:focus,.box input:active,.box button:focus,.box button:active{
@@ -522,7 +532,7 @@ a{
 }
 
 .container{
-    padding-top: 50px;
+    padding-top: 48px;
     background: rgba(64, 64, 64, 0.3);
     height: 100%;
 }
@@ -535,7 +545,7 @@ a{
 .container-building{
     padding-top: 60px;
     background: rgba(64, 64, 64, 0.3);
-    height: 100%;
+    width: 100%;
 }
 
 .container-building p {
@@ -628,4 +638,16 @@ background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,24
 background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
 
+}
+
+.roomSideBar{
+    float: left;
+    position: fixed;
+    margin-top: 10%;
+    margin-left: 4%;
+    height: 500px;
+    width: 20%;
+    border-radius: 3px;
+    background-color: #666;
+    
 }

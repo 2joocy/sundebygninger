@@ -16,6 +16,6 @@
         %>
         <p><%=s1%></p>
         <p><%=s2%></p>
-        <%=handler.getImageHTML(32)%>
+        <%=handler.getImageHTML(Integer.parseInt(s2))%>
     </body>
 </html>

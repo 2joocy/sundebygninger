@@ -18,8 +18,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+
 public class DBUserHandler {
-    
+
     private boolean showJoptionPanes = false;
 
     public User checkLogin(String email, String password) {
@@ -42,15 +43,15 @@ public class DBUserHandler {
         }
         return newUser;
     }
-    
+
     public String registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date datePre = new Date();
-        
+
         if (userExists(email)) {
             return "Error, email already in use.";
         }
-       
+
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO user (email, password, businessName, phone, status, fullName, createdDate)"
@@ -63,7 +64,7 @@ public class DBUserHandler {
             prepared.setString(5, status);
             prepared.setString(6, fullName);
             prepared.setString(7, dateFormat.format(datePre));
-            
+
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
             if (showJoptionPanes) {
@@ -88,7 +89,7 @@ public class DBUserHandler {
         }
         return false;
     }
-    
+
     public int countUnConfirmed() {
         int count = 0;
         try {
@@ -135,7 +136,7 @@ public class DBUserHandler {
             }
         }
     }
-    
+
     public String getUnConfirmed() {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
@@ -173,43 +174,44 @@ public class DBUserHandler {
                 + "  </table>";
         return tableData;
     }
-    
+
     public void updatePassword(String username, String password) {
-         try {
+        password = this.encryptPassword(password);
+        try {
             Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE user set password=? where email=?";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, password);
             prepared.setString(2, username);
             prepared.executeUpdate();
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    
+
     public String forgotPass(String email, String businessName) {
         String subject = "Password Reset Request - Sundere Bygninger";
         String randomPass = randomString(12);
         String message = "Hello " + businessName + ". \n You've recently requested "
-                    + "that you've forgotten your password. This email will contain your password. "
-                    + "Should you feel like changing it, you can do it under "
-                    + "account management after logging in. \n Password: " + randomPass;
+                + "that you've forgotten your password. This email will contain your password. "
+                + "Should you feel like changing it, you can do it under "
+                + "account management after logging in. \n Password: " + randomPass;
         String status = SendMailTLS.sendMessage(email, subject, message);
         String encrypted = encryptPassword(randomPass);
         updatePassword(email, encrypted);
         return randomPass + "      hashed: " + encrypted + "                        " + status;
     }
 
-    String randomString(int len){
+    String randomString(int len) {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         SecureRandom rnd = new SecureRandom();
         StringBuilder sb = new StringBuilder(len);
-        for(int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++) {
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         }
         return sb.toString();
-    }   
-    
+    }
+
     public String encryptPassword(String password) {
         String encryptedPassword = null;
         try {
@@ -225,5 +227,43 @@ public class DBUserHandler {
             e.printStackTrace();
         }
         return encryptedPassword;
+    }
+
+    public boolean correctPass(String password, String email) {
+        boolean isCorrect = false;
+        String password2 = this.encryptPassword(password);
+        int count = 0;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT idUser FROM user WHERE email=? AND password=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, email);
+            prepared.setString(2, password2);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                count++;
+            }
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+
+        if (count > 0) {
+            isCorrect = true;
+        }
+
+        return isCorrect;
+    }
+
+    public void updateEmail(String email, int id) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "UPDATE user set email=? where idUser=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, email);
+            prepared.setInt(2, id);
+            prepared.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -29,9 +29,9 @@
 
         <div class="container">
             <center style="padding-top: 3%;">
-            <%
-            out.print(db.getUnConfirmed());
-            %>
+                <p>
+                Currently No Service Available!
+                </p>    
             </center>
         </div>
 

@@ -5,8 +5,12 @@
 <%
     DBUserHandler db = new DBUserHandler();
     DBBuildingHandler dbB = new DBBuildingHandler();
-
+    
     User user = (User) session.getAttribute("user");
+    
+    if(!user.getStatus().equalsIgnoreCase("worker")){
+        response.sendRedirect("index.jsp");
+    }
 %>
 <html lang="en">
     <head>
