@@ -137,6 +137,10 @@ public class Front extends HttpServlet {
                 db.confirmUser(id);
                 response.sendRedirect("overviewUsers.jsp");
                 break;
+            case "denyUsers":
+                db.denyUser(id);
+                response.sendRedirect("overviewUsers.jsp");
+                break;
             case "forgotPass":
                 if (!db.userExists(email)) {
                     out.println("No such user exists.");

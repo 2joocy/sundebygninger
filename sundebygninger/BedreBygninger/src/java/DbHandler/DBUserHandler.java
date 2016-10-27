@@ -144,7 +144,8 @@ public class DBUserHandler {
                 + "        <th>ID</th>\n"
                 + "        <th>Email</th>\n"
                 + "        <th>Business Name</th>\n"
-                + "         <th></th>\n"
+                + "         <th>Confirm User</th>\n"
+                + "         <th>Deny User</th>\n"
                 + "      </tr>\n"
                 + "    </thead>\n"
                 + "    <tbody>";
@@ -162,7 +163,7 @@ public class DBUserHandler {
                 businessName = myRS.getString("businessName");
                 id = myRS.getInt("idUser");
 
-                tableData += "<tr><form method ='POST' action='Front'><td>" + id + "</td><td>" + email + "</td><td>" + businessName + "<input type='hidden' name='methodForm' value='confirmUsers'><input type='hidden' name='userID' value='" + id + "'></td><td><button type='submit'>Confirm User</button></td></form></tr>";
+                tableData += "<tr><form method ='POST' action='Front'><td>" + id + "</td><td>" + email + "</td><td>" + businessName + "<input type='hidden' name='methodForm' value='confirmUsers'><input type='hidden' name='userID' value='" + id + "'></td><td><button type='submit'>Confirm User</button></td></form><td><form method ='POST' action='Front'><input type='hidden' name='methodForm' value='denyUsers'><input type='hidden' name='userID' value='" + id + "'><button type='submit'>Deny User</button></form></td></tr>";
 
             }
         } catch (SQLException | HeadlessException ex) {
