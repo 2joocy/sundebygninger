@@ -7,6 +7,7 @@ package servletHandler;
 
 import DbHandler.DBBuildingHandler;
 import DbHandler.DBUserHandler;
+import entities.Building;
 import entities.User;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,6 +91,7 @@ public class Front extends HttpServlet {
         String idRoom = request.getParameter("idRoom");
         String newPassword = request.getParameter("newPass");
         String newEmail = request.getParameter("newEmail");
+        String fk_idMainPicture = request.getParameter("fk_idMainPicture");
 
         PrintWriter out = response.getWriter();
         switch (method) {
@@ -121,8 +123,8 @@ public class Front extends HttpServlet {
                 }
                 //out.print(user == null ? "User == null" : user.getEmail());
                 break;
+                
             case "register":
-
                 String message = db.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
                 if (message.contains("Error, ")) {
                     //request.getSession().setAttribute("failure", message);
@@ -133,14 +135,17 @@ public class Front extends HttpServlet {
                 }
 
                 break;
+                
             case "confirmUsers":
                 db.confirmUser(id);
                 response.sendRedirect("overviewUsers.jsp");
                 break;
+                
             case "denyUsers":
                 db.denyUser(id);
                 response.sendRedirect("overviewUsers.jsp");
                 break;
+                
             case "forgotPass":
                 if (!db.userExists(email)) {
                     out.println("No such user exists.");
@@ -149,12 +154,13 @@ public class Front extends HttpServlet {
                 out.println("Email sent to " + email + " with new password.");
                 db.forgotPass(email, businessName);
                 break;
+                
             case "registerBuilding":
                 dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
+                
             case "logout":
-
                 request.getSession().invalidate();
                 failure = "You have successfully been logged out!";
                 request.getSession().setAttribute("failure", failure);
@@ -168,7 +174,6 @@ public class Front extends HttpServlet {
                 break;
 
             case "editBuildingFinal":
-
                 dbB.editBuilding(address, cadastral, builtYear, area, zipcode, city, condition, extraText, Integer.parseInt(idBuilding2));
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
@@ -180,37 +185,44 @@ public class Front extends HttpServlet {
 
             case "uploadPicture":
                 Part filePart = request.getPart("picture");
-                int imageId = dbB.uploadImage("", filePart.getContentType(), filePart, 8);
+                Building building = (Building) request.getSession().getAttribute("building");
+                int imageId = dbB.uploadImage("", filePart.getContentType(), filePart);
                 String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
                 request.getSession().setAttribute("imageMessage", "" + imageMessage);
                 request.getSession().setAttribute("imageId", "" + imageId);
                 request.getSession().setAttribute("imageTest", dbB.getImage());
                 response.sendRedirect("FileConf.jsp");
                 break;
+                
             case "getService":
                 request.getSession().setAttribute("idBuilding", idBuilding);
                 response.sendRedirect("service.jsp");
                 break;
+                
             case "submitReport":
                 Part filePart2 = request.getPart("picture");
-                int imageId2 = dbB.uploadImage("", filePart2.getContentType(), filePart2, 8);
+                int imageId2 = dbB.uploadImage("", filePart2.getContentType(), filePart2);
                 String imageMessage2 = (imageId2 == -1 ? "Image failed to upload." : "Image uploaded to the database.");
                 request.getSession().setAttribute("imageMessage", "" + imageMessage2);
                 request.getSession().setAttribute("imageId", "" + imageId2);
                 request.getSession().setAttribute("imageTest", dbB.getImage());
                 break;
+                
             case "serviceRoom":
                 response.sendRedirect("service.jsp");
                 break;
+                
             case "editRoom":
                 request.getSession().setAttribute("idRoom", idRoom);
                 response.sendRedirect("editRoom.jsp");
                 break;
+                
             case "changeEmail":
                 user = (User) request.getSession().getAttribute("user");
                 db.updateEmail(newEmail, user.getIdUser());
                 response.sendRedirect("account.jsp");
                 break;
+                
             case "changePass":
                 if (db.correctPass(password, email) == true) {
                     db.updatePassword(email, newPassword);
@@ -220,6 +232,14 @@ public class Front extends HttpServlet {
                     request.getSession().setAttribute("failure", "Password has not been changed due to incorrect password. Please double check your info before typing!");
                     response.sendRedirect("account.jsp");
                 }
+                break;
+                
+            case "newMainImage":
+                filePart = request.getPart("picture");
+                int newImageID = Integer.parseInt(idBuilding);
+                int fk_mainImage = Integer.parseInt(fk_idMainPicture);
+                imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+                response.sendRedirect("overviewBuilding.jsp");
                 break;
         }
 

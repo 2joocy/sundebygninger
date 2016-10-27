@@ -91,7 +91,14 @@
                 
                 <div class="pictureBox">
                     <h2>Picture</h2>
-                    <%= dbb.getImageHTML(build.getFk_idMainPicture(), 50, 50) %>
+                    <%= dbb.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
+                    <form action="Front" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="methodForm" value="newMainImage"/>
+                        <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>
+                        <input type="hidden" name="fk_idMainPicture" value="<%=build.getFk_idMainPicture()%>"/>
+                        <td><input type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
+                        <button type="submit">Upload New Main Image</button>
+                    </form>
                 </div>
                         
                 <h2 style="padding-top: 15px;">Edit Building <button id="clicker" onclick="lockUnlock();">&#128274;</button></h2>

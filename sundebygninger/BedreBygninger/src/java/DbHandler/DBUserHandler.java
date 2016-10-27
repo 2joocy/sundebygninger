@@ -95,7 +95,7 @@ public class DBUserHandler {
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser FROM user WHERE status='not'";
-            System.out.println(sql);
+            //System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
@@ -155,7 +155,7 @@ public class DBUserHandler {
         try {
             Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser, email, businessName FROM user WHERE status='not'";
-            System.out.println(sql);
+            //System.out.println(sql);
             PreparedStatement prepared = myConn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {

@@ -90,10 +90,11 @@ public class DBBuildingHandler {
             int id = 1;
             while (myRS.next()) {
                 int idBuilding = myRS.getInt("idBuilding");
+                int imageID = myRS.getInt("fk_idMainPicture");
                 String address = myRS.getString("address");
                 String city = myRS.getString("city");
                 String zipcode = myRS.getString("zipcode");
-                tableData += "<tr><td><img src='http://cdn.technicpack.net/platform2/pack-icons/879003.png?1470098482'</img>"
+                tableData += "<tr><td>" + getImageHTML(imageID, 50, 50)
                         + "<td>" + address + "</td><td>" + zipcode + "</td><td>" + city
                         + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editBuilding'><td><button class='editbtn' type='submit'>Show/Edit</button></td>"
                         + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
@@ -361,10 +362,35 @@ public class DBBuildingHandler {
         return null;
     }
 
-    public int uploadImage(String description, String type, Part filePart, int id) {
+    public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "INSERT INTO picture (description, type, image, fk_idBuilding) VALUES (?, ?, ?, (select idBuilding from building where idBuilding=?))";
+            String sql = "DELETE FROM picture WHERE idPicture=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setInt(1, fk_idMainPicture);
+            prepared.executeUpdate();
+            int returnValue = uploadImage(description, type, filePart);
+            if (returnValue >= 0) {
+                sql = "UPDATE building SET fk_idMainPicture = ? WHERE idBuilding = ?";
+                prepared = myConn.prepareStatement(sql);
+                prepared.setInt(1, returnValue);
+                prepared.setInt(2, buildingID);
+                prepared.executeUpdate();
+                return returnValue;
+            } else {
+                JOptionPane.showMessageDialog(null, "[DBBuildingHandler.uploadMainImage] Error, returnValue: " + returnValue);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "[DBBuildingHandler.uploadMainImage] " + e.getMessage());
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int uploadImage(String description, String type, Part filePart) {
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
             PreparedStatement prepared = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             InputStream inputStream = null;
             if (filePart != null) {
@@ -374,7 +400,6 @@ public class DBBuildingHandler {
                 prepared.setString(1, description);
                 prepared.setString(2, type);
                 prepared.setBlob(3, inputStream);
-                prepared.setInt(4, id);
                 prepared.executeUpdate();
                 ResultSet rs = prepared.getGeneratedKeys();
                 while (rs.next()) {
