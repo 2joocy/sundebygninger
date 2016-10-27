@@ -338,6 +338,10 @@ public class DBBuildingHandler {
     public String getImageHTML(int id) {
         return "<img src=\"ImageServlet?id=" + id + "\"/>";
     }
+    
+    public String getImageHTML(int id, int width, int height) {
+        return "<img src=\"ImageServlet?id=" + id + "\" height=\"" + height + "\" width=\"" + width+ "\"/>";
+    }
 
     public Image getImage() {
         Connection myConn = DBConnection.getConnection();

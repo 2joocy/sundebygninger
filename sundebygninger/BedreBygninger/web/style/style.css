@@ -643,11 +643,23 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 .roomSideBar{
     float: left;
     position: fixed;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-left: 4%;
     height: 500px;
     width: 20%;
     border-radius: 3px;
     background-color: #666;
     
+}
+
+.pictureBox{
+    color: white;
+    float: right;
+    position: fixed;
+    margin-left: 75%;
+    margin-top: 5%;
+    height: 500px;
+    width: 20%;
+    border-radius: 3px;
+    background-color: #666;
 }

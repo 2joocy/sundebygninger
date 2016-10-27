@@ -10,8 +10,8 @@
 <%@page import="DbHandler.DBBuildingHandler"%>
 <!DOCTYPE html>
 <%
-    DBBuildingHandler db = new DBBuildingHandler();
-    DBUserHandler dbb = new DBUserHandler();
+    DBBuildingHandler dbb = new DBBuildingHandler();
+    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
     Building build = (Building) session.getAttribute("building");
     if (user == null) {
@@ -55,8 +55,8 @@
         <%
             if (user.getStatus().equalsIgnoreCase("worker")) {
 
-                if (dbb.countUnConfirmed() > 0) {
-                    out.print("<script>alert('You have new unconfirmed accounts to review!(" + dbb.countUnConfirmed() + ")');</script>");
+                if (db.countUnConfirmed() > 0) {
+                    out.print("<script>alert('You have new unconfirmed accounts to review!(" + db.countUnConfirmed() + ")');</script>");
                 }
 
             }
@@ -64,7 +64,7 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(db.createMenu(user.getStatus()));
+                    out.print(dbb.createMenu(user.getStatus()));
                 %>
         </ul>
 
@@ -76,7 +76,7 @@
 
 
                         <%
-                            out.print(db.getRooms(build.getIdBuilding()));
+                            out.print(dbb.getRooms(build.getIdBuilding()));
                         %>
                         <br> <br>
                         <center>
@@ -87,16 +87,18 @@
 
 
                 </div>
-
-
-
                 </form>
-
+                
+                <div class="pictureBox">
+                    <h2>Picture</h2>
+                    <%= dbb.getImageHTML(build.getFk_idMainPicture(), 50, 50) %>
+                </div>
+                        
                 <h2 style="padding-top: 15px;">Edit Building <button id="clicker" onclick="lockUnlock();">&#128274;</button></h2>
                 <form action="Front" method="POST" >
 
 
-                    <p>Adress</p>
+                    <p>Address</p>
                     <p><input type="text" id="address" name="address" value="<% out.print(build.getAddress()); %>" placeholder="Address" readonly></p>
                     <br />
                     <p>Cadastral</p>
@@ -119,7 +121,7 @@
                     <br />
                     <p>Extra Text</p>
                     <p><input type="text" id="extraText" name="extraText" value="<% out.print(build.getExtraText()); %>" placeholder="Extra Text" readonly></p>
-
+                    
                     <%
                         out.print("<p><input type='hidden' name='buildingID' value='" + build.getIdBuilding() + "'></p>");
                     %>

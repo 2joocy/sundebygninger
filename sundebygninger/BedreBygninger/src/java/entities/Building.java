@@ -23,7 +23,7 @@ public class Building {
     public Building(int idBuilding, String address, String cadastral,
                     String area, String zipcode, String city, String condition, String service, 
                     String extraText, String builtYear, int fk_idUser, 
-                    int fk_MainPicture, int fk_idReport, String dateCreated) {
+                    int fk_idMainPicture, int fk_idReport, String dateCreated) {
            
         this.idBuilding = idBuilding;
         this.address = address;
