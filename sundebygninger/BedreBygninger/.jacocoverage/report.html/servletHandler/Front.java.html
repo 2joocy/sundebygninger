@@ -144,12 +144,12 @@ import DbHandler.*;
 <span class="nc" id="L144">                break;</span>
                 
             case &quot;confirmUsers&quot;:
-<span class="nc" id="L147">                db.confirmUser(id);</span>
+<span class="nc" id="L147">                db.confirmUser(Integer.parseInt(id));</span>
 <span class="nc" id="L148">                response.sendRedirect(&quot;overviewUsers.jsp&quot;);</span>
 <span class="nc" id="L149">                break;</span>
                 
             case &quot;denyUsers&quot;:
-<span class="nc" id="L152">                db.denyUser(id);</span>
+<span class="nc" id="L152">                db.denyUser(Integer.parseInt(id));</span>
 <span class="nc" id="L153">                response.sendRedirect(&quot;overviewUsers.jsp&quot;);</span>
 <span class="nc" id="L154">                break;</span>
                 

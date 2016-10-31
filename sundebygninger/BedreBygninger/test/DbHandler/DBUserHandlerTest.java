@@ -6,6 +6,7 @@
 package DbHandler;
 
 import entities.User;
+import javax.swing.JOptionPane;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -77,9 +78,13 @@ public class DBUserHandlerTest {
     public void testConfirmUser() {
         System.out.println("confirmUser");
         DBUserHandler db = new DBUserHandler(DBConnection.getTestConnection());
-        db.registerUser("testmail@mail.dk", "pass", "Bingo", "85858585", "not", "Bingomanden", "Today");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        db.registerUser("testmail1@mail.dk", "pass", "Bingo", "85858585", "not", "Bingomanden", "Today");
+        User user = db.checkLogin("testmail1@mail.dk", "pass");
+        assertEquals(user.getStatus(), "not");
+        db.confirmUser("testmail1@mail.dk");
+        user = db.checkLogin("testmail1@mail.dk", "pass");
+        assertEquals(user.getStatus(), "customer");
+        db.removeUser("testmail1@mail.dk");
     }
 
     /**
@@ -88,39 +93,31 @@ public class DBUserHandlerTest {
     @Test
     public void testDenyUser() {
         System.out.println("denyUser");
-        String id = "";
-        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
-        instance.denyUser(id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        DBUserHandler db = new DBUserHandler(DBConnection.getTestConnection());
+        db.registerUser("testmail2@mail.dk", "pass", "Bingo", "85858585", "not", "Bingomanden", "Today");
+        User user = db.checkLogin("testmail2@mail.dk", "pass");
+        assertEquals(user.getStatus(), "not");
+        db.denyUser("testmail2@mail.dk");
+        user = db.checkLogin("testmail2@mail.dk", "pass");
+        assertEquals(user.getStatus(), "denied");
+        db.removeUser("testmail2@mail.dk");
     }
 
-    /**
-     * Test of getUnConfirmed method, of class DBUserHandler.
-     */
-    @Test
-    public void testGetUnConfirmed() {
-        System.out.println("getUnConfirmed");
-        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
-        String expResult = "";
-        String result = instance.getUnConfirmed();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
+    
     /**
      * Test of updatePassword method, of class DBUserHandler.
      */
     @Test
     public void testUpdatePassword() {
         System.out.println("updatePassword");
-        String username = "";
-        String password = "";
-        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
-        instance.updatePassword(username, password);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        DBUserHandler db = new DBUserHandler(DBConnection.getTestConnection());
+        db.registerUser("testmail3@mail.dk", "pass", "Bingo", "85858585", "not", "Bingomanden", "Today");
+        User user = db.checkLogin("testmail3@mail.dk", "pass");
+        assertNotNull(user);
+        db.updatePassword("testmail3@mail.dk", "pass1");
+        user = db.checkLogin("testmail3@mail.dk", "pass1");
+        assertNotNull(user);
+        db.removeUser("testmail3@mail.dk");
     }
 
     /**
@@ -149,37 +146,6 @@ public class DBUserHandlerTest {
         DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         String expResult = "";
         String result = instance.randomString(len);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of encryptPassword method, of class DBUserHandler.
-     */
-    @Test
-    public void testEncryptPassword() {
-        System.out.println("encryptPassword");
-        String password = "";
-        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
-        String expResult = "";
-        String result = instance.encryptPassword(password);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of correctPass method, of class DBUserHandler.
-     */
-    @Test
-    public void testCorrectPass() {
-        System.out.println("correctPass");
-        String password = "";
-        String email = "";
-        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
-        boolean expResult = false;
-        boolean result = instance.correctPass(password, email);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -115,11 +115,24 @@ public class DBUserHandler {
         return count;
     }
 
-    public void confirmUser(String id) {
+    public void confirmUser(int id) {
         try {
             String sql = "UPDATE user set status='customer' where idUser=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, Integer.parseInt(id));
+            prepared.setInt(1, id);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
+    
+    public void confirmUser(String email) {
+        try {
+            String sql = "UPDATE user set status='customer' where email=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setString(1, email);
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
             if (showJoptionPanes) {
@@ -154,11 +167,11 @@ public class DBUserHandler {
         }
     }
     
-    public void denyUser(String id) {
+    public void denyUser(int id) {
         try {
             String sql = "UPDATE user set status='denied' where idUser=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, Integer.parseInt(id));
+            prepared.setInt(1, id);
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
             if (showJoptionPanes) {
@@ -167,6 +180,19 @@ public class DBUserHandler {
         }
     }
 
+    public void denyUser(String email) {
+        try {
+            String sql = "UPDATE user set status='denied' where email=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setString(1, email);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
+    
     public String getUnConfirmed() {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"

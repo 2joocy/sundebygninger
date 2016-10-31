@@ -32,10 +32,11 @@ public class DBConnection {
     }
     
     public static Connection getTestConnection() {
-        if (con == null) {
+//        if (con == null) 
+        {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://viter.dk/testsundebygninger", "transformer", "bookworm#17laesehest");
+                return con = DriverManager.getConnection("jdbc:mysql://viter.dk/testsundebygninger", "transformer", "bookworm#17laesehest");
             } catch (Exception ex) {
                 System.out.println("hej");
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);

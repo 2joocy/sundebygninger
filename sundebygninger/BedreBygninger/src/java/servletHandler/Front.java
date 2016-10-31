@@ -144,12 +144,12 @@ public class Front extends HttpServlet {
                 break;
                 
             case "confirmUsers":
-                db.confirmUser(id);
+                db.confirmUser(Integer.parseInt(id));
                 response.sendRedirect("overviewUsers.jsp");
                 break;
                 
             case "denyUsers":
-                db.denyUser(id);
+                db.denyUser(Integer.parseInt(id));
                 response.sendRedirect("overviewUsers.jsp");
                 break;
                 
