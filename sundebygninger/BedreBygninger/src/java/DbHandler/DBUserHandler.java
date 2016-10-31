@@ -128,6 +128,32 @@ public class DBUserHandler {
         }
     }
 
+    public void removeUser(int id){
+        try {
+            String sql = "DELETE FROM user WHERE idUser=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, id);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
+    
+    public void removeUser(String email){
+        try {
+            String sql = "DELETE FROM user WHERE email=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setString(1, email);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException ex) {
+            if (showJoptionPanes) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
+    
     public void denyUser(String id) {
         try {
             String sql = "UPDATE user set status='denied' where idUser=?";

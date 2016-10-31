@@ -61,18 +61,14 @@ public class DBBuildingHandlerTest {
         int fk_idUser = 1;
         int fk_idMainPicture = 0;
         int fk_idReport = 0;
-        
         Building b = new Building(idBuilding, address, cadastral, area, zipcode, city, conditionText, service, extraText, builtYear, fk_idUser, fk_idMainPicture, fk_idReport, dateCreated);
         instance.addBuilding(b);    //Add building to DB
         Building loaded = instance.getBuilding(address);    //Retrieve building from DB
-        if (b.equals(loaded)) {     //Check if the two buildings have same info
-            System.out.println("Building was loaded correctly.");
-            instance.removeBuilding(loaded.getIdBuilding());        //Delete building from DB
-            Building hopefullyNull = instance.getBuilding(address);
-            assertNull(hopefullyNull);
-            return;
-        }
-        fail("Failed and stuff");
+        assertEquals(b, loaded);      //Check if the two buildings have same info
+        System.out.println("Building was loaded correctly.");
+        instance.removeBuilding(loaded.getIdBuilding());        //Delete building from DB
+        Building hopefullyNull = instance.getBuilding(address);
+        assertNull(hopefullyNull);
     }
     
     @Test
