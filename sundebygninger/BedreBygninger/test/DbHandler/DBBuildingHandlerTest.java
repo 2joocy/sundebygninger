@@ -46,7 +46,7 @@ public class DBBuildingHandlerTest {
     @Test
     public void testAddBuilding() {
         System.out.println("addBuilding");
-        DBBuildingHandler instance = new DBBuildingHandler();
+        DBBuildingHandler instance = new DBBuildingHandler(DBConnection.getTestConnection());
         String address = "aa123123123";
         String cadastral = "a";
         String builtYear = "a";
@@ -77,7 +77,7 @@ public class DBBuildingHandlerTest {
     
     @Test
     public void testSubmitReport() {
-        DBBuildingHandler handler = new DBBuildingHandler();
+        DBBuildingHandler handler = new DBBuildingHandler(DBConnection.getTestConnection());
         String buildingUsage = "Yes.";
         boolean roofRemarks = false;
         String roofText = "It's a roof.";

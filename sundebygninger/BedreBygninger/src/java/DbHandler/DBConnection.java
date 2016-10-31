@@ -31,5 +31,18 @@ public class DBConnection {
         return con;
     }
     
+    public static Connection getTestConnection() {
+        if (con == null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://77.66.117.72/pfaffeeu_testsundebygninger", "pfaffeeu_william", "william1O");
+            } catch (Exception ex) {
+                System.out.println("hej");
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return con;
+    }
+    
 }
 

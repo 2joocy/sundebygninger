@@ -46,7 +46,7 @@ public class DBUserHandlerTest {
         System.out.println("checkLogin");
         String email = "";
         String password = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         User expResult = null;
         User result = instance.checkLogin(email, password);
         assertEquals(expResult, result);
@@ -67,7 +67,7 @@ public class DBUserHandlerTest {
         String status = "";
         String fullName = "";
         String createdDate = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         String expResult = "";
         String result = instance.registerUser(email, password, businessName, phone, status, fullName, createdDate);
         assertEquals(expResult, result);
@@ -82,7 +82,7 @@ public class DBUserHandlerTest {
     public void testUserExists() {
         System.out.println("userExists");
         String username = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         boolean expResult = false;
         boolean result = instance.userExists(username);
         assertEquals(expResult, result);
@@ -96,7 +96,7 @@ public class DBUserHandlerTest {
     @Test
     public void testCountUnConfirmed() {
         System.out.println("countUnConfirmed");
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         int expResult = 0;
         int result = instance.countUnConfirmed();
         assertEquals(expResult, result);
@@ -111,7 +111,7 @@ public class DBUserHandlerTest {
     public void testConfirmUser() {
         System.out.println("confirmUser");
         String id = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         instance.confirmUser(id);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -124,7 +124,7 @@ public class DBUserHandlerTest {
     public void testDenyUser() {
         System.out.println("denyUser");
         String id = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         instance.denyUser(id);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -136,7 +136,7 @@ public class DBUserHandlerTest {
     @Test
     public void testGetUnConfirmed() {
         System.out.println("getUnConfirmed");
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         String expResult = "";
         String result = instance.getUnConfirmed();
         assertEquals(expResult, result);
@@ -152,7 +152,7 @@ public class DBUserHandlerTest {
         System.out.println("updatePassword");
         String username = "";
         String password = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         instance.updatePassword(username, password);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -166,7 +166,7 @@ public class DBUserHandlerTest {
         System.out.println("forgotPass");
         String email = "";
         String businessName = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         String expResult = "";
         String result = instance.forgotPass(email, businessName);
         assertEquals(expResult, result);
@@ -181,7 +181,7 @@ public class DBUserHandlerTest {
     public void testRandomString() {
         System.out.println("randomString");
         int len = 0;
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         String expResult = "";
         String result = instance.randomString(len);
         assertEquals(expResult, result);
@@ -196,7 +196,7 @@ public class DBUserHandlerTest {
     public void testEncryptPassword() {
         System.out.println("encryptPassword");
         String password = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         String expResult = "";
         String result = instance.encryptPassword(password);
         assertEquals(expResult, result);
@@ -212,7 +212,7 @@ public class DBUserHandlerTest {
         System.out.println("correctPass");
         String password = "";
         String email = "";
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         boolean expResult = false;
         boolean result = instance.correctPass(password, email);
         assertEquals(expResult, result);
@@ -228,7 +228,7 @@ public class DBUserHandlerTest {
         System.out.println("updateEmail");
         String email = "";
         int id = 0;
-        DBUserHandler instance = new DBUserHandler();
+        DBUserHandler instance = new DBUserHandler(DBConnection.getTestConnection());
         instance.updateEmail(email, id);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

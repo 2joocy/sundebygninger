@@ -21,15 +21,24 @@ import javax.swing.JOptionPane;
 
 public class DBUserHandler {
 
+    Connection conn;
+    
+    public DBUserHandler() {
+        this.conn = DBConnection.getConnection();
+    }
+    
+    public DBUserHandler(Connection conn) {
+        this.conn = conn;
+    }
+    
     private boolean showJoptionPanes = false;
 
     public User checkLogin(String email, String password) {
         User newUser = null;
         password = encryptPassword(password);
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser, email, businessName, phone, status, fullName, createdDate FROM user WHERE email=? AND password=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.setString(2, password);
             ResultSet myRS = prepared.executeQuery();
@@ -53,10 +62,9 @@ public class DBUserHandler {
         }
 
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO user (email, password, businessName, phone, status, fullName, createdDate)"
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.setString(2, this.encryptPassword(password));
             prepared.setString(3, businessName);
@@ -76,9 +84,8 @@ public class DBUserHandler {
 
     public boolean userExists(String username) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT * FROM user WHERE email=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, username);
             ResultSet result = prepared.executeQuery();
             if (result.next()) {
@@ -93,10 +100,9 @@ public class DBUserHandler {
     public int countUnConfirmed() {
         int count = 0;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser FROM user WHERE status='not'";
             //System.out.println(sql);
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 count++;
@@ -111,9 +117,8 @@ public class DBUserHandler {
 
     public void confirmUser(String id) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE user set status='customer' where idUser=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, Integer.parseInt(id));
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
@@ -125,9 +130,8 @@ public class DBUserHandler {
 
     public void denyUser(String id) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE user set status='denied' where idUser=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, Integer.parseInt(id));
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
@@ -153,10 +157,9 @@ public class DBUserHandler {
         String businessName = "";
         int id = 0;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser, email, businessName FROM user WHERE status='not'";
             //System.out.println(sql);
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 email = myRS.getString("email");
@@ -184,9 +187,8 @@ public class DBUserHandler {
     public void updatePassword(String username, String password) {
         password = this.encryptPassword(password);
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE user set password=? where email=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, password);
             prepared.setString(2, username);
             prepared.executeUpdate();
@@ -240,9 +242,8 @@ public class DBUserHandler {
         String password2 = this.encryptPassword(password);
         int count = 0;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idUser FROM user WHERE email=? AND password=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.setString(2, password2);
             ResultSet myRS = prepared.executeQuery();
@@ -262,9 +263,8 @@ public class DBUserHandler {
 
     public void updateEmail(String email, int id) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE user set email=? where idUser=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.setInt(2, id);
             prepared.executeUpdate();

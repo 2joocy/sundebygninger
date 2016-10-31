@@ -28,6 +28,16 @@ import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
 
+    Connection conn;
+    
+    public DBBuildingHandler() {
+        this.conn = DBConnection.getConnection();
+    }
+    
+    public DBBuildingHandler(Connection conn) {
+        this.conn = conn;
+    }
+    
     public void addBuilding(Building b) {
         addBuilding(b.getAddress(), b.getCadastral(), b.getBuiltYear(), b.getArea(), b.getZipcode(), b.getCity(), 
                     b.getCondition(), b.getService(), b.getExtraText(), b.getDateCreated(), b.getFk_idUser(), b.getFk_idMainPicture(), b.getFk_idReport());
@@ -39,10 +49,9 @@ public class DBBuildingHandler {
             int fk_idMainPicture, int fk_idReport) {
 
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)"
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,(select idUser from user where idUser=?),null,null)";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
 
             prepared.setString(1, address);
             prepared.setString(2, cadastral);
@@ -87,9 +96,8 @@ public class DBBuildingHandler {
     int fk_MainPicture, int fk_idReport, Date dateCreated
              */
 
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT * FROM building WHERE fk_idUser=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, idUser);
             ResultSet myRS = prepared.executeQuery();
             int id = 1;
@@ -124,9 +132,8 @@ public class DBBuildingHandler {
     public Building getBuilding(int idUser) {
         Building building = null;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT * FROM building WHERE idBuilding=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, idUser);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
@@ -157,9 +164,8 @@ public class DBBuildingHandler {
     public Building getBuilding(String address) {
         Building building = null;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT * FROM building WHERE address=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, address);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
@@ -190,10 +196,9 @@ public class DBBuildingHandler {
     public void submitReport(String buildingUsage, boolean roofRemarks,
             int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES "
                     + "(?,?,(select idPicture from picture where idPicture=?),?,?,(select idPicture from picture where idPicture=?),?,(select idUser from user where idUser=?),?)";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, buildingUsage);
             prepared.setInt(2, (roofRemarks ? 1 : 0));
             prepared.setInt(3, fk_idPictureRoof);
@@ -212,9 +217,8 @@ public class DBBuildingHandler {
     public String getRooms(int id) {
         String roomData = "";
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idRoomBuilding, roomDescribtion from roomBuilding where fk_idBuilding=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
@@ -238,9 +242,8 @@ public class DBBuildingHandler {
             String area, String zipcode, String city, String condition,
             String extraText, int userID) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, address);
             prepared.setString(2, cadastral);
             prepared.setString(3, builtYear);
@@ -260,9 +263,8 @@ public class DBBuildingHandler {
     public int getBuildingCount(int id) {
         int count = 0;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idBuilding FROM building WHERE fk_idUser=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             ResultSet myRS = prepared.executeQuery();
             while(myRS.next()){
@@ -277,9 +279,8 @@ public class DBBuildingHandler {
     public int getBuildingCount() {
         int count = 0;
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idBuilding FROM building";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while(myRS.next()){
                 count++;
@@ -308,9 +309,8 @@ public class DBBuildingHandler {
     int fk_MainPicture, int fk_idReport, Date dateCreated
              */
 
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT idBuilding, address, cadastral, builtYear, area, zipcode, city, condition, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport FROM building WHERE fk_idUser=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, idUser);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
@@ -349,7 +349,7 @@ public class DBBuildingHandler {
     }
 
     public String createMenu(String status) {
-        DBUserHandler db = new DBUserHandler();
+        DBUserHandler db = new DBUserHandler(conn);
         String menu = "";
         if (status.equalsIgnoreCase("customer")) {
             return "<li><a href='overviewBuilding.jsp'>Estate</a></li>\n"
@@ -369,9 +369,8 @@ public class DBBuildingHandler {
 
     public String getReportField(int reportID, String fieldName) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "SELECT ? FROM report where ";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -381,9 +380,8 @@ public class DBBuildingHandler {
 
     public void removeBuilding(int id) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "DELETE FROM building WHERE idBuilding=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             prepared.executeUpdate();
         } catch (Exception e) {
@@ -400,10 +398,9 @@ public class DBBuildingHandler {
     }
 
     public Image getImage() {
-        Connection myConn = DBConnection.getConnection();
         String sql = "SELECT * FROM picture WHERE idPicture=?";
         try {
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             ResultSet rs = prepared.executeQuery();
             while (rs.next()) {
                 Blob blob = rs.getBlob("image");
@@ -419,15 +416,14 @@ public class DBBuildingHandler {
 
     public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "DELETE FROM picture WHERE idPicture=?";
-            PreparedStatement prepared = myConn.prepareStatement(sql);
+            PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, fk_idMainPicture);
             prepared.executeUpdate();
             int returnValue = uploadImage(description, type, filePart);
             if (returnValue >= 0) {
                 sql = "UPDATE building SET fk_idMainPicture = ? WHERE idBuilding = ?";
-                prepared = myConn.prepareStatement(sql);
+                prepared = conn.prepareStatement(sql);
                 prepared.setInt(1, returnValue);
                 prepared.setInt(2, buildingID);
                 prepared.executeUpdate();
@@ -444,9 +440,8 @@ public class DBBuildingHandler {
     
     public int uploadImage(String description, String type, Part filePart) {
         try {
-            Connection myConn = DBConnection.getConnection();
             String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
-            PreparedStatement prepared = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             InputStream inputStream = null;
             if (filePart != null) {
                 inputStream = filePart.getInputStream();

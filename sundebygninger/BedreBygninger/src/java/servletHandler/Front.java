@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.swing.JOptionPane;
+import DbHandler.*;
 
 /**
  *
@@ -33,8 +34,10 @@ import javax.swing.JOptionPane;
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
 public class Front extends HttpServlet {
 
-    private final DBUserHandler db = new DBUserHandler();
-    private final DBBuildingHandler dbB = new DBBuildingHandler();
+    public static boolean test;
+    
+    private DBUserHandler db;
+    private DBBuildingHandler dbB;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,6 +51,10 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        db = new DBUserHandler(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
+        dbB = new DBBuildingHandler(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
+        
+        
         //String username = request.getParameter("username");
         String failure = "";
         String action = request.getParameter("action");
