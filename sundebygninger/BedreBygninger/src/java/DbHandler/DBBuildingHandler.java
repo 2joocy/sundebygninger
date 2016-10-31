@@ -28,6 +28,11 @@ import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
 
+    public void addBuilding(Building b) {
+        addBuilding(b.getAddress(), b.getCadastral(), b.getBuiltYear(), b.getArea(), b.getZipcode(), b.getCity(), 
+                    b.getCondition(), b.getService(), b.getExtraText(), b.getDateCreated(), b.getFk_idUser(), b.getFk_idMainPicture(), b.getFk_idReport());
+    }
+    
     public void addBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String conditionText,
             String service, String extraText, String dateCreated, int fk_idUser,
@@ -149,14 +154,48 @@ public class DBBuildingHandler {
         return building;
     }
 
-    public void submitReport(String buildingUsage, String roofRemarks,
+    public Building getBuilding(String address) {
+        Building building = null;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT * FROM building WHERE address=?";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            prepared.setString(1, address);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                building = new Building(
+                        myRS.getInt("idBuilding"),
+                        myRS.getString("address"),
+                        myRS.getString("cadastral"),
+                        myRS.getString("area"),
+                        myRS.getString("zipcode"),
+                        myRS.getString("city"),
+                        myRS.getString("conditionText"),
+                        myRS.getString("service"),
+                        myRS.getString("extraText"),
+                        myRS.getString("builtYear"),
+                        myRS.getInt("fk_idUser"),
+                        myRS.getInt("fk_idMainPicture"),
+                        myRS.getInt("fk_idReport"),
+                        myRS.getString("dateCreated")
+                );
+            }
+
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+        return building;
+    }
+
+    public void submitReport(String buildingUsage, boolean roofRemarks,
             int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
         try {
             Connection myConn = DBConnection.getConnection();
-            String sql = "INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_icPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES(?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES "
+                    + "(?,?,(select idPicture from picture where idPicture=?),?,?,(select idPicture from picture where idPicture=?),?,(select idUser from user where idUser=?),?)";
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setString(1, buildingUsage);
-            prepared.setString(2, roofRemarks);
+            prepared.setInt(2, (roofRemarks ? 1 : 0));
             prepared.setInt(3, fk_idPictureRoof);
             prepared.setString(4, roofText);
             prepared.setBoolean(5, outerWallRemarks);
@@ -166,7 +205,7 @@ public class DBBuildingHandler {
             prepared.setString(9, buildingResponsible);
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showConfirmDialog(null, "(Submit Report) - Fejl her!");
+            JOptionPane.showMessageDialog(null, "[DBBuilding.submitReport] " + ex);
         }
     }
 
@@ -235,6 +274,22 @@ public class DBBuildingHandler {
         return count;
     }
 
+    public int getBuildingCount() {
+        int count = 0;
+        try {
+            Connection myConn = DBConnection.getConnection();
+            String sql = "SELECT idBuilding FROM building";
+            PreparedStatement prepared = myConn.prepareStatement(sql);
+            ResultSet myRS = prepared.executeQuery();
+            while(myRS.next()){
+                count++;
+            }
+        } catch (SQLException | HeadlessException ex) {
+
+        }
+        return count;
+    }
+    
     public String getService(int idUser) {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"

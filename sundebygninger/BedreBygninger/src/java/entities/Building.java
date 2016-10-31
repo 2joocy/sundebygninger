@@ -103,5 +103,19 @@ public class Building {
         return buildingArea;
     }
     
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Building) {
+            Building check = (Building) o;
+            System.out.println("o is instanceof Building");
+            System.out.println(check.getAddress() + " vs " + address + ", " + check.getFk_idUser() + " vs " + fk_idUser);
+            return check.getAddress().equals(address) &&
+                   check.getZipcode().equals(zipcode) &&
+                   check.getFk_idUser() == fk_idUser;
+        } else {
+            System.out.println("Object is not instanceof Building");
+        }
+        return false;
+    }
     
 }

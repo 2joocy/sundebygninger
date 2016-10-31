@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Front.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SundeBygninger&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">servletHandler</a> &gt; <span class="el_source">Front.java</span></div><h1>Front.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package servletHandler;
+
+import DbHandler.DBBuildingHandler;
+import DbHandler.DBUserHandler;
+import entities.Building;
+import entities.User;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author William-PC
+ */
+@WebServlet(name = &quot;Front&quot;, urlPatterns = {&quot;/Front&quot;})
+@MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
+<span class="nc" id="L34">public class Front extends HttpServlet {</span>
+
+<span class="nc" id="L36">    private final DBUserHandler db = new DBUserHandler();</span>
+<span class="nc" id="L37">    private final DBBuildingHandler dbB = new DBBuildingHandler();</span>
+
+    /**
+     * Processes requests for both HTTP &lt;code&gt;GET&lt;/code&gt; and &lt;code&gt;POST&lt;/code&gt;
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+<span class="nc" id="L50">        response.setContentType(&quot;text/html;charset=UTF-8&quot;);</span>
+        //String username = request.getParameter(&quot;username&quot;);
+<span class="nc" id="L52">        String failure = &quot;&quot;;</span>
+<span class="nc" id="L53">        String action = request.getParameter(&quot;action&quot;);</span>
+<span class="nc" id="L54">        String password = request.getParameter(&quot;password&quot;);</span>
+<span class="nc" id="L55">        String id = request.getParameter(&quot;userID&quot;);</span>
+<span class="nc" id="L56">        String email = request.getParameter(&quot;email&quot;);</span>
+<span class="nc" id="L57">        String phone = request.getParameter(&quot;phone&quot;);</span>
+<span class="nc" id="L58">        String fullName = request.getParameter(&quot;fullName&quot;);</span>
+<span class="nc" id="L59">        String businessName = request.getParameter(&quot;businessName&quot;);</span>
+<span class="nc" id="L60">        String method = request.getParameter(&quot;methodForm&quot;);</span>
+<span class="nc" id="L61">        DateFormat dateFormat = new SimpleDateFormat(&quot;dd/MM/yyyy HH:mm:ss&quot;);</span>
+<span class="nc" id="L62">        Date datePre = new Date();</span>
+<span class="nc" id="L63">        String date = dateFormat.format(datePre);</span>
+<span class="nc" id="L64">        String address = request.getParameter(&quot;address&quot;);</span>
+<span class="nc" id="L65">        String cadastral = request.getParameter(&quot;cadastral&quot;);</span>
+<span class="nc" id="L66">        String builtYear = request.getParameter(&quot;builtYear&quot;);</span>
+<span class="nc" id="L67">        String area = request.getParameter(&quot;area&quot;);</span>
+<span class="nc" id="L68">        String zipcode = request.getParameter(&quot;zipcode&quot;);</span>
+<span class="nc" id="L69">        String city = request.getParameter(&quot;city&quot;);</span>
+<span class="nc" id="L70">        String condition = request.getParameter(&quot;condition&quot;);</span>
+<span class="nc" id="L71">        String extraText = request.getParameter(&quot;extraText&quot;);</span>
+<span class="nc" id="L72">        String idBuilding = request.getParameter(&quot;idBuilding&quot;);</span>
+<span class="nc" id="L73">        String idBuilding2 = request.getParameter(&quot;buildingID&quot;);</span>
+<span class="nc" id="L74">        String typeDmg = request.getParameter(&quot;typeDmg&quot;);</span>
+<span class="nc" id="L75">        String remarks = request.getParameter(&quot;remarks&quot;);</span>
+<span class="nc" id="L76">        String dmg = request.getParameter(&quot;damage&quot;);</span>
+<span class="nc" id="L77">        String dateDmg = request.getParameter(&quot;dateOfDamage&quot;);</span>
+<span class="nc" id="L78">        String placeDmg = request.getParameter(&quot;placementOfDmg&quot;);</span>
+<span class="nc" id="L79">        String descDmg = request.getParameter(&quot;descDmg&quot;);</span>
+<span class="nc" id="L80">        String reasonDmg = request.getParameter(&quot;reasonDmg&quot;);</span>
+<span class="nc" id="L81">        String hasWallRemark = request.getParameter(&quot;hasWallRemarks&quot;);</span>
+<span class="nc" id="L82">        String wallRemark = request.getParameter(&quot;wallRemark&quot;);</span>
+<span class="nc" id="L83">        String hasRoofRemarks = request.getParameter(&quot;hasRoofRemarks&quot;);</span>
+<span class="nc" id="L84">        String roofRemarks = request.getParameter(&quot;roofRemarks&quot;);</span>
+<span class="nc" id="L85">        String hasFloorRemarks = request.getParameter(&quot;hasFloorRemarks&quot;);</span>
+<span class="nc" id="L86">        String floorRemarks = request.getParameter(&quot;floorRemarks&quot;);</span>
+<span class="nc" id="L87">        String hasMoistureRemark = request.getParameter(&quot;hasMoistureRemark&quot;);</span>
+<span class="nc" id="L88">        String moistureDesc = request.getParameter(&quot;moistureDesc&quot;);</span>
+<span class="nc" id="L89">        String moistureMeasure = request.getParameter(&quot;moistureMeasure&quot;);</span>
+<span class="nc" id="L90">        String conclusion = request.getParameter(&quot;conclusion&quot;);</span>
+<span class="nc" id="L91">        String idRoom = request.getParameter(&quot;idRoom&quot;);</span>
+<span class="nc" id="L92">        String newPassword = request.getParameter(&quot;newPass&quot;);</span>
+<span class="nc" id="L93">        String newEmail = request.getParameter(&quot;newEmail&quot;);</span>
+<span class="nc" id="L94">        String fk_idMainPicture = request.getParameter(&quot;fk_idMainPicture&quot;);</span>
+
+<span class="nc" id="L96">        PrintWriter out = response.getWriter();</span>
+<span class="nc bnc" id="L97" title="All 74 branches missed.">        switch (method) {</span>
+            case &quot;login&quot;:
+<span class="nc" id="L99">                User user = db.checkLogin(email, password);</span>
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                if (user == null) {</span>
+                    //Try to make a pop-up declaring the error (user login incorrect).
+                    //After confirmation from user on the pop-up, redirect to login page, again.
+<span class="nc" id="L104">                    failure = &quot;Account was not found. Please check the entered data!&quot;;</span>
+<span class="nc" id="L105">                    request.getSession().setAttribute(&quot;failure&quot;, failure);</span>
+<span class="nc" id="L106">                    response.sendRedirect(&quot;index.jsp&quot;);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                } else if (user.getStatus().equals(&quot;not&quot;)) {</span>
+<span class="nc" id="L108">                    failure = &quot;Your membership is still under review. If this has been the case for more than 48 hours, please contact Polygon support!&quot;;</span>
+<span class="nc" id="L109">                    request.getSession().setAttribute(&quot;failure&quot;, failure);</span>
+<span class="nc" id="L110">                    response.sendRedirect(&quot;index.jsp&quot;);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                } else if (user.getStatus().equalsIgnoreCase(&quot;worker&quot;)) {</span>
+<span class="nc" id="L112">                    HttpSession session = request.getSession();</span>
+<span class="nc" id="L113">                    session.setAttribute(&quot;user&quot;, user);</span>
+<span class="nc" id="L114">                    response.sendRedirect(&quot;firstPage.jsp&quot;);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                } else if (user.getStatus().equalsIgnoreCase(&quot;denied&quot;)) {</span>
+<span class="nc" id="L116">                    failure = &quot;Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff.&quot;;</span>
+<span class="nc" id="L117">                    request.getSession().setAttribute(&quot;failure&quot;, failure);</span>
+<span class="nc" id="L118">                    response.sendRedirect(&quot;index.jsp&quot;);</span>
+                } else {
+<span class="nc" id="L120">                    HttpSession session = request.getSession();</span>
+<span class="nc" id="L121">                    session.setAttribute(&quot;user&quot;, user);</span>
+<span class="nc" id="L122">                    response.sendRedirect(&quot;firstPage.jsp&quot;);</span>
+                }
+                //out.print(user == null ? &quot;User == null&quot; : user.getEmail());
+<span class="nc" id="L125">                break;</span>
+                
+            case &quot;register&quot;:
+<span class="nc" id="L128">                String message = db.registerUser(email, password, businessName, phone, &quot;not&quot;, fullName, dateFormat.format(datePre));</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                if (message.contains(&quot;Error, &quot;)) {</span>
+                    //request.getSession().setAttribute(&quot;failure&quot;, message);
+<span class="nc" id="L131">                    response.sendRedirect(&quot;register.jsp&quot;);</span>
+                } else {
+<span class="nc" id="L133">                    db.registerUser(email, password, businessName, phone, &quot;not&quot;, fullName, dateFormat.format(datePre));</span>
+<span class="nc" id="L134">                    response.sendRedirect(&quot;awaitingApproval.jsp&quot;);</span>
+                }
+
+<span class="nc" id="L137">                break;</span>
+                
+            case &quot;confirmUsers&quot;:
+<span class="nc" id="L140">                db.confirmUser(id);</span>
+<span class="nc" id="L141">                response.sendRedirect(&quot;overviewUsers.jsp&quot;);</span>
+<span class="nc" id="L142">                break;</span>
+                
+            case &quot;denyUsers&quot;:
+<span class="nc" id="L145">                db.denyUser(id);</span>
+<span class="nc" id="L146">                response.sendRedirect(&quot;overviewUsers.jsp&quot;);</span>
+<span class="nc" id="L147">                break;</span>
+                
+            case &quot;forgotPass&quot;:
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                if (!db.userExists(email)) {</span>
+<span class="nc" id="L151">                    out.println(&quot;No such user exists.&quot;);</span>
+<span class="nc" id="L152">                    return;</span>
+                }
+<span class="nc" id="L154">                out.println(&quot;Email sent to &quot; + email + &quot; with new password.&quot;);</span>
+<span class="nc" id="L155">                db.forgotPass(email, businessName);</span>
+<span class="nc" id="L156">                break;</span>
+                
+            case &quot;registerBuilding&quot;:
+<span class="nc" id="L159">                dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, &quot;&quot;, &quot;&quot;, extraText, date, Integer.parseInt(id), 0, 0);</span>
+<span class="nc" id="L160">                response.sendRedirect(&quot;overviewBuilding.jsp&quot;);</span>
+<span class="nc" id="L161">                break;</span>
+                
+            case &quot;logout&quot;:
+<span class="nc" id="L164">                request.getSession().invalidate();</span>
+<span class="nc" id="L165">                failure = &quot;You have successfully been logged out!&quot;;</span>
+<span class="nc" id="L166">                request.getSession().setAttribute(&quot;failure&quot;, failure);</span>
+<span class="nc" id="L167">                response.sendRedirect(&quot;index.jsp&quot;);</span>
+
+<span class="nc" id="L169">                break;</span>
+
+            case &quot;editBuilding&quot;:
+<span class="nc" id="L172">                request.getSession().setAttribute(&quot;building&quot;, dbB.getBuilding(Integer.parseInt(idBuilding)));</span>
+<span class="nc" id="L173">                response.sendRedirect(&quot;editBuilding.jsp&quot;);</span>
+<span class="nc" id="L174">                break;</span>
+
+            case &quot;editBuildingFinal&quot;:
+<span class="nc" id="L177">                dbB.editBuilding(address, cadastral, builtYear, area, zipcode, city, condition, extraText, Integer.parseInt(idBuilding2));</span>
+<span class="nc" id="L178">                response.sendRedirect(&quot;overviewBuilding.jsp&quot;);</span>
+<span class="nc" id="L179">                break;</span>
+
+            case &quot;deleteBuilding&quot;:
+<span class="nc" id="L182">                dbB.removeBuilding(Integer.parseInt(idBuilding));</span>
+<span class="nc" id="L183">                response.sendRedirect(&quot;overviewBuilding.jsp&quot;);</span>
+<span class="nc" id="L184">                break;</span>
+
+            case &quot;uploadPicture&quot;:
+<span class="nc" id="L187">                Part filePart = request.getPart(&quot;picture&quot;);</span>
+<span class="nc" id="L188">                Building building = (Building) request.getSession().getAttribute(&quot;building&quot;);</span>
+<span class="nc" id="L189">                int imageId = dbB.uploadImage(&quot;&quot;, filePart.getContentType(), filePart);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">                String imageMessage = (imageId == -1 ? &quot;Image failed to upload.&quot; : &quot;Image uploaded to the database.&quot;);</span>
+<span class="nc" id="L191">                request.getSession().setAttribute(&quot;imageMessage&quot;, &quot;&quot; + imageMessage);</span>
+<span class="nc" id="L192">                request.getSession().setAttribute(&quot;imageId&quot;, &quot;&quot; + imageId);</span>
+<span class="nc" id="L193">                request.getSession().setAttribute(&quot;imageTest&quot;, dbB.getImage());</span>
+<span class="nc" id="L194">                response.sendRedirect(&quot;FileConf.jsp&quot;);</span>
+<span class="nc" id="L195">                break;</span>
+                
+            case &quot;getService&quot;:
+<span class="nc" id="L198">                request.getSession().setAttribute(&quot;idBuilding&quot;, idBuilding);</span>
+<span class="nc" id="L199">                response.sendRedirect(&quot;service.jsp&quot;);</span>
+<span class="nc" id="L200">                break;</span>
+                
+            case &quot;submitReport&quot;:
+<span class="nc" id="L203">                Part filePart2 = request.getPart(&quot;picture&quot;);</span>
+<span class="nc" id="L204">                int imageId2 = dbB.uploadImage(&quot;&quot;, filePart2.getContentType(), filePart2);</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                String imageMessage2 = (imageId2 == -1 ? &quot;Image failed to upload.&quot; : &quot;Image uploaded to the database.&quot;);</span>
+<span class="nc" id="L206">                request.getSession().setAttribute(&quot;imageMessage&quot;, &quot;&quot; + imageMessage2);</span>
+<span class="nc" id="L207">                request.getSession().setAttribute(&quot;imageId&quot;, &quot;&quot; + imageId2);</span>
+<span class="nc" id="L208">                request.getSession().setAttribute(&quot;imageTest&quot;, dbB.getImage());</span>
+<span class="nc" id="L209">                break;</span>
+                
+            case &quot;serviceRoom&quot;:
+<span class="nc" id="L212">                response.sendRedirect(&quot;service.jsp&quot;);</span>
+<span class="nc" id="L213">                break;</span>
+                
+            case &quot;editRoom&quot;:
+<span class="nc" id="L216">                request.getSession().setAttribute(&quot;idRoom&quot;, idRoom);</span>
+<span class="nc" id="L217">                response.sendRedirect(&quot;editRoom.jsp&quot;);</span>
+<span class="nc" id="L218">                break;</span>
+                
+            case &quot;changeEmail&quot;:
+<span class="nc" id="L221">                user = (User) request.getSession().getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L222">                db.updateEmail(newEmail, user.getIdUser());</span>
+<span class="nc" id="L223">                response.sendRedirect(&quot;account.jsp&quot;);</span>
+<span class="nc" id="L224">                break;</span>
+                
+            case &quot;changePass&quot;:
+<span class="nc bnc" id="L227" title="All 2 branches missed.">                if (db.correctPass(password, email) == true) {</span>
+<span class="nc" id="L228">                    db.updatePassword(email, newPassword);</span>
+<span class="nc" id="L229">                    request.getSession().setAttribute(&quot;failure&quot;, &quot;Password has been successfully changed!&quot;);</span>
+<span class="nc" id="L230">                    response.sendRedirect(&quot;account.jsp&quot;);</span>
+                } else {
+<span class="nc" id="L232">                    request.getSession().setAttribute(&quot;failure&quot;, &quot;Password has not been changed due to incorrect password. Please double check your info before typing!&quot;);</span>
+<span class="nc" id="L233">                    response.sendRedirect(&quot;account.jsp&quot;);</span>
+                }
+<span class="nc" id="L235">                break;</span>
+                
+            case &quot;newMainImage&quot;:
+<span class="nc" id="L238">                filePart = request.getPart(&quot;picture&quot;);</span>
+<span class="nc" id="L239">                int newImageID = Integer.parseInt(idBuilding);</span>
+<span class="nc" id="L240">                int fk_mainImage = Integer.parseInt(fk_idMainPicture);</span>
+<span class="nc" id="L241">                imageId = dbB.uploadMainImage(&quot;&quot;, filePart.getContentType(), filePart, newImageID, fk_mainImage);</span>
+<span class="nc" id="L242">                response.sendRedirect(&quot;overviewBuilding.jsp&quot;);</span>
+                break;
+        }
+
+<span class="nc" id="L246">    }</span>
+
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;HttpServlet methods. Click on the + sign on the left to edit the code.&quot;&gt;
+    /**
+     * Handles the HTTP &lt;code&gt;GET&lt;/code&gt; method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+<span class="nc" id="L260">        processRequest(request, response);</span>
+<span class="nc" id="L261">    }</span>
+
+    /**
+     * Handles the HTTP &lt;code&gt;POST&lt;/code&gt; method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+<span class="nc" id="L274">        processRequest(request, response);</span>
+<span class="nc" id="L275">    }</span>
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+<span class="nc" id="L284">        return &quot;Short description&quot;;</span>
+    }// &lt;/editor-fold&gt;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

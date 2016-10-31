@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Building.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SundeBygninger&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">entities</a> &gt; <span class="el_source">Building.java</span></div><h1>Building.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entities;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+
+/**
+ *
+ * @author William-PC
+ */
+public class Building {
+
+    private int idBuilding, fk_idUser, fk_idMainPicture, fk_idReport;
+    private String address, cadastral, area, zipcode, city, condition, service, extraText,builtYear;
+    private String dateCreated;
+    private double buildingArea;
+
+    public Building(int idBuilding, String address, String cadastral,
+                    String area, String zipcode, String city, String condition, String service, 
+                    String extraText, String builtYear, int fk_idUser, 
+<span class="fc" id="L26">                    int fk_idMainPicture, int fk_idReport, String dateCreated) {</span>
+           
+<span class="fc" id="L28">        this.idBuilding = idBuilding;</span>
+<span class="fc" id="L29">        this.address = address;</span>
+<span class="fc" id="L30">        this.cadastral = cadastral;</span>
+<span class="fc" id="L31">        this.area = area;</span>
+<span class="fc" id="L32">        this.zipcode = zipcode;</span>
+<span class="fc" id="L33">        this.city = city;</span>
+<span class="fc" id="L34">        this.condition = condition;</span>
+<span class="fc" id="L35">        this.service = service;</span>
+<span class="fc" id="L36">        this.extraText = extraText;</span>
+<span class="fc" id="L37">        this.builtYear = builtYear;</span>
+<span class="fc" id="L38">        this.fk_idUser = fk_idUser;</span>
+<span class="fc" id="L39">        this.fk_idReport = fk_idReport;</span>
+<span class="fc" id="L40">        this.fk_idMainPicture = fk_idMainPicture;</span>
+<span class="fc" id="L41">        this.dateCreated = dateCreated;</span>
+        
+        
+<span class="fc" id="L44">    }</span>
+
+    public int getIdBuilding() {
+<span class="fc" id="L47">        return idBuilding;</span>
+    }
+
+    public int getFk_idUser() {
+<span class="fc" id="L51">        return fk_idUser;</span>
+    }
+
+    public int getFk_idMainPicture() {
+<span class="fc" id="L55">        return fk_idMainPicture;</span>
+    }
+
+    public int getFk_idReport() {
+<span class="fc" id="L59">        return fk_idReport;</span>
+    }
+
+    public String getAddress() {
+<span class="fc" id="L63">        return address;</span>
+    }
+
+    public String getCadastral() {
+<span class="fc" id="L67">        return cadastral;</span>
+    }
+
+    public String getArea() {
+<span class="fc" id="L71">        return area;</span>
+    }
+
+    public String getZipcode() {
+<span class="fc" id="L75">        return zipcode;</span>
+    }
+
+    public String getCity() {
+<span class="fc" id="L79">        return city;</span>
+    }
+
+    public String getCondition() {
+<span class="fc" id="L83">        return condition;</span>
+    }
+
+    public String getService() {
+<span class="fc" id="L87">        return service;</span>
+    }
+
+    public String getExtraText() {
+<span class="fc" id="L91">        return extraText;</span>
+    }
+
+    public String getBuiltYear() {
+<span class="fc" id="L95">        return builtYear;</span>
+    }
+
+    public String getDateCreated() {
+<span class="fc" id="L99">        return dateCreated;</span>
+    }
+
+    public double getBuildingArea() {
+<span class="nc" id="L103">        return buildingArea;</span>
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (o instanceof Building) {</span>
+<span class="fc" id="L109">            Building check = (Building) o;</span>
+<span class="fc" id="L110">            System.out.println(&quot;o is instanceof Building&quot;);</span>
+<span class="fc" id="L111">            System.out.println(check.getAddress() + &quot; vs &quot; + address + &quot;, &quot; + check.getFk_idUser() + &quot; vs &quot; + fk_idUser);</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            return check.getAddress().equals(address) &amp;&amp;</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">                   check.getZipcode().equals(zipcode) &amp;&amp;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                   check.getFk_idUser() == fk_idUser;</span>
+        } else {
+<span class="nc" id="L116">            System.out.println(&quot;Object is not instanceof Building&quot;);</span>
+        }
+<span class="nc" id="L118">        return false;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
