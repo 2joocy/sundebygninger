@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DBBuildingHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SundeBygninger&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">DbHandler</a> &gt; <span class="el_source">DBBuildingHandler.java</span></div><h1>DBBuildingHandler.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DBBuildingHandler.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SundeBygninger&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">DbHandler</a> &gt; <span class="el_source">DBBuildingHandler.java</span></div><h1>DBBuildingHandler.java</h1><pre class="source lang-java linenums">/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -10,6 +10,9 @@ import entities.User;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,18 +33,18 @@ public class DBBuildingHandler {
 
     private Connection conn;
     
-<span class="fc" id="L33">    public DBBuildingHandler() {</span>
-<span class="fc" id="L34">        this.conn = DBConnection.getConnection();</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L36">    public DBBuildingHandler() {</span>
+<span class="fc" id="L37">        this.conn = DBConnection.getConnection();</span>
+<span class="fc" id="L38">    }</span>
     
-<span class="fc" id="L37">    public DBBuildingHandler(Connection conn) {</span>
-<span class="fc" id="L38">        this.conn = conn;</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L40">    public DBBuildingHandler(Connection conn) {</span>
+<span class="fc" id="L41">        this.conn = conn;</span>
+<span class="fc" id="L42">    }</span>
     
     public void addBuilding(Building b) {
-<span class="fc" id="L42">        addBuilding(b.getAddress(), b.getCadastral(), b.getBuiltYear(), b.getArea(), b.getZipcode(), b.getCity(), </span>
-<span class="fc" id="L43">                    b.getCondition(), b.getService(), b.getExtraText(), b.getDateCreated(), b.getFk_idUser(), b.getFk_idMainPicture(), b.getFk_idReport());</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L45">        addBuilding(b.getAddress(), b.getCadastral(), b.getBuiltYear(), b.getArea(), b.getZipcode(), b.getCity(), </span>
+<span class="fc" id="L46">                    b.getCondition(), b.getService(), b.getExtraText(), b.getDateCreated(), b.getFk_idUser(), b.getFk_idMainPicture(), b.getFk_idReport());</span>
+<span class="fc" id="L47">    }</span>
     
     public void addBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String conditionText,
@@ -49,31 +52,31 @@ public class DBBuildingHandler {
             int fk_idMainPicture, int fk_idReport) {
 
         try {
-<span class="fc" id="L52">            String sql = &quot;INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)&quot;</span>
+<span class="fc" id="L55">            String sql = &quot;INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport)&quot;</span>
                     + &quot;VALUES (?,?,?,?,?,?,?,?,?,?,(select idUser from user where idUser=?),null,null)&quot;;
-<span class="fc" id="L54">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L57">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
 
-<span class="fc" id="L56">            prepared.setString(1, address);</span>
-<span class="fc" id="L57">            prepared.setString(2, cadastral);</span>
-<span class="fc" id="L58">            prepared.setString(3, builtYear);</span>
-<span class="fc" id="L59">            prepared.setString(4, area);</span>
-<span class="fc" id="L60">            prepared.setString(5, zipcode);</span>
-<span class="fc" id="L61">            prepared.setString(6, city);</span>
-<span class="fc" id="L62">            prepared.setString(7, conditionText);</span>
-<span class="fc" id="L63">            prepared.setString(8, service);</span>
-<span class="fc" id="L64">            prepared.setString(9, extraText);</span>
-<span class="fc" id="L65">            prepared.setString(10, dateCreated);</span>
-<span class="fc" id="L66">            prepared.setInt(11, fk_idUser);</span>
+<span class="fc" id="L59">            prepared.setString(1, address);</span>
+<span class="fc" id="L60">            prepared.setString(2, cadastral);</span>
+<span class="fc" id="L61">            prepared.setString(3, builtYear);</span>
+<span class="fc" id="L62">            prepared.setString(4, area);</span>
+<span class="fc" id="L63">            prepared.setString(5, zipcode);</span>
+<span class="fc" id="L64">            prepared.setString(6, city);</span>
+<span class="fc" id="L65">            prepared.setString(7, conditionText);</span>
+<span class="fc" id="L66">            prepared.setString(8, service);</span>
+<span class="fc" id="L67">            prepared.setString(9, extraText);</span>
+<span class="fc" id="L68">            prepared.setString(10, dateCreated);</span>
+<span class="fc" id="L69">            prepared.setInt(11, fk_idUser);</span>
             //prepared.setInt(12, fk_idMainPicture);
             //prepared.setInt(13, fk_idReport);
 
-<span class="fc" id="L70">            prepared.executeUpdate();</span>
-<span class="pc" id="L71">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L73">            prepared.executeUpdate();</span>
+<span class="pc" id="L74">        } catch (SQLException | HeadlessException ex) {}</span>
 
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L76">    }</span>
 
     public String getBuildings(int idUser) {
-<span class="fc" id="L76">        String tableData = &quot;&lt;table class='table table-hover'&gt;\n&quot;</span>
+<span class="fc" id="L79">        String tableData = &quot;&lt;table class='table table-hover'&gt;\n&quot;</span>
                 + &quot;    &lt;thead&gt;\n&quot;
                 + &quot;      &lt;tr&gt;\n&quot;
                 + &quot;        &lt;th&gt;Thumbnail&lt;/th&gt;\n&quot;
@@ -94,18 +97,18 @@ public class DBBuildingHandler {
     int fk_MainPicture, int fk_idReport, Date dateCreated
              */
 
-<span class="fc" id="L97">            String sql = &quot;SELECT * FROM building WHERE fk_idUser=?&quot;;</span>
-<span class="fc" id="L98">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L99">            prepared.setInt(1, idUser);</span>
-<span class="fc" id="L100">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="fc" id="L101">            int id = 1;</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">            while (myRS.next()) {</span>
-<span class="fc" id="L103">                int idBuilding = myRS.getInt(&quot;idBuilding&quot;);</span>
-<span class="fc" id="L104">                int imageID = myRS.getInt(&quot;fk_idMainPicture&quot;);</span>
-<span class="fc" id="L105">                String address = myRS.getString(&quot;address&quot;);</span>
-<span class="fc" id="L106">                String city = myRS.getString(&quot;city&quot;);</span>
-<span class="fc" id="L107">                String zipcode = myRS.getString(&quot;zipcode&quot;);</span>
-<span class="fc" id="L108">                tableData += &quot;&lt;tr&gt;&lt;td&gt;&quot; + getImageHTML(imageID, 50, 50)</span>
+<span class="fc" id="L100">            String sql = &quot;SELECT * FROM building WHERE fk_idUser=?&quot;;</span>
+<span class="fc" id="L101">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L102">            prepared.setInt(1, idUser);</span>
+<span class="fc" id="L103">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="fc" id="L104">            int id = 1;</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            while (myRS.next()) {</span>
+<span class="fc" id="L106">                int idBuilding = myRS.getInt(&quot;idBuilding&quot;);</span>
+<span class="fc" id="L107">                int imageID = myRS.getInt(&quot;fk_idMainPicture&quot;);</span>
+<span class="fc" id="L108">                String address = myRS.getString(&quot;address&quot;);</span>
+<span class="fc" id="L109">                String city = myRS.getString(&quot;city&quot;);</span>
+<span class="fc" id="L110">                String zipcode = myRS.getString(&quot;zipcode&quot;);</span>
+<span class="fc" id="L111">                tableData += &quot;&lt;tr&gt;&lt;td&gt;&quot; + getImageHTML(imageID, 50, 50)</span>
                         + &quot;&lt;td&gt;&quot; + address + &quot;&lt;/td&gt;&lt;td&gt;&quot; + zipcode + &quot;&lt;/td&gt;&lt;td&gt;&quot; + city
                         + &quot;&lt;form action='Front' method='POST'&gt;&lt;input type='hidden' name='methodForm' value='editBuilding'&gt;&lt;td&gt;&lt;button class='editbtn' type='submit'&gt;Show/Edit&lt;/button&gt;&lt;/td&gt;&quot;
                         + &quot;&lt;input type='hidden' name='idBuilding' value='&quot; + idBuilding + &quot;'&gt;&lt;/td&gt;&quot;
@@ -117,164 +120,164 @@ public class DBBuildingHandler {
                         + &quot;&lt;input type='hidden' name='idBuilding' value='&quot; + idBuilding + &quot;'&gt;&lt;/td&gt;&quot;
                         + &quot;&lt;/form&gt;&quot;
                         + &quot;&lt;/tr&gt;&quot;;
-<span class="fc" id="L120">                id++;</span>
-<span class="fc" id="L121">            }</span>
-<span class="pc" id="L122">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L123">        tableData += &quot;&lt;/tbody&gt;\n&quot;</span>
+<span class="fc" id="L123">                id++;</span>
+<span class="fc" id="L124">            }</span>
+<span class="pc" id="L125">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L126">        tableData += &quot;&lt;/tbody&gt;\n&quot;</span>
                 + &quot;  &lt;/table&gt;&quot;;
-<span class="fc" id="L125">        return tableData;</span>
+<span class="fc" id="L128">        return tableData;</span>
     }
 
     public Building getBuilding(int idUser) {
-<span class="fc" id="L129">        Building building = null;</span>
+<span class="fc" id="L132">        Building building = null;</span>
         try {
-<span class="fc" id="L131">            String sql = &quot;SELECT * FROM building WHERE idBuilding=?&quot;;</span>
-<span class="fc" id="L132">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L133">            prepared.setInt(1, idUser);</span>
-<span class="fc" id="L134">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">            while (myRS.next()) {</span>
-<span class="fc" id="L136">                building = new Building(</span>
-<span class="fc" id="L137">                        myRS.getInt(&quot;idBuilding&quot;),</span>
-<span class="fc" id="L138">                        myRS.getString(&quot;address&quot;),</span>
-<span class="fc" id="L139">                        myRS.getString(&quot;cadastral&quot;),</span>
-<span class="fc" id="L140">                        myRS.getString(&quot;area&quot;),</span>
-<span class="fc" id="L141">                        myRS.getString(&quot;zipcode&quot;),</span>
-<span class="fc" id="L142">                        myRS.getString(&quot;city&quot;),</span>
-<span class="fc" id="L143">                        myRS.getString(&quot;conditionText&quot;),</span>
-<span class="fc" id="L144">                        myRS.getString(&quot;service&quot;),</span>
-<span class="fc" id="L145">                        myRS.getString(&quot;extraText&quot;),</span>
-<span class="fc" id="L146">                        myRS.getString(&quot;builtYear&quot;),</span>
-<span class="fc" id="L147">                        myRS.getInt(&quot;fk_idUser&quot;),</span>
-<span class="fc" id="L148">                        myRS.getInt(&quot;fk_idMainPicture&quot;),</span>
-<span class="fc" id="L149">                        myRS.getInt(&quot;fk_idReport&quot;),</span>
-<span class="fc" id="L150">                        myRS.getString(&quot;dateCreated&quot;)</span>
+<span class="fc" id="L134">            String sql = &quot;SELECT * FROM building WHERE idBuilding=?&quot;;</span>
+<span class="fc" id="L135">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L136">            prepared.setInt(1, idUser);</span>
+<span class="fc" id="L137">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            while (myRS.next()) {</span>
+<span class="fc" id="L139">                building = new Building(</span>
+<span class="fc" id="L140">                        myRS.getInt(&quot;idBuilding&quot;),</span>
+<span class="fc" id="L141">                        myRS.getString(&quot;address&quot;),</span>
+<span class="fc" id="L142">                        myRS.getString(&quot;cadastral&quot;),</span>
+<span class="fc" id="L143">                        myRS.getString(&quot;area&quot;),</span>
+<span class="fc" id="L144">                        myRS.getString(&quot;zipcode&quot;),</span>
+<span class="fc" id="L145">                        myRS.getString(&quot;city&quot;),</span>
+<span class="fc" id="L146">                        myRS.getString(&quot;conditionText&quot;),</span>
+<span class="fc" id="L147">                        myRS.getString(&quot;service&quot;),</span>
+<span class="fc" id="L148">                        myRS.getString(&quot;extraText&quot;),</span>
+<span class="fc" id="L149">                        myRS.getString(&quot;builtYear&quot;),</span>
+<span class="fc" id="L150">                        myRS.getInt(&quot;fk_idUser&quot;),</span>
+<span class="fc" id="L151">                        myRS.getInt(&quot;fk_idMainPicture&quot;),</span>
+<span class="fc" id="L152">                        myRS.getInt(&quot;fk_idReport&quot;),</span>
+<span class="fc" id="L153">                        myRS.getString(&quot;dateCreated&quot;)</span>
                 );
             }
 
-<span class="pc" id="L154">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L155">        return building;</span>
+<span class="pc" id="L157">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L158">        return building;</span>
     }
 
     public Building getBuilding(String address) {
-<span class="fc" id="L159">        Building building = null;</span>
+<span class="fc" id="L162">        Building building = null;</span>
         try {
-<span class="fc" id="L161">            String sql = &quot;SELECT * FROM building WHERE address=?&quot;;</span>
-<span class="fc" id="L162">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L163">            prepared.setString(1, address);</span>
-<span class="fc" id="L164">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="fc bfc" id="L165" title="All 2 branches covered.">            while (myRS.next()) {</span>
-<span class="fc" id="L166">                building = new Building(</span>
-<span class="fc" id="L167">                        myRS.getInt(&quot;idBuilding&quot;),</span>
-<span class="fc" id="L168">                        myRS.getString(&quot;address&quot;),</span>
-<span class="fc" id="L169">                        myRS.getString(&quot;cadastral&quot;),</span>
-<span class="fc" id="L170">                        myRS.getString(&quot;area&quot;),</span>
-<span class="fc" id="L171">                        myRS.getString(&quot;zipcode&quot;),</span>
-<span class="fc" id="L172">                        myRS.getString(&quot;city&quot;),</span>
-<span class="fc" id="L173">                        myRS.getString(&quot;conditionText&quot;),</span>
-<span class="fc" id="L174">                        myRS.getString(&quot;service&quot;),</span>
-<span class="fc" id="L175">                        myRS.getString(&quot;extraText&quot;),</span>
-<span class="fc" id="L176">                        myRS.getString(&quot;builtYear&quot;),</span>
-<span class="fc" id="L177">                        myRS.getInt(&quot;fk_idUser&quot;),</span>
-<span class="fc" id="L178">                        myRS.getInt(&quot;fk_idMainPicture&quot;),</span>
-<span class="fc" id="L179">                        myRS.getInt(&quot;fk_idReport&quot;),</span>
-<span class="fc" id="L180">                        myRS.getString(&quot;dateCreated&quot;)</span>
+<span class="fc" id="L164">            String sql = &quot;SELECT * FROM building WHERE address=?&quot;;</span>
+<span class="fc" id="L165">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L166">            prepared.setString(1, address);</span>
+<span class="fc" id="L167">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            while (myRS.next()) {</span>
+<span class="fc" id="L169">                building = new Building(</span>
+<span class="fc" id="L170">                        myRS.getInt(&quot;idBuilding&quot;),</span>
+<span class="fc" id="L171">                        myRS.getString(&quot;address&quot;),</span>
+<span class="fc" id="L172">                        myRS.getString(&quot;cadastral&quot;),</span>
+<span class="fc" id="L173">                        myRS.getString(&quot;area&quot;),</span>
+<span class="fc" id="L174">                        myRS.getString(&quot;zipcode&quot;),</span>
+<span class="fc" id="L175">                        myRS.getString(&quot;city&quot;),</span>
+<span class="fc" id="L176">                        myRS.getString(&quot;conditionText&quot;),</span>
+<span class="fc" id="L177">                        myRS.getString(&quot;service&quot;),</span>
+<span class="fc" id="L178">                        myRS.getString(&quot;extraText&quot;),</span>
+<span class="fc" id="L179">                        myRS.getString(&quot;builtYear&quot;),</span>
+<span class="fc" id="L180">                        myRS.getInt(&quot;fk_idUser&quot;),</span>
+<span class="fc" id="L181">                        myRS.getInt(&quot;fk_idMainPicture&quot;),</span>
+<span class="fc" id="L182">                        myRS.getInt(&quot;fk_idReport&quot;),</span>
+<span class="fc" id="L183">                        myRS.getString(&quot;dateCreated&quot;)</span>
                 );
             }
 
-<span class="pc" id="L184">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L185">        return building;</span>
+<span class="pc" id="L187">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L188">        return building;</span>
     }
 
     public void submitReport(String buildingUsage, boolean roofRemarks,
             int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
         try {
-<span class="fc" id="L191">            String sql = &quot;INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES &quot;</span>
+<span class="fc" id="L194">            String sql = &quot;INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES &quot;</span>
                     + &quot;(?,?,(select idPicture from picture where idPicture=?),?,?,(select idPicture from picture where idPicture=?),?,(select idUser from user where idUser=?),?)&quot;;
-<span class="fc" id="L193">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L194">            prepared.setString(1, buildingUsage);</span>
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">            prepared.setInt(2, (roofRemarks ? 1 : 0));</span>
-<span class="fc" id="L196">            prepared.setInt(3, fk_idPictureRoof);</span>
-<span class="fc" id="L197">            prepared.setString(4, roofText);</span>
-<span class="fc" id="L198">            prepared.setBoolean(5, outerWallRemarks);</span>
-<span class="fc" id="L199">            prepared.setInt(6, fk_idPictureOuterRoof);</span>
-<span class="fc" id="L200">            prepared.setString(7, outerWallText);</span>
-<span class="fc" id="L201">            prepared.setInt(8, fk_idEmployee);</span>
-<span class="fc" id="L202">            prepared.setString(9, buildingResponsible);</span>
-<span class="fc" id="L203">            prepared.executeUpdate();</span>
-<span class="pc" id="L204">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L205">    }</span>
+<span class="fc" id="L196">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L197">            prepared.setString(1, buildingUsage);</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            prepared.setInt(2, (roofRemarks ? 1 : 0));</span>
+<span class="fc" id="L199">            prepared.setInt(3, fk_idPictureRoof);</span>
+<span class="fc" id="L200">            prepared.setString(4, roofText);</span>
+<span class="fc" id="L201">            prepared.setBoolean(5, outerWallRemarks);</span>
+<span class="fc" id="L202">            prepared.setInt(6, fk_idPictureOuterRoof);</span>
+<span class="fc" id="L203">            prepared.setString(7, outerWallText);</span>
+<span class="fc" id="L204">            prepared.setInt(8, fk_idEmployee);</span>
+<span class="fc" id="L205">            prepared.setString(9, buildingResponsible);</span>
+<span class="fc" id="L206">            prepared.executeUpdate();</span>
+<span class="pc" id="L207">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L208">    }</span>
 
     public String getRooms(int id) {
-<span class="fc" id="L208">        String roomData = &quot;&quot;;</span>
+<span class="fc" id="L211">        String roomData = &quot;&quot;;</span>
         try {
-<span class="fc" id="L210">            String sql = &quot;SELECT idRoomBuilding, roomDescribtion from roomBuilding where fk_idBuilding=?&quot;;</span>
-<span class="fc" id="L211">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L212">            prepared.setInt(1, id);</span>
-<span class="fc" id="L213">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            while (myRS.next()) {</span>
-<span class="fc" id="L215">                int roomID = myRS.getInt(&quot;idRoomBuilding&quot;);</span>
-<span class="fc" id="L216">                String roomDesc = myRS.getString(&quot;roomDescribtion&quot;);</span>
+<span class="fc" id="L213">            String sql = &quot;SELECT idRoomBuilding, roomDescribtion from roomBuilding where fk_idBuilding=?&quot;;</span>
+<span class="fc" id="L214">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L215">            prepared.setInt(1, id);</span>
+<span class="fc" id="L216">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">            while (myRS.next()) {</span>
+<span class="fc" id="L218">                int roomID = myRS.getInt(&quot;idRoomBuilding&quot;);</span>
+<span class="fc" id="L219">                String roomDesc = myRS.getString(&quot;roomDescribtion&quot;);</span>
 
-<span class="fc" id="L218">                roomData += &quot;&lt;form action='Front' method='POST'&gt;&lt;input type='hidden' name='methodForm' value='serviceRoom'&gt;&lt;h4 style='color: white;'&gt;&quot; + roomDesc + &quot;&lt;/h4&gt;&lt;br&gt;&lt;p style='color:white;'&gt;&lt;button class='.btn-success' type='submit'&gt;Service Room&lt;/button&gt;&quot;</span>
+<span class="fc" id="L221">                roomData += &quot;&lt;form action='Front' method='POST'&gt;&lt;input type='hidden' name='methodForm' value='serviceRoom'&gt;&lt;h4 style='color: white;'&gt;&quot; + roomDesc + &quot;&lt;/h4&gt;&lt;br&gt;&lt;p style='color:white;'&gt;&lt;button class='.btn-success' type='submit'&gt;Service Room&lt;/button&gt;&quot;</span>
                         + &quot;&lt;input type='hidden' name='idRoom' value='&quot; + roomID + &quot;'&gt;&lt;/td&gt;&quot;
                         + &quot;&lt;/form&gt;&quot;
                         + &quot;&lt;form action='Front' method='POST'&gt;&lt;input type='hidden' name='methodForm' value='editRoom'&gt;&lt;p style='color:white;'&gt;&lt;button class='.btn-success' type='submit'&gt;Edit Room&lt;/button&gt;&quot;
                         + &quot;&lt;input type='hidden' name='idRoom' value='&quot; + roomID + &quot;'&gt;&lt;/td&gt;&quot;
                         + &quot;&lt;/form&gt;&lt;br&gt;&quot;;
-<span class="fc" id="L224">            }</span>
-<span class="pc" id="L225">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L226">        return roomData;</span>
+<span class="fc" id="L227">            }</span>
+<span class="pc" id="L228">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L229">        return roomData;</span>
     }
 
     public void editBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String condition,
             String extraText, int idBuilding) {
         try {
-<span class="fc" id="L233">            String sql = &quot;UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?&quot;;</span>
-<span class="fc" id="L234">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L235">            prepared.setString(1, address);</span>
-<span class="fc" id="L236">            prepared.setString(2, cadastral);</span>
-<span class="fc" id="L237">            prepared.setString(3, builtYear);</span>
-<span class="fc" id="L238">            prepared.setString(4, area);</span>
-<span class="fc" id="L239">            prepared.setString(5, zipcode);</span>
-<span class="fc" id="L240">            prepared.setString(6, city);</span>
-<span class="fc" id="L241">            prepared.setString(7, condition);</span>
-<span class="fc" id="L242">            prepared.setString(8, extraText);</span>
-<span class="fc" id="L243">            prepared.setInt(9, idBuilding);</span>
-<span class="fc" id="L244">            prepared.executeUpdate();</span>
+<span class="fc" id="L236">            String sql = &quot;UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?&quot;;</span>
+<span class="fc" id="L237">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L238">            prepared.setString(1, address);</span>
+<span class="fc" id="L239">            prepared.setString(2, cadastral);</span>
+<span class="fc" id="L240">            prepared.setString(3, builtYear);</span>
+<span class="fc" id="L241">            prepared.setString(4, area);</span>
+<span class="fc" id="L242">            prepared.setString(5, zipcode);</span>
+<span class="fc" id="L243">            prepared.setString(6, city);</span>
+<span class="fc" id="L244">            prepared.setString(7, condition);</span>
+<span class="fc" id="L245">            prepared.setString(8, extraText);</span>
+<span class="fc" id="L246">            prepared.setInt(9, idBuilding);</span>
+<span class="fc" id="L247">            prepared.executeUpdate();</span>
 
-<span class="pc" id="L246">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L247">    }</span>
+<span class="pc" id="L249">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L250">    }</span>
 
     public int getBuildingCount(int id) {
-<span class="fc" id="L250">        int count = 0;</span>
+<span class="fc" id="L253">        int count = 0;</span>
         try {
-<span class="fc" id="L252">            String sql = &quot;SELECT idBuilding FROM building WHERE fk_idUser=?&quot;;</span>
-<span class="fc" id="L253">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L254">            prepared.setInt(1, id);</span>
-<span class="fc" id="L255">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="fc bfc" id="L256" title="All 2 branches covered.">            while(myRS.next()){</span>
-<span class="fc" id="L257">                count++;</span>
+<span class="fc" id="L255">            String sql = &quot;SELECT idBuilding FROM building WHERE fk_idUser=?&quot;;</span>
+<span class="fc" id="L256">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L257">            prepared.setInt(1, id);</span>
+<span class="fc" id="L258">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">            while(myRS.next()){</span>
+<span class="fc" id="L260">                count++;</span>
             }
-<span class="pc" id="L259">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L260">        return count;</span>
+<span class="pc" id="L262">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L263">        return count;</span>
     }
 
     public int getBuildingCount() {
-<span class="fc" id="L264">        int count = 0;</span>
+<span class="fc" id="L267">        int count = 0;</span>
         try {
-<span class="fc" id="L266">            String sql = &quot;SELECT idBuilding FROM building&quot;;</span>
-<span class="fc" id="L267">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L268">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="fc bfc" id="L269" title="All 2 branches covered.">            while(myRS.next()){</span>
-<span class="fc" id="L270">                count++;</span>
+<span class="fc" id="L269">            String sql = &quot;SELECT idBuilding FROM building&quot;;</span>
+<span class="fc" id="L270">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L271">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">            while(myRS.next()){</span>
+<span class="fc" id="L273">                count++;</span>
             }
-<span class="pc" id="L272">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L273">        return count;</span>
+<span class="pc" id="L275">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L276">        return count;</span>
     }
     
     public String getService(int idUser) {
-<span class="fc" id="L277">        String tableData = &quot;&lt;table class='table table-hover'&gt;\n&quot;</span>
+<span class="fc" id="L280">        String tableData = &quot;&lt;table class='table table-hover'&gt;\n&quot;</span>
                 + &quot;    &lt;thead&gt;\n&quot;
                 + &quot;      &lt;tr&gt;\n&quot;
                 + &quot;        &lt;th&gt;Address&lt;/th&gt;\n&quot;
@@ -291,17 +294,17 @@ public class DBBuildingHandler {
     int fk_MainPicture, int fk_idReport, Date dateCreated
              */
 
-<span class="fc" id="L294">            String sql = &quot;SELECT idBuilding, address, cadastral, builtYear, area, zipcode, city, condition, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport FROM building WHERE fk_idUser=?&quot;;</span>
-<span class="fc" id="L295">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L296">            prepared.setInt(1, idUser);</span>
-<span class="nc" id="L297">            ResultSet myRS = prepared.executeQuery();</span>
-<span class="nc bnc" id="L298" title="All 2 branches missed.">            while (myRS.next()) {</span>
-<span class="nc" id="L299">                int idBuilding = myRS.getInt(&quot;idBuilding&quot;);</span>
-<span class="nc" id="L300">                String address = myRS.getString(&quot;address&quot;);</span>
-<span class="nc" id="L301">                String city = myRS.getString(&quot;city&quot;);</span>
-<span class="nc" id="L302">                int builtYear = myRS.getInt(&quot;builtYear&quot;);</span>
+<span class="fc" id="L297">            String sql = &quot;SELECT idBuilding, address, cadastral, builtYear, area, zipcode, city, condition, service, extraText, dateCreated, fk_idUser, fk_idMainPicture, fk_idReport FROM building WHERE fk_idUser=?&quot;;</span>
+<span class="fc" id="L298">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L299">            prepared.setInt(1, idUser);</span>
+<span class="nc" id="L300">            ResultSet myRS = prepared.executeQuery();</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">            while (myRS.next()) {</span>
+<span class="nc" id="L302">                int idBuilding = myRS.getInt(&quot;idBuilding&quot;);</span>
+<span class="nc" id="L303">                String address = myRS.getString(&quot;address&quot;);</span>
+<span class="nc" id="L304">                String city = myRS.getString(&quot;city&quot;);</span>
+<span class="nc" id="L305">                int builtYear = myRS.getInt(&quot;builtYear&quot;);</span>
 
-<span class="nc" id="L304">                tableData += &quot;&lt;tr&gt;&lt;form method ='POST' action='Front'&gt;&lt;td&gt;&quot; + address + &quot;&lt;/td&gt;&lt;td&gt;&quot; + city + &quot;&lt;/td&gt;&lt;td&gt;&quot; + builtYear + &quot;&lt;input type='hidden' name='methodForm' value='serviceBuilding'&gt;&lt;input type='hidden' name='idBuilding' value='&quot; + idBuilding + &quot;'&gt;&lt;/td&gt;&lt;/tr&gt;&quot;;</span>
+<span class="nc" id="L307">                tableData += &quot;&lt;tr&gt;&lt;form method ='POST' action='Front'&gt;&lt;td&gt;&quot; + address + &quot;&lt;/td&gt;&lt;td&gt;&quot; + city + &quot;&lt;/td&gt;&lt;td&gt;&quot; + builtYear + &quot;&lt;input type='hidden' name='methodForm' value='serviceBuilding'&gt;&lt;input type='hidden' name='idBuilding' value='&quot; + idBuilding + &quot;'&gt;&lt;/td&gt;&lt;/tr&gt;&quot;;</span>
 
 //                Building building = new Building(myRS.getInt(&quot;idBuilding&quot;), 
 //                                                 myRS.getString(&quot;address&quot;),
@@ -321,103 +324,103 @@ public class DBBuildingHandler {
 //                                                 myRS.getDate(&quot;dateCreated&quot;)
 //                                                );
 //                buildingList.add(building);
-<span class="nc" id="L324">            }</span>
-<span class="pc" id="L325">        } catch (SQLException | HeadlessException ex) {}</span>
-<span class="fc" id="L326">        tableData += &quot;&lt;/tbody&gt;\n&quot;</span>
+<span class="nc" id="L327">            }</span>
+<span class="pc" id="L328">        } catch (SQLException | HeadlessException ex) {}</span>
+<span class="fc" id="L329">        tableData += &quot;&lt;/tbody&gt;\n&quot;</span>
                 + &quot;  &lt;/table&gt;&quot;;
-<span class="fc" id="L328">        return tableData;</span>
+<span class="fc" id="L331">        return tableData;</span>
     }
 
     public String createMenu(String status) {
-<span class="fc" id="L332">        DBUserHandler db = new DBUserHandler(conn);</span>
-<span class="fc" id="L333">        String menu = &quot;&quot;;</span>
-<span class="fc bfc" id="L334" title="All 2 branches covered.">        if (status == null) {</span>
-<span class="fc" id="L335">            return &quot;Unspecified Login. Please retry!&quot;;</span>
+<span class="fc" id="L335">        DBUserHandler db = new DBUserHandler(conn);</span>
+<span class="fc" id="L336">        String menu = &quot;&quot;;</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">        if (status == null) {</span>
+<span class="fc" id="L338">            return &quot;Unspecified Login. Please retry!&quot;;</span>
         }
-<span class="fc bfc" id="L337" title="All 2 branches covered.">        else if (status.equalsIgnoreCase(&quot;customer&quot;)) {</span>
-<span class="fc" id="L338">            return &quot;&lt;li&gt;&lt;a href='overviewBuilding.jsp'&gt;Estate&lt;/a&gt;&lt;/li&gt;\n&quot;</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        else if (status.equalsIgnoreCase(&quot;customer&quot;)) {</span>
+<span class="fc" id="L341">            return &quot;&lt;li&gt;&lt;a href='overviewBuilding.jsp'&gt;Estate&lt;/a&gt;&lt;/li&gt;\n&quot;</span>
                     + &quot;            &lt;li&gt;&lt;a href='service.jsp'&gt;Service Overview&lt;/a&gt;&lt;/li&gt;\n&quot;
                     + &quot;            &lt;li&gt;&lt;a href='account.jsp'&gt;Account Management&lt;/a&gt;&lt;/li&gt;\n&quot;
                     + &quot;            &lt;li&gt;&lt;a href='contact.jsp'&gt;Contact Staff&lt;/a&gt;&lt;/li&gt;&quot;;
         } 
-<span class="pc bpc" id="L343" title="1 of 2 branches missed.">        else if (status.equalsIgnoreCase(&quot;worker&quot;)) {</span>
-<span class="fc" id="L344">            return &quot;&lt;li&gt;&lt;a href='overviewBuilding.jsp'&gt;Estates&lt;/a&gt;&lt;/li&gt;\n&quot;</span>
+<span class="pc bpc" id="L346" title="1 of 2 branches missed.">        else if (status.equalsIgnoreCase(&quot;worker&quot;)) {</span>
+<span class="fc" id="L347">            return &quot;&lt;li&gt;&lt;a href='overviewBuilding.jsp'&gt;Estates&lt;/a&gt;&lt;/li&gt;\n&quot;</span>
                     + &quot;            &lt;li&gt;&lt;a href='service.jsp'&gt;Service Overview&lt;/a&gt;&lt;/li&gt;\n&quot;
-<span class="fc" id="L346">                    + &quot;            &lt;li&gt;&lt;a href='overviewUsers.jsp'&gt;Account Management(&quot; + db.countUnConfirmed() + &quot;)&lt;/a&gt;&lt;/li&gt;\n&quot;</span>
+<span class="fc" id="L349">                    + &quot;            &lt;li&gt;&lt;a href='overviewUsers.jsp'&gt;Account Management(&quot; + db.countUnConfirmed() + &quot;)&lt;/a&gt;&lt;/li&gt;\n&quot;</span>
                     + &quot;            &lt;li&gt;&lt;a href='contact.jsp'&gt;Contact Staff&lt;/a&gt;&lt;/li&gt;&quot;;
         } 
-<span class="nc" id="L349">        return &quot;&quot;;</span>
+<span class="nc" id="L352">        return &quot;&quot;;</span>
     }
 
     public String getReportField(int reportID, String fieldName) {
         try {
-<span class="fc" id="L354">            String sql = &quot;SELECT ? FROM report where &quot;;</span>
-<span class="fc" id="L355">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L357">            String sql = &quot;SELECT ? FROM report where &quot;;</span>
+<span class="fc" id="L358">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
 
-<span class="pc" id="L357">        } catch (Exception e) {}</span>
-<span class="fc" id="L358">        return null;</span>
+<span class="pc" id="L360">        } catch (Exception e) {}</span>
+<span class="fc" id="L361">        return null;</span>
     }
 
     public void removeBuilding(int id) {
         try {
-<span class="fc" id="L363">            String sql = &quot;DELETE FROM building WHERE idBuilding=?&quot;;</span>
-<span class="fc" id="L364">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="fc" id="L365">            prepared.setInt(1, id);</span>
-<span class="fc" id="L366">            prepared.executeUpdate();</span>
-<span class="pc" id="L367">        } catch (Exception e) {}</span>
-<span class="fc" id="L368">    }</span>
+<span class="fc" id="L366">            String sql = &quot;DELETE FROM building WHERE idBuilding=?&quot;;</span>
+<span class="fc" id="L367">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="fc" id="L368">            prepared.setInt(1, id);</span>
+<span class="fc" id="L369">            prepared.executeUpdate();</span>
+<span class="pc" id="L370">        } catch (Exception e) {}</span>
+<span class="fc" id="L371">    }</span>
 
     public String getImageHTML(int id) {
-<span class="fc" id="L371">        return &quot;&lt;img src=\&quot;ImageServlet?id=&quot; + id + &quot;\&quot;/&gt;&quot;;</span>
+<span class="fc" id="L374">        return &quot;&lt;img src=\&quot;ImageServlet?id=&quot; + id + &quot;\&quot;/&gt;&quot;;</span>
     }
     
     public String getImageHTML(int id, int width, int height) {
-<span class="fc" id="L375">        return &quot;&lt;img src=\&quot;ImageServlet?id=&quot; + id + &quot;\&quot; height=\&quot;&quot; + height + &quot;\&quot; width=\&quot;&quot; + width+ &quot;\&quot;/&gt;&quot;;</span>
+<span class="fc" id="L378">        return &quot;&lt;img src=\&quot;ImageServlet?id=&quot; + id + &quot;\&quot; height=\&quot;&quot; + height + &quot;\&quot; width=\&quot;&quot; + width+ &quot;\&quot;/&gt;&quot;;</span>
     }
 
     public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
         try {
-<span class="nc" id="L380">            String sql = &quot;DELETE FROM picture WHERE idPicture=?&quot;;</span>
-<span class="nc" id="L381">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
-<span class="nc" id="L382">            prepared.setInt(1, fk_idMainPicture);</span>
-<span class="nc" id="L383">            prepared.executeUpdate();</span>
-<span class="nc" id="L384">            int returnValue = uploadImage(description, type, filePart);</span>
-<span class="nc bnc" id="L385" title="All 2 branches missed.">            if (returnValue &gt;= 0) {</span>
-<span class="nc" id="L386">                sql = &quot;UPDATE building SET fk_idMainPicture = ? WHERE idBuilding = ?&quot;;</span>
-<span class="nc" id="L387">                prepared = conn.prepareStatement(sql);</span>
-<span class="nc" id="L388">                prepared.setInt(1, returnValue);</span>
-<span class="nc" id="L389">                prepared.setInt(2, buildingID);</span>
-<span class="nc" id="L390">                prepared.executeUpdate();</span>
-<span class="nc" id="L391">                return returnValue;</span>
+<span class="nc" id="L383">            String sql = &quot;DELETE FROM picture WHERE idPicture=?&quot;;</span>
+<span class="nc" id="L384">            PreparedStatement prepared = conn.prepareStatement(sql);</span>
+<span class="nc" id="L385">            prepared.setInt(1, fk_idMainPicture);</span>
+<span class="nc" id="L386">            prepared.executeUpdate();</span>
+<span class="nc" id="L387">            int returnValue = uploadImage(description, type, filePart);</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">            if (returnValue &gt;= 0) {</span>
+<span class="nc" id="L389">                sql = &quot;UPDATE building SET fk_idMainPicture = ? WHERE idBuilding = ?&quot;;</span>
+<span class="nc" id="L390">                prepared = conn.prepareStatement(sql);</span>
+<span class="nc" id="L391">                prepared.setInt(1, returnValue);</span>
+<span class="nc" id="L392">                prepared.setInt(2, buildingID);</span>
+<span class="nc" id="L393">                prepared.executeUpdate();</span>
+<span class="nc" id="L394">                return returnValue;</span>
             } else {}
-<span class="nc" id="L393">        } catch (Exception e) {}</span>
-<span class="nc" id="L394">        return -1;</span>
+<span class="nc" id="L396">        } catch (Exception e) {}</span>
+<span class="nc" id="L397">        return -1;</span>
     }
     
     public int uploadImage(String description, String type, Part filePart) {
         try {
-<span class="nc" id="L399">            String sql = &quot;INSERT INTO picture (description, type, image) VALUES (?, ?, ?)&quot;;</span>
-<span class="nc" id="L400">            PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
-<span class="nc" id="L401">            InputStream inputStream = null;</span>
-<span class="nc bnc" id="L402" title="All 2 branches missed.">            if (filePart != null) {</span>
-<span class="nc" id="L403">                inputStream = filePart.getInputStream();</span>
+<span class="fc" id="L402">            String sql = &quot;INSERT INTO picture (description, type, image) VALUES (?, ?, ?)&quot;;</span>
+<span class="fc" id="L403">            PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+<span class="fc" id="L404">            InputStream inputStream = null;</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">            if (filePart != null) {</span>
+<span class="fc" id="L406">                inputStream = filePart.getInputStream();</span>
             }
-<span class="nc bnc" id="L405" title="All 2 branches missed.">            if (inputStream != null) {</span>
-<span class="nc" id="L406">                prepared.setString(1, description);</span>
-<span class="nc" id="L407">                prepared.setString(2, type);</span>
-<span class="nc" id="L408">                prepared.setBlob(3, inputStream);</span>
-<span class="nc" id="L409">                prepared.executeUpdate();</span>
-<span class="nc" id="L410">                ResultSet rs = prepared.getGeneratedKeys();</span>
-<span class="nc bnc" id="L411" title="All 2 branches missed.">                while (rs.next()) {</span>
-<span class="nc" id="L412">                    return rs.getInt(1);</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">            if (inputStream != null) {</span>
+<span class="fc" id="L409">                prepared.setString(1, description);</span>
+<span class="fc" id="L410">                prepared.setString(2, type);</span>
+<span class="fc" id="L411">                prepared.setBlob(3, inputStream);</span>
+<span class="fc" id="L412">                prepared.executeUpdate();</span>
+<span class="fc" id="L413">                ResultSet rs = prepared.getGeneratedKeys();</span>
+<span class="pc bpc" id="L414" title="1 of 2 branches missed.">                while (rs.next()) {</span>
+<span class="fc" id="L415">                    return rs.getInt(1);</span>
                 }
             }
-<span class="nc" id="L415">        } catch (Exception e) {}</span>
-<span class="nc" id="L416">        return -1;</span>
+<span class="nc" id="L418">        } catch (Exception e) {}</span>
+<span class="nc" id="L419">        return -1;</span>
     }
 
     public Connection getConn() {
-<span class="fc" id="L420">        return conn;</span>
+<span class="fc" id="L423">        return conn;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

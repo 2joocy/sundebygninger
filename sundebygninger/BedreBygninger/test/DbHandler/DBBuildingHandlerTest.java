@@ -7,7 +7,13 @@ package DbHandler;
 
 import entities.Building;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 import javax.servlet.http.Part;
+import javax.swing.JOptionPane;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -152,6 +158,70 @@ public class DBBuildingHandlerTest {
         int fk_idEmployee = 15;
         handler.submitReport(buildingUsage, roofRemarks, fk_idPictureRoof, roofText, true, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible);
         assertTrue(true);
+    }
+ 
+    @Test
+    public void testUploadImage() {
+        DBBuildingHandler handler = new DBBuildingHandler(DBConnection.getTestConnection());
+        int value = handler.uploadImage("TestImage", "png", getPremadePart());
+        System.out.println("[testUploadMainImage] " + value);
+        assertNotEquals(-1, value);
+    }
+    
+    public Part getPremadePart() {
+        String path = "extra/Activity Diagram/MembershipApproval.png";
+        File f = new File(path);
+        return new Part() {
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return new FileInputStream(f);
+            }
+
+            @Override
+            public String getContentType() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public String getName() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public String getSubmittedFileName() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public long getSize() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void write(String fileName) throws IOException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void delete() throws IOException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public String getHeader(String name) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Collection<String> getHeaders(String name) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Collection<String> getHeaderNames() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
     }
     
 }
