@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 
 public class DBUserHandler {
 
-    Connection conn;
+    private Connection conn;
     
     public DBUserHandler() {
         this.conn = DBConnection.getConnection();
@@ -31,8 +31,6 @@ public class DBUserHandler {
         this.conn = conn;
     }
     
-    private boolean showJoptionPanes = false;
-
     public User checkLogin(String email, String password) {
         User newUser = null;
         password = encryptPassword(password);
@@ -45,11 +43,7 @@ public class DBUserHandler {
             while (myRS.next()) {
                 newUser = new User(myRS.getInt("idUser"), myRS.getString("email"), myRS.getString("businessName"), myRS.getString("phone"), myRS.getString("status"), myRS.getString("fullName"), myRS.getString("createdDate"));
             }
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return newUser;
     }
 
@@ -74,11 +68,7 @@ public class DBUserHandler {
             prepared.setString(7, dateFormat.format(datePre));
 
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return "";
     }
 
@@ -91,9 +81,7 @@ public class DBUserHandler {
             if (result.next()) {
                 return true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
         return false;
     }
 
@@ -107,11 +95,7 @@ public class DBUserHandler {
             while (myRS.next()) {
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return count;
     }
 
@@ -121,11 +105,7 @@ public class DBUserHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
     
     public void confirmUser(String email) {
@@ -134,11 +114,7 @@ public class DBUserHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
 
     public void removeUser(int id){
@@ -147,11 +123,7 @@ public class DBUserHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
     
     public void removeUser(String email){
@@ -160,11 +132,7 @@ public class DBUserHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
     
     public void denyUser(int id) {
@@ -173,11 +141,7 @@ public class DBUserHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
 
     public void denyUser(String email) {
@@ -186,11 +150,7 @@ public class DBUserHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, email);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
     
     public String getUnConfirmed() {
@@ -226,11 +186,7 @@ public class DBUserHandler {
                         + "<input type='hidden' name='userID' value='" + id + "'><button type='submit'>Deny User</button></form></td></tr>";
 
             }
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+        } catch (SQLException | HeadlessException ex) {}
         tableData += "</tbody>\n"
                 + "  </table>";
         return tableData;
@@ -244,9 +200,7 @@ public class DBUserHandler {
             prepared.setString(1, password);
             prepared.setString(2, username);
             prepared.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
     }
 
     public String forgotPass(String email, String businessName) {
@@ -283,9 +237,7 @@ public class DBUserHandler {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             encryptedPassword = sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        } catch (NoSuchAlgorithmException e) {}
         return encryptedPassword;
     }
 
@@ -302,9 +254,7 @@ public class DBUserHandler {
             while (myRS.next()) {
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
 
         if (count > 0) {
             isCorrect = true;
@@ -320,8 +270,11 @@ public class DBUserHandler {
             prepared.setString(1, email);
             prepared.setInt(2, id);
             prepared.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
     }
+
+    public Connection getConn() {
+        return conn;
+    }
+    
 }

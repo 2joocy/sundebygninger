@@ -195,9 +195,6 @@ public class Front extends HttpServlet {
                 Building building = (Building) request.getSession().getAttribute("building");
                 int imageId = dbB.uploadImage("", filePart.getContentType(), filePart);
                 String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
-                request.getSession().setAttribute("imageMessage", "" + imageMessage);
-                request.getSession().setAttribute("imageId", "" + imageId);
-                request.getSession().setAttribute("imageTest", dbB.getImage());
                 response.sendRedirect("FileConf.jsp");
                 break;
                 
@@ -212,7 +209,6 @@ public class Front extends HttpServlet {
                 String imageMessage2 = (imageId2 == -1 ? "Image failed to upload." : "Image uploaded to the database.");
                 request.getSession().setAttribute("imageMessage", "" + imageMessage2);
                 request.getSession().setAttribute("imageId", "" + imageId2);
-                request.getSession().setAttribute("imageTest", dbB.getImage());
                 break;
                 
             case "serviceRoom":

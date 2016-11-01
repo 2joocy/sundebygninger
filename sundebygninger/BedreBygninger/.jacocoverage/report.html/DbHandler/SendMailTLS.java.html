@@ -25,11 +25,11 @@ import javax.mail.internet.MimeMessage;
 <span class="fc" id="L25">        Session s = getSession(username, password);</span>
 <span class="fc" id="L26">        Message m = createMessage(s, username, toEmail, subject, message);</span>
         try {
-<span class="nc" id="L28">            Transport.send(m);</span>
-<span class="fc" id="L29">        } catch (MessagingException e) {</span>
-<span class="fc" id="L30">            return e.getMessage();</span>
-<span class="nc" id="L31">        }</span>
-<span class="nc" id="L32">        return &quot;No errors.&quot;;</span>
+<span class="fc" id="L28">            Transport.send(m);</span>
+<span class="nc" id="L29">        } catch (MessagingException e) {</span>
+<span class="nc" id="L30">            return e.getMessage();</span>
+<span class="fc" id="L31">        }</span>
+<span class="fc" id="L32">        return &quot;No errors.&quot;;</span>
     }
 
     private static Session getSession(String username, String password) {
@@ -45,7 +45,7 @@ import javax.mail.internet.MimeMessage;
     private static Authenticator getAuthenticator(String username, String password) {
 <span class="fc" id="L46">        return new javax.mail.Authenticator() {</span>
             protected PasswordAuthentication getPasswordAuthentication() {
-<span class="nc" id="L48">                return new PasswordAuthentication(username, password);</span>
+<span class="fc" id="L48">                return new PasswordAuthentication(username, password);</span>
             }
         };
     }

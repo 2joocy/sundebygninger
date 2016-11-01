@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
 
-    Connection conn;
+    private Connection conn;
     
     public DBBuildingHandler() {
         this.conn = DBConnection.getConnection();
@@ -68,9 +68,7 @@ public class DBBuildingHandler {
             //prepared.setInt(13, fk_idReport);
 
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "[DBBuiling.addBuilding] " + ex);
-        }
+        } catch (SQLException | HeadlessException ex) {}
 
     }
 
@@ -121,9 +119,7 @@ public class DBBuildingHandler {
                         + "</tr>";
                 id++;
             }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         tableData += "</tbody>\n"
                 + "  </table>";
         return tableData;
@@ -155,9 +151,7 @@ public class DBBuildingHandler {
                 );
             }
 
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return building;
     }
 
@@ -187,9 +181,7 @@ public class DBBuildingHandler {
                 );
             }
 
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return building;
     }
 
@@ -209,9 +201,7 @@ public class DBBuildingHandler {
             prepared.setInt(8, fk_idEmployee);
             prepared.setString(9, buildingResponsible);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "[DBBuilding.submitReport] " + ex);
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
 
     public String getRooms(int id) {
@@ -232,15 +222,13 @@ public class DBBuildingHandler {
                         + "<input type='hidden' name='idRoom' value='" + roomID + "'></td>"
                         + "</form><br>";
             }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return roomData;
     }
 
     public void editBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String condition,
-            String extraText, int userID) {
+            String extraText, int idBuilding) {
         try {
             String sql = "UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
@@ -252,12 +240,10 @@ public class DBBuildingHandler {
             prepared.setString(6, city);
             prepared.setString(7, condition);
             prepared.setString(8, extraText);
-            prepared.setInt(9, userID);
+            prepared.setInt(9, idBuilding);
             prepared.executeUpdate();
 
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
     }
 
     public int getBuildingCount(int id) {
@@ -270,9 +256,7 @@ public class DBBuildingHandler {
             while(myRS.next()){
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return count;
     }
 
@@ -285,9 +269,7 @@ public class DBBuildingHandler {
             while(myRS.next()){
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         return count;
     }
     
@@ -340,9 +322,7 @@ public class DBBuildingHandler {
 //                                                );
 //                buildingList.add(building);
             }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
+        } catch (SQLException | HeadlessException ex) {}
         tableData += "</tbody>\n"
                 + "  </table>";
         return tableData;
@@ -351,19 +331,21 @@ public class DBBuildingHandler {
     public String createMenu(String status) {
         DBUserHandler db = new DBUserHandler(conn);
         String menu = "";
-        if (status.equalsIgnoreCase("customer")) {
+        if (status == null) {
+            return "Unspecified Login. Please retry!";
+        }
+        else if (status.equalsIgnoreCase("customer")) {
             return "<li><a href='overviewBuilding.jsp'>Estate</a></li>\n"
                     + "            <li><a href='service.jsp'>Service Overview</a></li>\n"
                     + "            <li><a href='account.jsp'>Account Management</a></li>\n"
                     + "            <li><a href='contact.jsp'>Contact Staff</a></li>";
-        } else if (status.equalsIgnoreCase("worker")) {
+        } 
+        else if (status.equalsIgnoreCase("worker")) {
             return "<li><a href='overviewBuilding.jsp'>Estates</a></li>\n"
                     + "            <li><a href='service.jsp'>Service Overview</a></li>\n"
                     + "            <li><a href='overviewUsers.jsp'>Account Management(" + db.countUnConfirmed() + ")</a></li>\n"
                     + "            <li><a href='contact.jsp'>Contact Staff</a></li>";
-        } else if (status == null) {
-            return "Unspecified Login. Please retry!";
-        }
+        } 
         return "";
     }
 
@@ -372,9 +354,7 @@ public class DBBuildingHandler {
             String sql = "SELECT ? FROM report where ";
             PreparedStatement prepared = conn.prepareStatement(sql);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
         return null;
     }
 
@@ -384,9 +364,7 @@ public class DBBuildingHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             prepared.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
     }
 
     public String getImageHTML(int id) {
@@ -395,23 +373,6 @@ public class DBBuildingHandler {
     
     public String getImageHTML(int id, int width, int height) {
         return "<img src=\"ImageServlet?id=" + id + "\" height=\"" + height + "\" width=\"" + width+ "\"/>";
-    }
-
-    public Image getImage() {
-        String sql = "SELECT * FROM picture WHERE idPicture=?";
-        try {
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            ResultSet rs = prepared.executeQuery();
-            while (rs.next()) {
-                Blob blob = rs.getBlob("image");
-                InputStream inputStream = blob.getBinaryStream();
-                BufferedImage image = ImageIO.read(inputStream);
-                return image;
-            }
-        } catch (Exception e) {
-
-        }
-        return null;
     }
 
     public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
@@ -428,13 +389,8 @@ public class DBBuildingHandler {
                 prepared.setInt(2, buildingID);
                 prepared.executeUpdate();
                 return returnValue;
-            } else {
-                JOptionPane.showMessageDialog(null, "[DBBuildingHandler.uploadMainImage] Error, returnValue: " + returnValue);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "[DBBuildingHandler.uploadMainImage] " + e.getMessage());
-            e.printStackTrace();
-        }
+            } else {}
+        } catch (Exception e) {}
         return -1;
     }
     
@@ -456,10 +412,11 @@ public class DBBuildingHandler {
                     return rs.getInt(1);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
         return -1;
     }
 
+    public Connection getConn() {
+        return conn;
+    }
 }

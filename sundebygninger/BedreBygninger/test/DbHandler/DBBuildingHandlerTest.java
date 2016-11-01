@@ -40,6 +40,14 @@ public class DBBuildingHandlerTest {
     public void tearDown() {
     }
 
+    @Test
+    public void testConstructor(){
+        DBBuildingHandler dbb = new DBBuildingHandler();
+        assertNotNull(dbb.getConn());
+        dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getConn());
+    }
+    
     /**
      * Test of addBuilding method, of class DBBuildingHandler.
      */
@@ -69,6 +77,66 @@ public class DBBuildingHandlerTest {
         instance.removeBuilding(loaded.getIdBuilding());        //Delete building from DB
         Building hopefullyNull = instance.getBuilding(address);
         assertNull(hopefullyNull);
+    }
+    
+    @Test
+    public void testGetBuildings(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getBuildings(9));
+    }
+    
+    @Test
+    public void testGetBuilding(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getBuilding(14));
+        assertNotNull(dbb.getBuilding("YupYup"));
+    }
+    
+    @Test
+    public void testGetRooms(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getRooms(8));
+    }
+    
+    @Test
+    public void testEditBuilding(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        dbb.editBuilding("YupYup", "Snask", "123", "Yush", "1337", "YoloSwag", "Harambe", "27/10/2016 16:21:00", 15);
+        assertNotNull(dbb.getBuilding("YupYup"));
+    }
+    
+    @Test
+    public void testGetBuildingCount(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getBuildingCount(9));
+        assertNotNull(dbb.getBuildingCount());
+    }
+    
+    @Test
+    public void testGetService(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getService(9));
+    }
+    
+    @Test
+    public void testCreateMenu(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.createMenu("customer"));
+        assertNotNull(dbb.createMenu("worker"));
+        assertNotNull(dbb.createMenu(null));
+    }
+    
+    @Test
+    public void testGetReportField(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNull(dbb.getReportField(7, ""));
+    }
+    
+    @Test
+    public void testGetImageHTML(){
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        assertNotNull(dbb.getImageHTML(9));
+        assertNotNull(dbb.getImageHTML(9, 1, 1));
     }
     
     @Test

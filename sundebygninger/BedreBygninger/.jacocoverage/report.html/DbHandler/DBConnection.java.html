@@ -19,7 +19,7 @@ import java.util.logging.Logger;
     private static Connection con;
     
     public static Connection getConnection() {
-<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (con == null) {</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        if (con == null) {</span>
             try {
 <span class="nc" id="L24">                Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</span>
 <span class="nc" id="L25">                con = DriverManager.getConnection(&quot;jdbc:mysql://viter.dk/sundebygninger&quot;, &quot;transformer&quot;, &quot;bookworm#17laesehest&quot;);</span>
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 <span class="nc" id="L28">                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);</span>
 <span class="nc" id="L29">            }</span>
         }
-<span class="nc" id="L31">        return con;</span>
+<span class="fc" id="L31">        return con;</span>
     }
     
     public static Connection getTestConnection() {

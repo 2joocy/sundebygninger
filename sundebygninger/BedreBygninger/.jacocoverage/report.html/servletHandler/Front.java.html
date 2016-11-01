@@ -195,62 +195,58 @@ import DbHandler.*;
 <span class="nc" id="L195">                Building building = (Building) request.getSession().getAttribute(&quot;building&quot;);</span>
 <span class="nc" id="L196">                int imageId = dbB.uploadImage(&quot;&quot;, filePart.getContentType(), filePart);</span>
 <span class="nc bnc" id="L197" title="All 2 branches missed.">                String imageMessage = (imageId == -1 ? &quot;Image failed to upload.&quot; : &quot;Image uploaded to the database.&quot;);</span>
-<span class="nc" id="L198">                request.getSession().setAttribute(&quot;imageMessage&quot;, &quot;&quot; + imageMessage);</span>
-<span class="nc" id="L199">                request.getSession().setAttribute(&quot;imageId&quot;, &quot;&quot; + imageId);</span>
-<span class="nc" id="L200">                request.getSession().setAttribute(&quot;imageTest&quot;, dbB.getImage());</span>
-<span class="nc" id="L201">                response.sendRedirect(&quot;FileConf.jsp&quot;);</span>
-<span class="nc" id="L202">                break;</span>
+<span class="nc" id="L198">                response.sendRedirect(&quot;FileConf.jsp&quot;);</span>
+<span class="nc" id="L199">                break;</span>
                 
             case &quot;getService&quot;:
-<span class="nc" id="L205">                request.getSession().setAttribute(&quot;idBuilding&quot;, idBuilding);</span>
-<span class="nc" id="L206">                response.sendRedirect(&quot;service.jsp&quot;);</span>
-<span class="nc" id="L207">                break;</span>
+<span class="nc" id="L202">                request.getSession().setAttribute(&quot;idBuilding&quot;, idBuilding);</span>
+<span class="nc" id="L203">                response.sendRedirect(&quot;service.jsp&quot;);</span>
+<span class="nc" id="L204">                break;</span>
                 
             case &quot;submitReport&quot;:
-<span class="nc" id="L210">                Part filePart2 = request.getPart(&quot;picture&quot;);</span>
-<span class="nc" id="L211">                int imageId2 = dbB.uploadImage(&quot;&quot;, filePart2.getContentType(), filePart2);</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">                String imageMessage2 = (imageId2 == -1 ? &quot;Image failed to upload.&quot; : &quot;Image uploaded to the database.&quot;);</span>
-<span class="nc" id="L213">                request.getSession().setAttribute(&quot;imageMessage&quot;, &quot;&quot; + imageMessage2);</span>
-<span class="nc" id="L214">                request.getSession().setAttribute(&quot;imageId&quot;, &quot;&quot; + imageId2);</span>
-<span class="nc" id="L215">                request.getSession().setAttribute(&quot;imageTest&quot;, dbB.getImage());</span>
-<span class="nc" id="L216">                break;</span>
+<span class="nc" id="L207">                Part filePart2 = request.getPart(&quot;picture&quot;);</span>
+<span class="nc" id="L208">                int imageId2 = dbB.uploadImage(&quot;&quot;, filePart2.getContentType(), filePart2);</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                String imageMessage2 = (imageId2 == -1 ? &quot;Image failed to upload.&quot; : &quot;Image uploaded to the database.&quot;);</span>
+<span class="nc" id="L210">                request.getSession().setAttribute(&quot;imageMessage&quot;, &quot;&quot; + imageMessage2);</span>
+<span class="nc" id="L211">                request.getSession().setAttribute(&quot;imageId&quot;, &quot;&quot; + imageId2);</span>
+<span class="nc" id="L212">                break;</span>
                 
             case &quot;serviceRoom&quot;:
-<span class="nc" id="L219">                response.sendRedirect(&quot;service.jsp&quot;);</span>
-<span class="nc" id="L220">                break;</span>
+<span class="nc" id="L215">                response.sendRedirect(&quot;service.jsp&quot;);</span>
+<span class="nc" id="L216">                break;</span>
                 
             case &quot;editRoom&quot;:
-<span class="nc" id="L223">                request.getSession().setAttribute(&quot;idRoom&quot;, idRoom);</span>
-<span class="nc" id="L224">                response.sendRedirect(&quot;editRoom.jsp&quot;);</span>
-<span class="nc" id="L225">                break;</span>
+<span class="nc" id="L219">                request.getSession().setAttribute(&quot;idRoom&quot;, idRoom);</span>
+<span class="nc" id="L220">                response.sendRedirect(&quot;editRoom.jsp&quot;);</span>
+<span class="nc" id="L221">                break;</span>
                 
             case &quot;changeEmail&quot;:
-<span class="nc" id="L228">                user = (User) request.getSession().getAttribute(&quot;user&quot;);</span>
-<span class="nc" id="L229">                db.updateEmail(newEmail, user.getIdUser());</span>
-<span class="nc" id="L230">                response.sendRedirect(&quot;account.jsp&quot;);</span>
-<span class="nc" id="L231">                break;</span>
+<span class="nc" id="L224">                user = (User) request.getSession().getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L225">                db.updateEmail(newEmail, user.getIdUser());</span>
+<span class="nc" id="L226">                response.sendRedirect(&quot;account.jsp&quot;);</span>
+<span class="nc" id="L227">                break;</span>
                 
             case &quot;changePass&quot;:
-<span class="nc bnc" id="L234" title="All 2 branches missed.">                if (db.correctPass(password, email) == true) {</span>
-<span class="nc" id="L235">                    db.updatePassword(email, newPassword);</span>
-<span class="nc" id="L236">                    request.getSession().setAttribute(&quot;failure&quot;, &quot;Password has been successfully changed!&quot;);</span>
-<span class="nc" id="L237">                    response.sendRedirect(&quot;account.jsp&quot;);</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">                if (db.correctPass(password, email) == true) {</span>
+<span class="nc" id="L231">                    db.updatePassword(email, newPassword);</span>
+<span class="nc" id="L232">                    request.getSession().setAttribute(&quot;failure&quot;, &quot;Password has been successfully changed!&quot;);</span>
+<span class="nc" id="L233">                    response.sendRedirect(&quot;account.jsp&quot;);</span>
                 } else {
-<span class="nc" id="L239">                    request.getSession().setAttribute(&quot;failure&quot;, &quot;Password has not been changed due to incorrect password. Please double check your info before typing!&quot;);</span>
-<span class="nc" id="L240">                    response.sendRedirect(&quot;account.jsp&quot;);</span>
+<span class="nc" id="L235">                    request.getSession().setAttribute(&quot;failure&quot;, &quot;Password has not been changed due to incorrect password. Please double check your info before typing!&quot;);</span>
+<span class="nc" id="L236">                    response.sendRedirect(&quot;account.jsp&quot;);</span>
                 }
-<span class="nc" id="L242">                break;</span>
+<span class="nc" id="L238">                break;</span>
                 
             case &quot;newMainImage&quot;:
-<span class="nc" id="L245">                filePart = request.getPart(&quot;picture&quot;);</span>
-<span class="nc" id="L246">                int newImageID = Integer.parseInt(idBuilding);</span>
-<span class="nc" id="L247">                int fk_mainImage = Integer.parseInt(fk_idMainPicture);</span>
-<span class="nc" id="L248">                imageId = dbB.uploadMainImage(&quot;&quot;, filePart.getContentType(), filePart, newImageID, fk_mainImage);</span>
-<span class="nc" id="L249">                response.sendRedirect(&quot;overviewBuilding.jsp&quot;);</span>
+<span class="nc" id="L241">                filePart = request.getPart(&quot;picture&quot;);</span>
+<span class="nc" id="L242">                int newImageID = Integer.parseInt(idBuilding);</span>
+<span class="nc" id="L243">                int fk_mainImage = Integer.parseInt(fk_idMainPicture);</span>
+<span class="nc" id="L244">                imageId = dbB.uploadMainImage(&quot;&quot;, filePart.getContentType(), filePart, newImageID, fk_mainImage);</span>
+<span class="nc" id="L245">                response.sendRedirect(&quot;overviewBuilding.jsp&quot;);</span>
                 break;
         }
 
-<span class="nc" id="L253">    }</span>
+<span class="nc" id="L249">    }</span>
 
     // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;HttpServlet methods. Click on the + sign on the left to edit the code.&quot;&gt;
     /**
@@ -264,8 +260,8 @@ import DbHandler.*;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<span class="nc" id="L267">        processRequest(request, response);</span>
-<span class="nc" id="L268">    }</span>
+<span class="nc" id="L263">        processRequest(request, response);</span>
+<span class="nc" id="L264">    }</span>
 
     /**
      * Handles the HTTP &lt;code&gt;POST&lt;/code&gt; method.
@@ -278,8 +274,8 @@ import DbHandler.*;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<span class="nc" id="L281">        processRequest(request, response);</span>
-<span class="nc" id="L282">    }</span>
+<span class="nc" id="L277">        processRequest(request, response);</span>
+<span class="nc" id="L278">    }</span>
 
     /**
      * Returns a short description of the servlet.
@@ -288,7 +284,7 @@ import DbHandler.*;
      */
     @Override
     public String getServletInfo() {
-<span class="nc" id="L291">        return &quot;Short description&quot;;</span>
+<span class="nc" id="L287">        return &quot;Short description&quot;;</span>
     }// &lt;/editor-fold&gt;
 
 }
