@@ -23,16 +23,6 @@ if(user == null){
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body style="height: 92%;">
-        <%
-        if(user.getStatus().equalsIgnoreCase("worker")){
-    
-            if (dbb.countUnConfirmed() > 0) {
-                out.print("<script>alert('You have new unconfirmed accounts to review!(" + dbb.countUnConfirmed() + ")');</script>");
-            }
-       
-        }
-        %>
-
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
             <%

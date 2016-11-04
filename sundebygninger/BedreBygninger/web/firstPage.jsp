@@ -26,8 +26,12 @@ if(user == null){
         <%
         if(user.getStatus().equalsIgnoreCase("worker")){
     
-            if (dbb.countUnConfirmed() > 0) {
+            if(dbb.countUnConfirmed() > 0) {
                 out.print("<script>alert('You have new unconfirmed accounts to review!(" + dbb.countUnConfirmed() + ")');</script>");
+            }
+            
+            if(db.getAwaitingService() > 0){
+                out.print("<script>alert('You have new services to review!(" + db.getAwaitingService() + ")');</script>");
             }
        
         }

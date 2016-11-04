@@ -52,15 +52,7 @@
             });
 
         </script>    
-        <%
-            if (user.getStatus().equalsIgnoreCase("worker")) {
-
-                if (db.countUnConfirmed() > 0) {
-                    out.print("<script>alert('You have new unconfirmed accounts to review!(" + db.countUnConfirmed() + ")');</script>");
-                }
-
-            }
-        %>
+      
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
@@ -96,7 +88,7 @@
                         <input type="hidden" name="methodForm" value="newMainImage"/>
                         <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>
                         <input type="hidden" name="fk_idMainPicture" value="<%=build.getFk_idMainPicture()%>"/>
-                        <td><input type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
+                        <td><input style="length: 300px;" type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
                         <button type="submit">Upload New Main Image</button>
                     </form>
                 </div>

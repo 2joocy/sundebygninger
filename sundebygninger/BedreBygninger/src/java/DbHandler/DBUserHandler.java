@@ -96,7 +96,24 @@ public class DBUserHandler {
         }
         return false;
     }
-
+    
+    public String getUserFromDB(int id){
+        String user = ""; 
+        try {
+            String sql = "SELECT businessName FROM user WHERE idUser=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, id);
+            ResultSet result = prepared.executeQuery();
+            if (result.next()) {
+                user = result.getString("businessName");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return user;
+    }
+    
     public int countUnConfirmed() {
         int count = 0;
         try {

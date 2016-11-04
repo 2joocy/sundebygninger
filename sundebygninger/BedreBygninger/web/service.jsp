@@ -27,11 +27,11 @@
                 %>
         </ul>
 
-        <div class="container">
-            <center style="padding-top: 3%;">
-                <p>
-                Currently No Service Available!
-                </p>    
+        <div id="edit" style="margin-top: 4%;">
+            <center>
+                <%
+                out.print(dbB.printAwaitingService());
+                %>    
             </center>
         </div>
 
