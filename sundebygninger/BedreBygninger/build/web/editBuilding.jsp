@@ -4,10 +4,12 @@
     Author     : William-PC
 --%>
 
-<%@page import="entities.Building"%>
+
 <%@page import="DbHandler.DBUserHandler"%>
-<%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
+<%@page import="DbHandler.ImageHandler"%>
+<%@page import="entities.Building"%>
+<%@page import="entities.User"%>
 <!DOCTYPE html>
 <%
     DBBuildingHandler dbb = new DBBuildingHandler();
@@ -83,7 +85,7 @@
                 
                 <div class="pictureBox">
                     <h2>Picture</h2>
-                    <%= dbb.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
+                    <%= ImageHandler.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
                     <form action="Front" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="methodForm" value="newMainImage"/>
                         <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>

@@ -5,10 +5,10 @@ import DbHandler.DBConnection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,20 +35,20 @@ public class ImageServlet extends HttpServlet {
                 response.setContentType(type);
                 break;
             }
-            InputStream input = rs.getBinaryStream("image");
-            byte[] bArr = new byte[input.available()];
-            for (int i = 0; i < bArr.length; i++) {
-                bArr[i] = (byte) input.read();
+            byte[] bArr;
+            try (InputStream input = rs.getBinaryStream("image")) {
+                bArr = new byte[input.available()];
+                for (int i = 0; i < bArr.length; i++) {
+                    bArr[i] = (byte) input.read();
+                }
             }
-            input.close();
-            OutputStream output = response.getOutputStream();
-            output.write(bArr);
-            output.close();
+            try (OutputStream output = response.getOutputStream()) {
+                output.write(bArr);
+            }
         }
-        catch(Exception e){
+        catch(SQLException | IOException e){
             e.printStackTrace();
         }
-        
         
     }
 

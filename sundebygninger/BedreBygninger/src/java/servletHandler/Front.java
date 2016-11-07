@@ -207,11 +207,10 @@ public class Front extends HttpServlet {
             case "uploadPicture":
                 Part filePart = request.getPart("picture");
                 Building building = (Building) request.getSession().getAttribute("building");
-                int imageId = dbB.uploadImage("", filePart.getContentType(), filePart);
+                int imageId = ImageHandler.uploadImage(DBConnection.getConnection(), "", filePart.getContentType(), filePart);
                 String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
                 request.getSession().setAttribute("imageMessage", "" + imageMessage);
                 request.getSession().setAttribute("imageId", "" + imageId);
-                request.getSession().setAttribute("imageTest", dbB.getImage());
                 response.sendRedirect("FileConf.jsp");
                 break;
 
@@ -254,31 +253,31 @@ public class Front extends HttpServlet {
                 
                 break;
             case "submitRoom":
-                if (remarks.equals("on")) {
+                if (remarks != null && remarks.equals("on")) {
                     remark = true;
                 }
 
-                if (dmg.equals("on")) {
+                if (dmg != null && dmg.equals("on")) {
                     damage = true;
                 }
 
-                if (hasWallRemark.equalsIgnoreCase("on")) {
+                if (hasWallRemark != null && hasWallRemark.equalsIgnoreCase("on")) {
                     wallRemarks = true;
                 }
 
-                if (hasFloorRemarks.equals("on")) {
+                if (hasFloorRemarks != null && hasFloorRemarks.equals("on")) {
                     floorRemark = true;
                 }
 
-                if (hasRoofRemarks.equalsIgnoreCase("on")) {
+                if (hasRoofRemarks != null && hasRoofRemarks.equalsIgnoreCase("on")) {
                     roofRemark = true;
                 }
 
-                if (hasMoistureRemark.equalsIgnoreCase("on")) {
+                if (hasMoistureRemark != null && hasMoistureRemark.equalsIgnoreCase("on")) {
                     moistureScan = true;
                 }
 
-                if (damage = true) {
+                if (damage && typeDmg != null) {
                     if (typeDmg.equals("Water Damage")) {
                         damageWater = true;
                     } else if (typeDmg.equals("Fire Damage")) {
@@ -290,7 +289,7 @@ public class Front extends HttpServlet {
                     }
                 }
 
-                if (hasMoistureRemark.equalsIgnoreCase("on")) {
+                if (hasMoistureRemark != null && hasMoistureRemark.equalsIgnoreCase("on")) {
                     moistureScan = true;
                 }
 //                String typeDmg = request.getParameter("typeDmg");
@@ -344,11 +343,10 @@ public class Front extends HttpServlet {
                 break;
             case "submitReport":
                 Part filePart2 = request.getPart("picture");
-                int imageId2 = dbB.uploadImage("", filePart2.getContentType(), filePart2);
+                int imageId2 = ImageHandler.uploadImage(DBConnection.getConnection(), "", filePart2.getContentType(), filePart2);
                 String imageMessage2 = (imageId2 == -1 ? "Image failed to upload." : "Image uploaded to the database.");
                 request.getSession().setAttribute("imageMessage", "" + imageMessage2);
                 request.getSession().setAttribute("imageId", "" + imageId2);
-                request.getSession().setAttribute("imageTest", dbB.getImage());
                 break;
 
             case "serviceRoom":
@@ -381,7 +379,39 @@ public class Front extends HttpServlet {
                 filePart = request.getPart("picture");
                 int newImageID = Integer.parseInt(idBuilding);
                 int fk_mainImage = Integer.parseInt(fk_idMainPicture);
-                imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+                imageId = ImageHandler.uploadMainImage(DBConnection.getConnection(), "", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+                response.sendRedirect("overviewBuilding.jsp");
+                break;
+            
+            case "uploadReportOuterRoofImage":
+                //Steps
+                
+                //1) Get picture into filePart
+                filePart = request.getPart("picture");
+                //2) Get which report we must insert it into
+                int idReport = (Integer) request.getSession().getAttribute("idReport");
+                //3) Which field we must insert it into
+                String insertColumn = "fk_idPictureOuterRoof";
+                
+                
+                
+                //imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+                response.sendRedirect("overviewBuilding.jsp");
+                break;
+                
+            case "uploadReportRoofImage":
+                //Steps
+                
+                //1) Get picture into filePart
+                filePart = request.getPart("picture");
+                //2) Get which report we must insert it into
+                idReport = (Integer) request.getSession().getAttribute("idReport");
+                //3) Which field we must insert it into
+                insertColumn = "fk_idPictureRoof";
+                
+                
+                fk_mainImage = Integer.parseInt(fk_idMainPicture);
+                //imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
         }

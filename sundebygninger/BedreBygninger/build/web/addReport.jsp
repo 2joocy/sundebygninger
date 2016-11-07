@@ -171,7 +171,7 @@
             <form action="Front" method="POST" >
                 <input type="hidden" name="methodForm" value="closeReport">
                 <br>
-                <input type="submit" value="Close Report Report">
+                <input type="submit" value="Close Report">
             </form>
         </center>
 

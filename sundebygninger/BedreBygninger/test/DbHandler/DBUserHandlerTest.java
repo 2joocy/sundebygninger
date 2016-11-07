@@ -6,7 +6,6 @@
 package DbHandler;
 
 import entities.User;
-import javax.swing.JOptionPane;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

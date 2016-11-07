@@ -6,24 +6,12 @@
 package DbHandler;
 
 import entities.Building;
-import entities.User;
 import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.sql.Statement;
-import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.servlet.http.Part;
 import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
@@ -108,7 +96,7 @@ public class DBBuildingHandler {
                 String address = myRS.getString("address");
                 String city = myRS.getString("city");
                 String zipcode = myRS.getString("zipcode");
-                tableData += "<tr><td>" + getImageHTML(imageID, 50, 50)
+                tableData += "<tr><td>" + ImageHandler.getImageHTML(imageID, 50, 50)
                         + "<td>" + address + "</td><td>" + zipcode + "</td><td>" + city
                         + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editBuilding'><td><button class='editbtn' type='submit'>Show/Edit</button></td>"
                         + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
@@ -562,7 +550,7 @@ public class DBBuildingHandler {
                 + "        <th>City</th>\n"
                 + "        <th>Building Year</th>\n"
                 + "        <th>User</th>\n"
-                + "        <th>Add Report</th>\n"
+                + "        <th>Edit Report</th>\n"
                 + "      </tr>\n"
                 + "    </thead>\n"
                 + "    <tbody>";
@@ -572,7 +560,7 @@ public class DBBuildingHandler {
             prepared.setString(1, "awaiting");
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-                tableData += "<tr><form method ='POST' action='Front'><td>" + myRS.getString("address") + "</td><td>" + myRS.getString("city") + "</td><td>" + myRS.getString("builtYear") + "</td><td>" + db.getUserFromDB(myRS.getInt("fk_idUser")) + "</td><td><button class='addSrvBtn' type='submit'>Submit</button><input type='hidden' name='methodForm' value='addReport'><input type='hidden' name='idBuilding' value='" + myRS.getInt("idBuilding") + "'></td></form>";
+                tableData += "<tr><form method ='POST' action='Front'><td>" + myRS.getString("address") + "</td><td>" + myRS.getString("city") + "</td><td>" + myRS.getString("builtYear") + "</td><td>" + db.getUserFromDB(myRS.getInt("fk_idUser")) + "</td><td><button class='addSrvBtn' type='submit'>View</button><input type='hidden' name='methodForm' value='addReport'><input type='hidden' name='idBuilding' value='" + myRS.getInt("idBuilding") + "'></td></form>";
             }
         } catch (SQLException | HeadlessException ex) {
 
@@ -605,77 +593,8 @@ public class DBBuildingHandler {
         }
     }
 
-    public String getImageHTML(int id) {
-        return "<img src=\"ImageServlet?id=" + id + "\"/>";
-    }
-
-    public String getImageHTML(int id, int width, int height) {
-        return "<img src=\"ImageServlet?id=" + id + "\" height=\"" + height + "\" width=\"" + width + "\"/>";
-    }
-
-    public Image getImage() {
-        String sql = "SELECT * FROM picture WHERE idPicture=?";
-        try {
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            ResultSet rs = prepared.executeQuery();
-            while (rs.next()) {
-                Blob blob = rs.getBlob("image");
-                InputStream inputStream = blob.getBinaryStream();
-                BufferedImage image = ImageIO.read(inputStream);
-                return image;
-            }
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
-
-    public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
-        try {
-            String sql = "DELETE FROM picture WHERE idPicture=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, fk_idMainPicture);
-            prepared.executeUpdate();
-            int returnValue = uploadImage(description, type, filePart);
-            if (returnValue >= 0) {
-                sql = "UPDATE building SET fk_idMainPicture = ? WHERE idBuilding = ?";
-                prepared = conn.prepareStatement(sql);
-                prepared.setInt(1, returnValue);
-                prepared.setInt(2, buildingID);
-                prepared.executeUpdate();
-                return returnValue;
-            } else {
-                JOptionPane.showMessageDialog(null, "[DBBuildingHandler.uploadMainImage] Error, returnValue: " + returnValue);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "[DBBuildingHandler.uploadMainImage] " + e.getMessage());
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public int uploadImage(String description, String type, Part filePart) {
-        try {
-            String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
-            PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            InputStream inputStream = null;
-            if (filePart != null) {
-                inputStream = filePart.getInputStream();
-            }
-            if (inputStream != null) {
-                prepared.setString(1, description);
-                prepared.setString(2, type);
-                prepared.setBlob(3, inputStream);
-                prepared.executeUpdate();
-                ResultSet rs = prepared.getGeneratedKeys();
-                while (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+    public Connection getConn() {
+        return conn;
     }
 
 }
