@@ -29,35 +29,9 @@ if(user == null){
             out.print(db.createMenu(user.getStatus()));
             %>
         </ul>
-
         <div class="edit" style="margin-top: 4%; padding-left: 10px;">
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <center>
-            <p>If you experience any issues regarding the site and it's functionality, or whether you have questions for our support group, you're welcome to contact us at:<br></P>
-            <p>666-666-666-666</p>
-            </center>
+        
         </div>
-
     </body>
 </html>
 

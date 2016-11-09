@@ -6,14 +6,12 @@
 package DbHandler;
 
 import entities.Building;
-import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import javax.servlet.http.Part;
-import javax.swing.JOptionPane;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -141,8 +139,8 @@ public class DBBuildingHandlerTest {
     @Test
     public void testGetImageHTML(){
         DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNotNull(dbb.getImageHTML(9));
-        assertNotNull(dbb.getImageHTML(9, 1, 1));
+        assertNotNull(ImageHandler.getImageHTML(9));
+        assertNotNull(ImageHandler.getImageHTML(9, 1, 1));
     }
     
     @Test
@@ -163,7 +161,7 @@ public class DBBuildingHandlerTest {
     @Test
     public void testUploadImage() {
         DBBuildingHandler handler = new DBBuildingHandler(DBConnection.getTestConnection());
-        int value = handler.uploadImage("TestImage", "png", getPremadePart());
+        int value = ImageHandler.uploadImage(handler.getConn(), "TestImage", "png", getPremadePart());
         System.out.println("[testUploadMainImage] " + value);
         assertNotEquals(-1, value);
     }
