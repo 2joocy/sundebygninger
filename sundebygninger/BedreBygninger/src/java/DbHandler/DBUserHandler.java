@@ -341,4 +341,8 @@ public class DBUserHandler {
             e.printStackTrace();
         }
     }
+    
+     public Connection getConn() {
+        return conn;
+    }
 }

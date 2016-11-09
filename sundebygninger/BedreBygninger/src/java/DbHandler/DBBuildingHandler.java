@@ -677,5 +677,9 @@ public class DBBuildingHandler {
         }
         return -1;
     }
+    
+    public Connection getConn() {
+        return conn;
+    }
 
 }
