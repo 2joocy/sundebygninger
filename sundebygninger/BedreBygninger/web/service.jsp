@@ -1,3 +1,4 @@
+<%@page import="DbHandler.ImageHandler"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
 <%@page import="DbHandler.DBUserHandler"%>
@@ -5,7 +6,6 @@
 <%
     DBUserHandler db = new DBUserHandler();
     DBBuildingHandler dbB = new DBBuildingHandler();
-
     User user = (User) session.getAttribute("user");
 %>
 <html lang="en">
@@ -31,16 +31,10 @@
             <center style="padding-top: 3%;">
                 <p>
                 Currently No Service Available!
+                <%= ImageHandler.getImageHTML(26, 1400, 600) %>
                 </p>    
             </center>
         </div>
 
     </body>
 </html>
-
-
-
-
-
-
-
