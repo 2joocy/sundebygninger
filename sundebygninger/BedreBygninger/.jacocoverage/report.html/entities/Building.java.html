@@ -48,11 +48,11 @@ public class Building {
     }
 
     public int getFk_idUser() {
-<span class="fc" id="L51">        return fk_idUser;</span>
+<span class="nc" id="L51">        return fk_idUser;</span>
     }
 
     public int getFk_idMainPicture() {
-<span class="fc" id="L55">        return fk_idMainPicture;</span>
+<span class="nc" id="L55">        return fk_idMainPicture;</span>
     }
 
     public int getFk_idReport() {
@@ -64,39 +64,39 @@ public class Building {
     }
 
     public String getCadastral() {
-<span class="fc" id="L67">        return cadastral;</span>
+<span class="nc" id="L67">        return cadastral;</span>
     }
 
     public String getArea() {
-<span class="fc" id="L71">        return area;</span>
+<span class="nc" id="L71">        return area;</span>
     }
 
     public String getZipcode() {
-<span class="fc" id="L75">        return zipcode;</span>
+<span class="nc" id="L75">        return zipcode;</span>
     }
 
     public String getCity() {
-<span class="fc" id="L79">        return city;</span>
+<span class="nc" id="L79">        return city;</span>
     }
 
     public String getCondition() {
-<span class="fc" id="L83">        return condition;</span>
+<span class="nc" id="L83">        return condition;</span>
     }
 
     public String getService() {
-<span class="fc" id="L87">        return service;</span>
+<span class="nc" id="L87">        return service;</span>
     }
 
     public String getExtraText() {
-<span class="fc" id="L91">        return extraText;</span>
+<span class="nc" id="L91">        return extraText;</span>
     }
 
     public String getBuiltYear() {
-<span class="fc" id="L95">        return builtYear;</span>
+<span class="nc" id="L95">        return builtYear;</span>
     }
 
     public String getDateCreated() {
-<span class="fc" id="L99">        return dateCreated;</span>
+<span class="nc" id="L99">        return dateCreated;</span>
     }
 
     public double getBuildingArea() {
@@ -105,13 +105,13 @@ public class Building {
     
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (o instanceof Building) {</span>
-<span class="fc" id="L109">            Building check = (Building) o;</span>
-<span class="fc" id="L110">            System.out.println(&quot;o is instanceof Building&quot;);</span>
-<span class="fc" id="L111">            System.out.println(check.getAddress() + &quot; vs &quot; + address + &quot;, &quot; + check.getFk_idUser() + &quot; vs &quot; + fk_idUser);</span>
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            return check.getAddress().equals(address) &amp;&amp;</span>
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">                   check.getZipcode().equals(zipcode) &amp;&amp;</span>
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">                   check.getFk_idUser() == fk_idUser;</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (o instanceof Building) {</span>
+<span class="nc" id="L109">            Building check = (Building) o;</span>
+<span class="nc" id="L110">            System.out.println(&quot;o is instanceof Building&quot;);</span>
+<span class="nc" id="L111">            System.out.println(check.getAddress() + &quot; vs &quot; + address + &quot;, &quot; + check.getFk_idUser() + &quot; vs &quot; + fk_idUser);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            return check.getAddress().equals(address) &amp;&amp;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                   check.getZipcode().equals(zipcode) &amp;&amp;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                   check.getFk_idUser() == fk_idUser;</span>
         } else {
 <span class="nc" id="L116">            System.out.println(&quot;Object is not instanceof Building&quot;);</span>
         }

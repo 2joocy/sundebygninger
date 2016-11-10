@@ -63,7 +63,8 @@ public class DBBuildingHandler {
             }
             
         } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "[DBBuiling.addBuilding] " + ex);
+            ex.printStackTrace();
+            //JOptionPane.showMessageDialog(null, "[DBBuiling.addBuilding] " + ex);
         }
         return -1;
     }
@@ -116,7 +117,7 @@ public class DBBuildingHandler {
                 id++;
             }
         } catch (SQLException | HeadlessException ex) {
-
+            ex.printStackTrace();
         }
         tableData += "</tbody>\n"
                 + "  </table>";
@@ -150,7 +151,7 @@ public class DBBuildingHandler {
             }
 
         } catch (SQLException | HeadlessException ex) {
-
+            ex.printStackTrace();
         }
         return building;
     }
@@ -181,7 +182,9 @@ public class DBBuildingHandler {
                 );
             }
 
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return building;
     }
 
@@ -207,7 +210,9 @@ public class DBBuildingHandler {
                 insertFkReport(buildingId, reportId);
                 return reportId;
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return -1;
     }
     
@@ -220,7 +225,9 @@ public class DBBuildingHandler {
             if(myRS.next()) {
               return myRS.getInt("fk_idReport");
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return -1;
     }
     
@@ -235,7 +242,7 @@ public class DBBuildingHandler {
                         myRS.getInt("idReport"),
                         myRS.getString("buildingUsage"),
                         myRS.getBoolean("roofRemarks"),
-                        myRS.getInt("idPictureRoof"),
+                        myRS.getInt("fk_idPictureRoof"),
                         myRS.getString("roofText"),
                         myRS.getBoolean("outerWallRemarks"),
                         myRS.getInt("fk_idPictureOuterRoof"),
@@ -245,8 +252,9 @@ public class DBBuildingHandler {
                 );
                 return report;
             }
-            
-        }catch(Exception ex){}
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
         return null;
     }
 
@@ -260,8 +268,9 @@ public class DBBuildingHandler {
                 int reportId = myRS.getInt("fk_idReport");
                 return getReport(reportId);
             }
+        } catch(Exception ex){
+            ex.printStackTrace();
         }
-        catch(Exception ex){}
         return null;
     }
     
@@ -273,7 +282,9 @@ public class DBBuildingHandler {
             prepared.setInt(2, buildingId);
             prepared.executeUpdate();
             
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
     }
     
     public void addRoomReport(boolean remarks, boolean damage, String damageDate, 
@@ -310,7 +321,9 @@ public class DBBuildingHandler {
             prepared.setInt(22, idReport);
             prepared.executeUpdate();
             
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
     }
     
     private void removeReport(int reportId){
@@ -320,8 +333,9 @@ public class DBBuildingHandler {
             prepared.setInt(1, reportId);
             prepared.executeUpdate();
         }
-        catch(Exception ex){}
-        
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
     
     public String getReportOverview(int id){
@@ -339,7 +353,9 @@ public class DBBuildingHandler {
               data += "<br /><br />Worker Responsible: " + myRS.getInt("fk_idEmployee") + "</h3>";
               data += "<button style='padding: 15px; width: 150px; border: 0px solid black; border-radius: 3px;' type='submit'>Review Report</button></form>";
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return data;
     }
     
@@ -350,7 +366,9 @@ public class DBBuildingHandler {
             prepared.setString(1, "awaiting");
             prepared.setInt(2, id);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void unrequestService(int id) {
@@ -360,7 +378,9 @@ public class DBBuildingHandler {
             prepared.setString(1, "reviewed");
             prepared.setInt(2, id);
             prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
     }
     
     
@@ -382,7 +402,9 @@ public class DBBuildingHandler {
                         + "<input type='hidden' name='idRoom' value='" + roomID + "'></td>"
                         + "</form><br>";
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return roomData;
     }
 
@@ -419,13 +441,15 @@ public class DBBuildingHandler {
             tableData += "Report ID: " +myRS.getInt("fk_idReport");
             tableData += "</center></h3>";
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return tableData;
     }
     
     public void editBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String condition,
-            String extraText, int userID) {
+            String extraText, int idBuilding) {
         try {
             String sql = "UPDATE building set address=?, cadastral=?, builtYear=?, area=?, zipcode=?, city=?, conditionText=?, extraText=? WHERE idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
@@ -437,23 +461,27 @@ public class DBBuildingHandler {
             prepared.setString(6, city);
             prepared.setString(7, condition);
             prepared.setString(8, extraText);
-            prepared.setInt(9, userID);
+            prepared.setInt(9, idBuilding);
             prepared.executeUpdate();
 
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public int getBuildingCount(int id) {
+    public int getBuildingCount(int idUser) {
         int count = 0;
         try {
             String sql = "SELECT idBuilding FROM building WHERE fk_idUser=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, id);
+            prepared.setInt(1, idUser);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return count;
     }
 
@@ -466,7 +494,9 @@ public class DBBuildingHandler {
             while (myRS.next()) {
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return count;
     }
 
@@ -493,7 +523,9 @@ public class DBBuildingHandler {
 
                 tableData += "<tr><form method ='POST' action='Front'><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "<input type='hidden' name='methodForm' value='serviceBuilding'><input type='hidden' name='idBuilding' value='" + idBuilding + "'></td></tr>";
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         tableData += "</tbody>\n"
                 + "  </table>";
         return tableData;
@@ -534,8 +566,9 @@ public class DBBuildingHandler {
             while (myRS.next()) {
                 count++;
             }
-        } catch (SQLException | HeadlessException ex) {}
-
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
         return count;
     }
 
@@ -561,7 +594,9 @@ public class DBBuildingHandler {
             while (myRS.next()) {
                 tableData += "<tr><form method ='POST' action='Front'><td>" + myRS.getString("address") + "</td><td>" + myRS.getString("city") + "</td><td>" + myRS.getString("builtYear") + "</td><td>" + db.getUserFromDB(myRS.getInt("fk_idUser")) + "</td><td><button class='addSrvBtn' type='submit'>View</button><input type='hidden' name='methodForm' value='addReport'><input type='hidden' name='idBuilding' value='" + myRS.getInt("idBuilding") + "'></td></form>";
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
 
         tableData += "</tbody>\n"
                 + "  </table>";
@@ -590,7 +625,9 @@ public class DBBuildingHandler {
             while (myRS.next()) {
                 tableData += "<tr><form method ='POST' action='Front'><td>" + myRS.getString("address") + "</td><td>" + myRS.getString("city") + "</td><td>" + myRS.getString("builtYear") + "</td><td>" + db.getUserFromDB(myRS.getInt("fk_idUser")) + "</td><td><button class='addSrvBtn' type='submit'>View</button><input type='hidden' name='methodForm' value='viewReport'><input type='hidden' name='idBuilding' value='" + myRS.getInt("idBuilding") + "'></td></form>";
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
 
         tableData += "</tbody>\n"
                 + "  </table>";
@@ -607,20 +644,13 @@ public class DBBuildingHandler {
             while (myRS.next()) {
                 counter++;
             }
-        } catch (SQLException | HeadlessException ex) {}
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
 
         return counter;
     }
     
-    public String getReportField(int reportID, String fieldName) {
-        try {
-            String sql = "SELECT ? FROM report where ";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-
-        } catch (Exception e) {}
-        return null;
-    }
-
     public void removeBuilding(int buildingId) {
         try {
             String sql = "DELETE FROM building WHERE idBuilding=?";
@@ -628,7 +658,9 @@ public class DBBuildingHandler {
             prepared.setInt(1, buildingId);
             removeReport(getReportFromBuildingId(buildingId).getIdReport());
             prepared.executeUpdate();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void removePicture(int pictureId){
@@ -637,7 +669,9 @@ public class DBBuildingHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, pictureId);
             prepared.executeUpdate();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Connection getConn() {

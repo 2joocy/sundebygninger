@@ -20,10 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author CHRIS
- */
 public class DBBuildingHandlerTest {
     
     public DBBuildingHandlerTest() {
@@ -80,14 +76,16 @@ public class DBBuildingHandlerTest {
     @Test
     public void testEditBuilding(){
         DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        dbb.editBuilding("YupYup", "Snask", "123", "Yush", "1337", "YoloSwag", "Harambe", "27/10/2016 16:21:00", 15);
+        int buildingID = dbb.addBuilding("Testvej 2", "a", "1985", "Hedehusene", "2640", "Bingobyen", "", "", "", "85", 1);
+        dbb.editBuilding("YupYup", "Snask", "123", "Yush", "1337", "YoloSwag", "Harambe", "27/10/2016 16:21:00", buildingID);
         assertNotNull(dbb.getBuilding("YupYup"));
+        dbb.removeBuilding(buildingID);
     }
     
     @Test
     public void testGetBuildingCount(){
         DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNotNull(dbb.getBuildingCount(9));
+        assertNotEquals(dbb.getBuildingCount(9), 0);
         assertNotNull(dbb.getBuildingCount());
     }
     
@@ -103,12 +101,6 @@ public class DBBuildingHandlerTest {
         assertNotNull(dbb.createMenu("customer"));
         assertNotNull(dbb.createMenu("worker"));
         assertNotNull(dbb.createMenu(null));
-    }
-    
-    @Test
-    public void testGetReportField(){
-        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNull(dbb.getReportField(7, ""));
     }
     
     @Test
