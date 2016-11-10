@@ -172,9 +172,7 @@ public class Front extends HttpServlet {
                 db.forgotPass(email, businessName);
                 break;
             case "registerBuilding":
-                int idB = dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id), 0, 0);
-                int idF = dbB.submitReport("", false, 0, "", false, 0, "", 0, "");
-                dbB.insertFkReport(idB, idF);
+                int idB = dbB.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id));
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
             case "logout":
@@ -220,27 +218,27 @@ public class Front extends HttpServlet {
                 request.getSession().setAttribute("hasReport", "yes");
                 response.sendRedirect("addReport.jsp");
                 break;
-            case "finalAddReport":
-                boolean roofRemark1 = false;
-                if (roofRemarks.equalsIgnoreCase("1")) {
-                    roofRemark1 = true;
-                }
-
-                if (outerWallRemarks.equalsIgnoreCase("1")) {
-                    outerWallRemark = true;
-                }
-
-                int idBuildingNew = Integer.parseInt((String) request.getSession().getAttribute("idBuilding"));
-                int idNew = (Integer) request.getSession().getAttribute("userID");
-                if(dbB.getFkIdReport(idBuildingNew) == -1){
-                    dbB.insertFkReport(idBuildingNew, dbB.submitReport(buildingUsage, roofRemark1, 0, roofText, outerWallRemark, 0, outerWallText, idNew, "hej"));
-                    response.sendRedirect("overviewBuilding.jsp");
-                }else{
-                    request.getSession().setAttribute("failure", "Please refrain from creating multiple reports under one building! Please add room reports, if this is the case!");
-                    response.sendRedirect("overviewBuilding.jsp");
-                }
-                
-                break;
+//            case "finalAddReport":
+//                boolean roofRemark1 = false;
+//                if (roofRemarks.equalsIgnoreCase("1")) {
+//                    roofRemark1 = true;
+//                }
+//
+//                if (outerWallRemarks.equalsIgnoreCase("1")) {
+//                    outerWallRemark = true;
+//                }
+//
+//                int idBuildingNew = Integer.parseInt((String) request.getSession().getAttribute("idBuilding"));
+//                int idNew = (Integer) request.getSession().getAttribute("userID");
+//                if(dbB.getFkIdReport(idBuildingNew) == -1){
+//                    dbB.insertFkReport(idBuildingNew, dbB.submitReport(buildingUsage, roofRemark1, 0, roofText, outerWallRemark, 0, outerWallText, idNew, "hej"));
+//                    response.sendRedirect("overviewBuilding.jsp");
+//                }else{
+//                    request.getSession().setAttribute("failure", "Please refrain from creating multiple reports under one building! Please add room reports, if this is the case!");
+//                    response.sendRedirect("overviewBuilding.jsp");
+//                }
+//                
+//                break;
             case "submitRoom":
                 if (remarks != null && remarks.equals("on")) {
                     remark = true;
