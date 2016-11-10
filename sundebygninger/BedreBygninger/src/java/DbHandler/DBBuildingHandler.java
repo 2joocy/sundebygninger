@@ -573,7 +573,9 @@ public class DBBuildingHandler {
     public String createMenu(String status) {
         DBUserHandler db = new DBUserHandler(conn);
         String menu = "";
-        if (status.equalsIgnoreCase("customer")) {
+         if (status == null) {
+            return "Unspecified Login. Please retry!";
+         } else if (status.equalsIgnoreCase("customer")) {
             return "<li><a href='overviewBuilding.jsp'>Estate</a></li>\n"
                     + "            <li><a href='service.jsp'>Service Overview</a></li>\n"
                     + "            <li><a href='account.jsp'>Account Management</a></li>\n"
@@ -585,8 +587,6 @@ public class DBBuildingHandler {
                     + "            <li><a href='overviewUsers.jsp'>Account Management(" + db.countUnConfirmed() + ")</a></li>\n"
                     + "            <li><a href='contact.jsp'>Contact Staff</a></li>"
                     + "            <li><a href='overviewAwaitingService.jsp'>Awaiting Service(" + this.getAwaitingService() + ")</a></li>";
-        } else if (status == null) {
-            return "Unspecified Login. Please retry!";
         }
         return "";
     }
