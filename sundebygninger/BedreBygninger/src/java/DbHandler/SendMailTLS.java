@@ -18,12 +18,12 @@ import javax.mail.internet.MimeMessage;
 
 public class SendMailTLS {
 
-    private final static String username = "bingobangomail@gmail.com";
-    private final static String password = "bingopassword";
+    private final static String USERNAME = "bingobangomail@gmail.com";
+    private final static String PASSWORD = "bingopassword";
 
     public static String sendMessage(String toEmail, String subject, String message) {
-        Session s = getSession(username, password);
-        Message m = createMessage(s, username, toEmail, subject, message);
+        Session s = getSession(USERNAME, PASSWORD);
+        Message m = createMessage(s, USERNAME, toEmail, subject, message);
         try {
             Transport.send(m);
         } catch (MessagingException e) {
@@ -44,6 +44,7 @@ public class SendMailTLS {
 
     private static Authenticator getAuthenticator(String username, String password) {
         return new javax.mail.Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }

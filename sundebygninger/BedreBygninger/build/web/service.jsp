@@ -6,6 +6,7 @@
 <%
     DBUserHandler db = new DBUserHandler();
     DBBuildingHandler dbB = new DBBuildingHandler();
+
     User user = (User) session.getAttribute("user");
 %>
 <html lang="en">

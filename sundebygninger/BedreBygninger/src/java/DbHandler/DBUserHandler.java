@@ -31,7 +31,7 @@ public class DBUserHandler {
         this.conn = conn;
     }
     
-    private boolean showJoptionPanes = false;
+    private final boolean showJoptionPanes = false;
 
     public User checkLogin(String email, String password) {
         User newUser = null;
@@ -222,18 +222,15 @@ public class DBUserHandler {
                 + "      </tr>\n"
                 + "    </thead>\n"
                 + "    <tbody>";
-        String email = "";
-        String businessName = "";
-        int id = 0;
         try {
             String sql = "SELECT idUser, email, businessName FROM user WHERE status='not'";
             //System.out.println(sql);
             PreparedStatement prepared = conn.prepareStatement(sql);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-                email = myRS.getString("email");
-                businessName = myRS.getString("businessName");
-                id = myRS.getInt("idUser");
+                String email = myRS.getString("email");
+                String businessName = myRS.getString("businessName");
+                int id = myRS.getInt("idUser");
 
                 tableData += "<tr><form method ='POST' action='Front'><td>" + id 
                         + "</td><td>" + email + "</td><td>" + businessName + 
@@ -341,8 +338,9 @@ public class DBUserHandler {
             e.printStackTrace();
         }
     }
-    
-     public Connection getConn() {
+
+    public Connection getConn() {
         return conn;
     }
+
 }

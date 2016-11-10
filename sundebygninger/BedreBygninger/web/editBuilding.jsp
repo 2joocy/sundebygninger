@@ -4,10 +4,12 @@
     Author     : William-PC
 --%>
 
-<%@page import="entities.Building"%>
+
 <%@page import="DbHandler.DBUserHandler"%>
-<%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
+<%@page import="DbHandler.ImageHandler"%>
+<%@page import="entities.Building"%>
+<%@page import="entities.User"%>
 <!DOCTYPE html>
 <%
     DBBuildingHandler dbb = new DBBuildingHandler();
@@ -63,16 +65,18 @@
         <div class="edit" style="margin-top: 4%;">
             <center>
                 <div class="roomSideBar">
-                    <h2 style="color: white;">Room Selection</h2>
+                    <h2 style="color: white;">Report Review:</h2>
                     <form action="Front" method="POST" >                
-
+                        <br />
+                        <center>
+                            
+                        
 
                         <%
-                            out.print(dbb.getRooms(build.getIdBuilding()));
+                            out.print(dbb.getReportOverview(build.getIdBuilding()));
                         %>
                         <br> <br>
-                        <center>
-                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Room</button>
+                        
                         </center>
                         <!-- Modal -->
 
@@ -83,13 +87,13 @@
                 
                 <div class="pictureBox">
                     <h2>Picture</h2>
-                    <%= dbb.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
+                    <%= ImageHandler.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
                     <form action="Front" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="methodForm" value="newMainImage"/>
                         <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>
                         <input type="hidden" name="fk_idMainPicture" value="<%=build.getFk_idMainPicture()%>"/>
-                        <td><input style="length: 300px;" type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
-                        <button type="submit">Upload New Main Image</button>
+                        <td><input style="length: 300px; padding: 15px; border: 0px solid black; border-radius: 3px;" type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
+                        <button style="padding: 15px; width: 150px; border: 0px solid black; border-radius: 3px;" type="submit">Upload New Main Image</button>
                     </form>
                 </div>
                         

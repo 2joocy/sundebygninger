@@ -12,9 +12,6 @@
         response.sendRedirect("index.jsp");
     }
 
-    if (session.getAttribute("hasReport") == null) {
-        response.sendRedirect("overviewBuilding.jsp");
-    }
 %>
 <html lang="en">
     <head>
@@ -136,7 +133,8 @@
         <center>
             <br>
             <h3>Submit Report</h3>
-            <%                out.print(session.getAttribute("idBuilding"));
+            <%               
+                out.print(session.getAttribute("idBuilding"));
                 out.print(session.getAttribute("idReport"));
             %>
             <form action="Front" method="POST" >
@@ -171,7 +169,7 @@
             <form action="Front" method="POST" >
                 <input type="hidden" name="methodForm" value="closeReport">
                 <br>
-                <input type="submit" value="Close Report Report">
+                <input type="submit" value="Close Report">
             </form>
         </center>
 
