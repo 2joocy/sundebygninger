@@ -31,12 +31,12 @@
                 %>
         </ul>
 
-        <div class="container">
-            <center style="padding-top: 3%;">
+        <div id="edit" style="margin-top: 4%;">
+            
             <%
             out.print(db.getUnConfirmed());
             %>
-            </center>
+            
         </div>
 
     </body>

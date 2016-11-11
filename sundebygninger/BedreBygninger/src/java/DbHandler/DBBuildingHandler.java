@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 public class DBBuildingHandler {
 
-    private Connection conn;    
+    private Connection conn;
 
     public DBBuildingHandler() {
         this.conn = DBConnection.getConnection();
@@ -52,16 +52,16 @@ public class DBBuildingHandler {
             prepared.setString(9, extraText);
             prepared.setString(10, dateCreated);
             prepared.setInt(11, fk_idUser);
-            
+
             prepared.executeUpdate();
-            
+
             ResultSet myRS = prepared.getGeneratedKeys();
-            if(myRS.next()){
+            if (myRS.next()) {
                 int buildingId = myRS.getInt(1);
                 submitReport(buildingId, "", false, 0, "", false, 0, "", 0, "");
                 return buildingId;
             }
-            
+
         } catch (SQLException | HeadlessException ex) {
             ex.printStackTrace();
             //JOptionPane.showMessageDialog(null, "[DBBuiling.addBuilding] " + ex);
@@ -188,7 +188,7 @@ public class DBBuildingHandler {
         return building;
     }
 
-    private int submitReport(int buildingId ,String buildingUsage, boolean roofRemarks,
+    private int submitReport(int buildingId, String buildingUsage, boolean roofRemarks,
             int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
         try {
             String sql = "INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES "
@@ -215,29 +215,29 @@ public class DBBuildingHandler {
         }
         return -1;
     }
-    
-    public int getFkIdReport(int BuildingId){
+
+    public int getFkIdReport(int BuildingId) {
         try {
             String sql = "SELECT fk_idReport from building where idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, BuildingId);
             ResultSet myRS = prepared.executeQuery();
-            if(myRS.next()) {
-              return myRS.getInt("fk_idReport");
+            if (myRS.next()) {
+                return myRS.getInt("fk_idReport");
             }
         } catch (SQLException | HeadlessException ex) {
             ex.printStackTrace();
         }
         return -1;
     }
-    
-    public Report getReport(int reportId){
-        try{
+
+    public Report getReport(int reportId) {
+        try {
             String sql = "SELECT * FROM report WHERE idReport=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, reportId);
             ResultSet myRS = prepared.executeQuery();
-            if(myRS.next()) {
+            if (myRS.next()) {
                 Report report = new Report(
                         myRS.getInt("idReport"),
                         myRS.getString("buildingUsage"),
@@ -252,48 +252,68 @@ public class DBBuildingHandler {
                 );
                 return report;
             }
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
-    public Report getReportFromBuildingId(int buildingId){
+    public Report getReportFromBuildingId(int buildingId) {
         String sql = "SELECT fk_idReport FROM building where idBuilding=?";
-        try{
+        try {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, buildingId);
             ResultSet myRS = prepared.executeQuery();
-            if(myRS.next()){
+            if (myRS.next()) {
                 int reportId = myRS.getInt("fk_idReport");
                 return getReport(reportId);
             }
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
-    
-    private void insertFkReport(int buildingId, int idReport){
+
+    private void insertFkReport(int buildingId, int idReport) {
         try {
             String sql = "UPDATE building set fk_idReport=? where idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, idReport);
             prepared.setInt(2, buildingId);
             prepared.executeUpdate();
-            
+
         } catch (SQLException | HeadlessException ex) {
             ex.printStackTrace();
         }
     }
-    
-    public void addRoomReport(boolean remarks, boolean damage, String damageDate, 
-            String damageWhere, String damageHappened, 
-            String damageRepaired, boolean damageWater, boolean damageRot, boolean damageMold, 
-            boolean damageFire, String damageOther, boolean wallRemark, String wallText, 
-            boolean roofRemark, String roofText, boolean floorRemark, String floorText, 
-            boolean moistureScan, String moistureScanText, String moistureScanMeasured, 
-            String conclusionText, int idReport){
+
+    public void editReport(Report report) {
+
+        try {
+            String sql = "UPDATE report set buildingUsage=?, roofRemarks=?, roofText=?, outerWallRemarks=?, outerWallText=?, fk_idEmployee=?, buildingResponsible=? where idReport=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setString(1, report.getBuildingUsage());
+            prepared.setBoolean(2, report.getRoofRemarks());
+            prepared.setString(3, report.getRoofText());
+            prepared.setBoolean(4, report.isOuterWallRemarks());
+            prepared.setString(5, report.getOuterWallText());
+            prepared.setInt(6, report.getFk_idEmployee());
+            prepared.setString(7, report.getBuildingResponsible());
+            prepared.setInt(8, report.getIdReport());
+            prepared.executeUpdate();
+
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
+    public void addRoomReport(boolean remarks, boolean damage, String damageDate,
+            String damageWhere, String damageHappened,
+            String damageRepaired, boolean damageWater, boolean damageRot, boolean damageMold,
+            boolean damageFire, String damageOther, boolean wallRemark, String wallText,
+            boolean roofRemark, String roofText, boolean floorRemark, String floorText,
+            boolean moistureScan, String moistureScanText, String moistureScanMeasured,
+            String conclusionText, int idReport) {
         try {
             String sql = "INSERT INTO room (remarks, damage, damageDate, damageWhere, damageHappened, damageRepaired, damageWater, damageRot, damageMold, damageFire, damageOther, wallRemark, wallText, roofRemark, roofText, floorRemark, floorText, moistureScan, moistureScanText, moistureScanMeasured, conclusionText, fk_idReport) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,(select idReport from report where idReport=?))";
             PreparedStatement prepared = conn.prepareStatement(sql);
@@ -320,38 +340,53 @@ public class DBBuildingHandler {
             prepared.setString(21, conclusionText);
             prepared.setInt(22, idReport);
             prepared.executeUpdate();
-            
+
         } catch (SQLException | HeadlessException ex) {
             ex.printStackTrace();
         }
     }
-    
-    private void removeReport(int reportId){
+
+    public int countRooms(int idReport) {
+        int counter = 0;
+        try {
+            String sql = "SELECT * FROM room where fk_idReport=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, idReport);
+            ResultSet myRS = prepared.executeQuery();
+            while (myRS.next()) {
+                counter++;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return counter;
+    }
+
+    private void removeReport(int reportId) {
         String sql = "DELETE FROM report where idReport=?";
-        try{
+        try {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, reportId);
             prepared.executeUpdate();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
-    public String getReportOverview(int id){
+
+    public String getReportOverview(int idBuilding) {
         String data = "";
         try {
             String sql = "SELECT * from report where idReport=(select fk_idReport from building where idBuilding=?)";
             PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, id);
+            prepared.setInt(1, idBuilding);
             ResultSet myRS = prepared.executeQuery();
-            if(myRS.next()) {
-              data += "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='overviewReport'><input type='hidden' name='reportID' value=' " + myRS.getInt("idReport") + "'>";
-              data += "<h3 style='color: white;'>Report ID: " + myRS.getInt("idReport");
-              data += "<br /><br />Roof Damage: " + myRS.getBoolean("roofRemarks");
-              data += "<br /><br />Outer Wall Damage: " + myRS.getBoolean("outerWallRemarks");
-              data += "<br /><br />Worker Responsible: " + myRS.getInt("fk_idEmployee") + "</h3>";
-              data += "<button style='padding: 15px; width: 150px; border: 0px solid black; border-radius: 3px;' type='submit'>Review Report</button></form>";
+            if (myRS.next()) {
+                data += "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='overviewReport'><input type='hidden' name='idReport' value=' " + myRS.getInt("idReport") + "'><input type='hidden' name='idBuilding' value=' " + idBuilding + "'>";
+                data += "<h3 style='color: white;'>Report ID: " + myRS.getInt("idReport");
+                data += "<br /><br />Roof Damage: " + myRS.getBoolean("roofRemarks");
+                data += "<br /><br />Outer Wall Damage: " + myRS.getBoolean("outerWallRemarks");
+                data += "<br /><br />Worker Responsible: " + myRS.getInt("fk_idEmployee") + "</h3>";
+                data += "<br /><button style='padding: 15px; width: 150px; border: 0px solid black; border-radius: 3px;' type='submit'>Review Report</button></form>";
             }
         } catch (SQLException | HeadlessException ex) {
             ex.printStackTrace();
@@ -359,6 +394,25 @@ public class DBBuildingHandler {
         return data;
     }
     
+    public String getReportOverviewWithReportID(int idReport) {
+        String data = "";
+        try {
+            String sql = "SELECT * from report where idReport=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, idReport);
+            ResultSet myRS = prepared.executeQuery();
+            if (myRS.next()) {
+                data += "<h3 style='color: white;'>Report ID: " + myRS.getInt("idReport");
+                data += "<br /><br />Roof Damage: " + myRS.getBoolean("roofRemarks");
+                data += "<br /><br />Outer Wall Damage: " + myRS.getBoolean("outerWallRemarks");
+                data += "<br /><br />Worker Responsible: " + myRS.getInt("fk_idEmployee") + "</h3>";
+            }
+        } catch (SQLException | HeadlessException ex) {
+            ex.printStackTrace();
+        }
+        return data;
+    }
+
     public void requestService(int id) {
         try {
             String sql = "UPDATE building set service=? where idBuilding=?";
@@ -371,19 +425,18 @@ public class DBBuildingHandler {
         }
     }
 
-    public void unrequestService(int id) {
+    public void setReviewed(int idBuilding) {
         try {
             String sql = "UPDATE building set service=? where idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setString(1, "reviewed");
-            prepared.setInt(2, id);
+            prepared.setInt(2, idBuilding);
             prepared.executeUpdate();
         } catch (SQLException | HeadlessException ex) {
             ex.printStackTrace();
         }
     }
-    
-    
+
     public String getRooms(int id) {
         String roomData = "";
         try {
@@ -408,45 +461,47 @@ public class DBBuildingHandler {
         return roomData;
     }
 
-    public String showReport(int id){
+    public String showRoomReport(int id) {
         String tableData = "";
+        int counter = 0;
         try {
-            String sql = "SELECT * from room where fk_idReport=?";
+            String sql = "SELECT * from room where fk_idReport=(select idReport from report where idReport=?)";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, id);
             ResultSet myRS = prepared.executeQuery();
             while (myRS.next()) {
-            tableData += "<center><h3 style='color: white;'><br / ><br / >";
-            tableData += "Remarks: " + myRS.getBoolean("remarks");
-            tableData += "Damage: " +myRS.getBoolean("damage");
-            tableData += "Date of Damage: " +myRS.getString("damageDate");
-            tableData += "Damage Location: " +myRS.getString("damageWhere");
-            tableData += "Reason behind the damage: " +myRS.getString("damageHappened");
-            tableData += "Damage Repaired: " +myRS.getString("damageRepaired");
-            tableData += "Damage Type: " +myRS.getBoolean("damageWater");
-            tableData += "Damage Type: " +myRS.getBoolean("damageRot");
-            tableData += "Damage Type: " +myRS.getBoolean("damageMold");
-            tableData += "Damage Type: " +myRS.getBoolean("damageFire");
-            tableData += "Damage Type: " +myRS.getString("damageOther");
-            tableData += "Wall Remarks: " +myRS.getBoolean("wallRemark");
-            tableData += "Wall Text: " +myRS.getString("wallText");
-            tableData += "Roof Remarks: " +myRS.getBoolean("roofRemark");
-            tableData += "Roof Text: " +myRS.getString("roofText");
-            tableData += "Floor Remarks: " +myRS.getBoolean("floorRemark");
-            tableData += "Floor Text: " +myRS.getString("floorText");
-            tableData += "Moisture Scan Performed: " +myRS.getBoolean("moistureScan");
-            tableData += "Moisture Scan Description: " +myRS.getString("moistureScanText");
-            tableData += "Moisture Scan Measurements: " +myRS.getString("moistureScanMeasured");
-            tableData += "Conclusion: " +myRS.getString("conclusionText");
-            tableData += "Report ID: " +myRS.getInt("fk_idReport");
-            tableData += "</center></h3>";
+                counter++;
+                tableData += "<center><div class='roomReport'><h2 style='color: white;'>Room Report: " + counter + "</h2><h3 style='color: white;'><br / >" + "<br / >";
+                tableData += "Remarks: " + myRS.getBoolean("remarks") + "<br / >" + "<br / >";
+                tableData += "Damage: " + myRS.getBoolean("damage") + "<br / >" + "<br / >";
+                tableData += "Date of Damage: " + myRS.getString("damageDate") + "<br / >" + "<br / >";
+                tableData += "Damage Location: " + myRS.getString("damageWhere") + "<br / >" + "<br / >";
+                tableData += "Reason behind the damage: " + myRS.getString("damageHappened") + "<br / >" + "<br / >";
+                tableData += "Damage Repaired: " + myRS.getString("damageRepaired") + "<br / >" + "<br / >";
+                tableData += "Damage Type: " + myRS.getBoolean("damageWater") + "<br / >" + "<br / >";
+                tableData += "Damage Type: " + myRS.getBoolean("damageRot") + "<br / >" + "<br / >";
+                tableData += "Damage Type: " + myRS.getBoolean("damageMold") + "<br / >" + "<br / >";
+                tableData += "Damage Type: " + myRS.getBoolean("damageFire") + "<br / >" + "<br / >";
+                tableData += "Damage Type: " + myRS.getString("damageOther") + "<br / >" + "<br / >";
+                tableData += "Wall Remarks: " + myRS.getBoolean("wallRemark") + "<br / >" + "<br / >";
+                tableData += "Wall Text: " + myRS.getString("wallText") + "<br / >" + "<br / >";
+                tableData += "Roof Remarks: " + myRS.getBoolean("roofRemark") + "<br / >" + "<br / >";
+                tableData += "Roof Text: " + myRS.getString("roofText") + "<br / >" + "<br / >";
+                tableData += "Floor Remarks: " + myRS.getBoolean("floorRemark") + "<br / >" + "<br / >";
+                tableData += "Floor Text: " + myRS.getString("floorText") + "<br / >" + "<br / >";
+                tableData += "Moisture Scan Performed: " + myRS.getBoolean("moistureScan") + "<br / >" + "<br / >";
+                tableData += "Moisture Scan Description: " + myRS.getString("moistureScanText") + "<br / >" + "<br / >";
+                tableData += "Moisture Scan Measurements: " + myRS.getString("moistureScanMeasured") + "<br / >" + "<br / >";
+                tableData += "Conclusion: " + myRS.getString("conclusionText") + "<br / >" + "<br / >";
+                tableData += "Report ID: " + myRS.getInt("fk_idReport") + "<br / >" + "<br / >";
+                tableData += "</h3></div></center>" + "<br / >" + "<br / >" + "<br / >" + "<br / >";
             }
         } catch (SQLException | HeadlessException ex) {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, ex);
         }
         return tableData;
     }
-    
+
     public void editBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String condition,
             String extraText, int idBuilding) {
@@ -538,13 +593,12 @@ public class DBBuildingHandler {
     public String createMenu(String status) {
         DBUserHandler db = new DBUserHandler(conn);
         String menu = "";
-         if (status == null) {
+        if (status == null) {
             return "Unspecified Login. Please retry!";
-         } else if (status.equalsIgnoreCase("customer")) {
+        } else if (status.equalsIgnoreCase("customer")) {
             return "<li><a href='overviewBuilding.jsp'>Estate</a></li>\n"
                     + "            <li><a href='service.jsp'>Service Overview</a></li>\n"
                     + "            <li><a href='account.jsp'>Account Management</a></li>\n"
-                    + "            <li><a href='report.jsp'>Reports(" + this.getAwaitingReview(0) + ")</a></li>\n"
                     + "            <li><a href='contact.jsp'>Contact Staff</a></li>";
         } else if (status.equalsIgnoreCase("worker")) {
             return "<li><a href='overviewBuilding.jsp'>Estates</a></li>\n"
@@ -572,7 +626,65 @@ public class DBBuildingHandler {
         return count;
     }
 
+    public int getEmployeeFromIdBuilding(int idBuilding){
+        try {
+            String sql = "SELECT fk_idEmployee FROM report WHERE idReport=(select fk_idReport from building where idBuilding=?)";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, idBuilding);
+            ResultSet myRS = prepared.executeQuery();
+            if(myRS.next()) {
+               return myRS.getInt("fk_idEmployee");
+            }
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return -1;
+    }
     
+    public String getAwaitingServiceCustomer(String parameter, int id) {
+        String tableData = "<table class='table table-hover'>\n"
+                + "    <thead>\n"
+                + "      <tr>\n"
+                + "        <th>Building ID</th>\n"
+                + "        <th>Address</th>\n"
+                + "        <th>City</th>\n"
+                + "        <th>Building Year</th>\n"
+                + "        <th>Worker Responsible</th>\n"
+                + "        <th>Review Service</th>\n"
+                + "      </tr>\n"
+                + "    </thead>\n"
+                + "    <tbody>";
+        try {
+            String sql = "SELECT * FROM building where service=? AND fk_idUser=(select idUser from user where idUser=?)";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setString(1, parameter);
+            prepared.setInt(2, id);
+            ResultSet myRS = prepared.executeQuery();
+            DBUserHandler db = new DBUserHandler();
+            while (myRS.next()) {
+                int idBuilding = myRS.getInt("idBuilding");
+                int idEmployee = getEmployeeFromIdBuilding(idBuilding);
+                int idReport = getFkIdReport(idBuilding);
+                String address = myRS.getString("address");
+                String city = myRS.getString("city");
+                String builtYear = myRS.getString("builtYear");
+                if(parameter.equalsIgnoreCase("reviewed")){
+                    tableData += "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='reviewReviewedService'><input type='hidden' name='idBuilding' value='" + idBuilding + "' /><input type='hidden' name='idReport' value='" + idReport + "' /><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td><td>" + idEmployee +"</td><td><button type='submit' class='srvbtn' style='padding: 10px;'>Review Service</button></td></tr>";
+                }else if (parameter.equalsIgnoreCase("awaiting")) {
+                    tableData += "<tr><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td></tr>";
+                }
+                
+                
+
+            }
+        } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        tableData += "</tbody>\n"
+                + "  </table>";
+        return tableData;
+    }
+
     public String printAwaitingService() {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
@@ -603,7 +715,6 @@ public class DBBuildingHandler {
         return tableData;
     }
 
-    
     public String printAwaitingReview(int id) {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
@@ -650,21 +761,21 @@ public class DBBuildingHandler {
 
         return counter;
     }
-    
+
     public void removeBuilding(int buildingId) {
         try {
             String sql = "DELETE FROM building WHERE idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, buildingId);
-            removeReport(getReportFromBuildingId(buildingId).getIdReport());
+            removeReport(getFkIdReport(buildingId));
             prepared.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public void removePicture(int pictureId){
-        try{
+
+    public void removePicture(int pictureId) {
+        try {
             String sql = "DELETE FROM picture WHERE idPicture=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, pictureId);

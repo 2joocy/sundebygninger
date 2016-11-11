@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.swing.JOptionPane;
 import DbHandler.*;
+import entities.Report;
 
 /**
  *
@@ -38,6 +39,7 @@ public class Front extends HttpServlet {
 
     private DBUserHandler db;
     private DBBuildingHandler dbB;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -99,10 +101,12 @@ public class Front extends HttpServlet {
         String roofText = request.getParameter("roofText");
         String outerWallRemarks = request.getParameter("outerWallRemarks");
         String reportID = request.getParameter("reportID");
+        String idReport1 = request.getParameter("idReport");
         String idRoom = request.getParameter("idRoom");
         String newPassword = request.getParameter("newPass");
         String newEmail = request.getParameter("newEmail");
         String fk_idMainPicture = request.getParameter("fk_idMainPicture");
+        String typeSearch = request.getParameter("typesearch");
         boolean outerWallRemark = false;
         boolean remark = false;
         boolean damage = false;
@@ -215,30 +219,27 @@ public class Front extends HttpServlet {
             case "addReport":
                 request.getSession().setAttribute("idBuilding", idBuilding);
                 request.getSession().setAttribute("idReport", dbB.getFkIdReport(Integer.parseInt(idBuilding)));
-                request.getSession().setAttribute("hasReport", "yes");
                 response.sendRedirect("addReport.jsp");
                 break;
-//            case "finalAddReport":
-//                boolean roofRemark1 = false;
-//                if (roofRemarks.equalsIgnoreCase("1")) {
-//                    roofRemark1 = true;
-//                }
-//
-//                if (outerWallRemarks.equalsIgnoreCase("1")) {
-//                    outerWallRemark = true;
-//                }
-//
-//                int idBuildingNew = Integer.parseInt((String) request.getSession().getAttribute("idBuilding"));
-//                int idNew = (Integer) request.getSession().getAttribute("userID");
-//                if(dbB.getFkIdReport(idBuildingNew) == -1){
-//                    dbB.insertFkReport(idBuildingNew, dbB.submitReport(buildingUsage, roofRemark1, 0, roofText, outerWallRemark, 0, outerWallText, idNew, "hej"));
-//                    response.sendRedirect("overviewBuilding.jsp");
-//                }else{
-//                    request.getSession().setAttribute("failure", "Please refrain from creating multiple reports under one building! Please add room reports, if this is the case!");
-//                    response.sendRedirect("overviewBuilding.jsp");
-//                }
-//                
-//                break;
+            case "finalAddReport":
+                boolean roofRemark1 = false;
+
+                if (roofRemarks.equalsIgnoreCase("1")) {
+                    roofRemark1 = true;
+                }
+
+                if (outerWallRemarks.equalsIgnoreCase("1")) {
+                    outerWallRemark = true;
+                }
+
+                int idBuildingNew = Integer.parseInt((String) request.getSession().getAttribute("idBuilding"));
+                int idNew = (Integer) request.getSession().getAttribute("userID");
+                int reportedID = (Integer) request.getSession().getAttribute("idReport");
+                Report newRep = new Report(reportedID, buildingUsage, roofRemark1, 0, roofText, outerWallRemark, 0, outerWallText, idNew, "");
+                dbB.editReport(newRep);
+                dbB.setReviewed(idBuildingNew);
+                response.sendRedirect("addReport.jsp");
+                break;
             case "submitRoom":
                 if (remarks != null && remarks.equals("on")) {
                     remark = true;
@@ -283,7 +284,7 @@ public class Front extends HttpServlet {
                 dbB.addRoomReport(remark, damage, dateDmg, placeDmg, descDmg, "", damageWater,
                         damageRot, damageMold, damageFire, reasonDmg, wallRemarks, wallRemark, roofRemark,
                         roofRemarks, floorRemark, floorRemarks, moistureScan, moistureDesc, moistureMeasure, conclusion, fk_idReport);
-                response.sendRedirect("service.jsp");
+                response.sendRedirect("addReport.jsp");
                 break;
             case "submitReport":
                 Part filePart2 = request.getPart("picture");
@@ -293,7 +294,14 @@ public class Front extends HttpServlet {
                 request.getSession().setAttribute("imageId", "" + imageId2);
                 break;
             case "overviewReport":
-                out.print(reportID);
+                request.getSession().setAttribute("idReport", idReport1);
+                request.getSession().setAttribute("idBuilding", idBuilding);
+                
+                response.sendRedirect("showReportCustomer.jsp");
+                break;
+            case "showRoomReport":
+                request.getSession().setAttribute("report", dbB.getReport(Integer.parseInt(idReport1)));
+                response.sendRedirect("showRoomReport.jsp");
                 break;
             case "serviceRoom":
                 response.sendRedirect("service.jsp");
@@ -321,6 +329,15 @@ public class Front extends HttpServlet {
                     response.sendRedirect("account.jsp");
                 }
                 break;
+            case "filterServiceCustomer":
+                request.getSession().setAttribute("searchParameter", typeSearch);
+                response.sendRedirect("service.jsp");
+                break;
+            case "reviewReviewedService":
+                request.getSession().setAttribute("idReport", dbB.getBuilding(Integer.parseInt(idReport1)));
+                request.getSession().setAttribute("building", dbB.getBuilding(Integer.parseInt(idBuilding)));
+                response.sendRedirect("editBuilding.jsp");
+                break;
             case "newMainImage":
                 filePart = request.getPart("picture");
                 int newImageID = Integer.parseInt(idBuilding);
@@ -330,30 +347,27 @@ public class Front extends HttpServlet {
                 break;
             case "uploadReportOuterRoofImage":
                 //Steps
-                
+
                 //1) Get picture into filePart
                 filePart = request.getPart("picture");
                 //2) Get which report we must insert it into
                 int idReport = (Integer) request.getSession().getAttribute("idReport");
                 //3) Which field we must insert it into
                 String insertColumn = "fk_idPictureOuterRoof";
-                
-                
-                
+
                 //imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
             case "uploadReportRoofImage":
                 //Steps
-                
+
                 //1) Get picture into filePart
                 filePart = request.getPart("picture");
                 //2) Get which report we must insert it into
                 idReport = (Integer) request.getSession().getAttribute("idReport");
                 //3) Which field we must insert it into
                 insertColumn = "fk_idPictureRoof";
-                
-                
+
                 fk_mainImage = Integer.parseInt(fk_idMainPicture);
                 //imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
                 response.sendRedirect("overviewBuilding.jsp");

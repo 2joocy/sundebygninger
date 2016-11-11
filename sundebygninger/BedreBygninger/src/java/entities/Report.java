@@ -67,6 +67,46 @@ public class Report {
     public String getBuildingResponsible() {
         return buildingResponsible;
     }
+
+    public void setIdReport(int idReport) {
+        this.idReport = idReport;
+    }
+
+    public void setBuildingUsage(String buildingUsage) {
+        this.buildingUsage = buildingUsage;
+    }
+
+    public void setRoofRemarks(boolean roofRemarks) {
+        this.roofRemarks = roofRemarks;
+    }
+
+    public void setFk_idPictureRoof(int fk_idPictureRoof) {
+        this.fk_idPictureRoof = fk_idPictureRoof;
+    }
+
+    public void setRoofText(String roofText) {
+        this.roofText = roofText;
+    }
+
+    public void setOuterWallRemarks(boolean outerWallRemarks) {
+        this.outerWallRemarks = outerWallRemarks;
+    }
+
+    public void setFk_idPictureOuterRoof(int fk_idPictureOuterRoof) {
+        this.fk_idPictureOuterRoof = fk_idPictureOuterRoof;
+    }
+
+    public void setOuterWallText(String outerWallText) {
+        this.outerWallText = outerWallText;
+    }
+
+    public void setFk_idEmployee(int fk_idEmployee) {
+        this.fk_idEmployee = fk_idEmployee;
+    }
+
+    public void setBuildingResponsible(String buildingResponsible) {
+        this.buildingResponsible = buildingResponsible;
+    }
     
     
     

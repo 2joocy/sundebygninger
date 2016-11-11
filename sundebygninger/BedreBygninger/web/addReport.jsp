@@ -1,3 +1,4 @@
+<%@page import="entities.Report"%>
 <%@page import="DbHandler.DBUserHandler"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
@@ -7,7 +8,6 @@
     DBBuildingHandler db = new DBBuildingHandler();
     DBUserHandler dbb = new DBUserHandler();
     User user = (User) session.getAttribute("user");
-
     if (user == null) {
         response.sendRedirect("index.jsp");
     }
@@ -28,8 +28,7 @@
         <link href="style/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body style="height: 92%;">
-        <%
-            if (user.getStatus().equalsIgnoreCase("worker")) {
+        <%            if (user.getStatus().equalsIgnoreCase("worker")) {
 
             }
 
@@ -129,51 +128,64 @@
                         </div>
                     </div>
                 </div>
-            </div></P>
-        <center>
-            <br>
-            <h3>Submit Report</h3>
-            <%               
-                out.print(session.getAttribute("idBuilding"));
-                out.print(session.getAttribute("idReport"));
-            %>
-            <form action="Front" method="POST" >
-                <input type="text" name="buildingUsage" placeholder="Building Usage..." />
-                <br />
-                Roof Remarks<input type="checkbox" name="roofRemarks" value="1"  />
-                <br />
-                <input type="text" name="roofText" placeholder="Roof Remarks..."  />
-                <br />
-                Outer Wall Remarks<input type="checkbox" name="outerWallRemarks" value="1"  />
-                <br />
-                <input type="text" name="outerWallText" placeholder="Outer Wall Text..."  />
-                <input type="text" name="buildingUsage" placeholder="Building Usage..."  />
-                <br />
-                <input type="submit" value="Submit Report">
-                <input type="hidden" name="idUser" value="<% session.getAttribute("userID");%>" />
-                <input type="hidden" name="idBuilding" value="<% session.getAttribute("idBuilding");%>"  />
-                <input type="hidden" name="methodForm" value="finalAddReport"  />
-            </form>
-        </center>
-        <br />
-        <center>
-            Or
-        </center>   
-        <br />
-        <center>
-            <input type="submit" data-toggle="modal" data-target="#myModal" value="Add Room Report">
-        </center>
-        <br />
-        <center>
-            Or
-            <form action="Front" method="POST" >
-                <input type="hidden" name="methodForm" value="closeReport">
-                <br>
-                <input type="submit" value="Close Report">
-            </form>
-        </center>
+            </div>
+            <div class="roomSideBar">
+                <center><h2 style="color: white;">Report Review:</h2></center>
+                               
+                    <br />
+                    <center>
+                        <%
+                            int idReport = (Integer) session.getAttribute("idReport");
+                            out.print("<h3 style='color: white;'>Room Reports:<br /><br /> " + db.countRooms(idReport) + "</h3>");
+                        %>
+                        <br />
+                        <center>
+                            <input type="submit" data-toggle="modal" data-target="#myModal" style="width: 200px;" value="Add Room Report">
+                            <br />
+                            <br />
+                            <form action="Front" method="POST" > 
+                            <input type="submit" style="width: 200px;" value="View Room Report">
+                            <input type="hidden" name="idReport" value="<% out.print(idReport); %>">
+                            <input type="hidden" name="methodForm" value="showRoomReport">
+                            </form>
+                        </center>
+                        <br> <br>
+                    </center>
 
-    </div>
-</body>
+            </div>
+                        <form action="Front" method="POST" > 
+            <center>
+                <br>
+                <h3>Submit Report</h3>
+                <br />
+                <form action="Front" method="POST" >
+                    <input type="text" name="buildingUsage" placeholder="Building Usage..." />
+                    <br />
+                    Roof Remarks<input type="checkbox" name="roofRemarks" value="1"  />
+                    <br />
+                    <input type="text" name="roofText" placeholder="Roof Remarks..."  />
+                    <br />
+                    Outer Wall Remarks<input type="checkbox" name="outerWallRemarks" value="1"  />
+                    <br />
+                    <input type="text" name="outerWallText" placeholder="Outer Wall Text..."  />
+                    <input type="text" name="buildingUsage" placeholder="Building Usage..."  />
+                    <br />
+                    <input type="submit" value="Submit Report">
+                    <input type="hidden" name="idUser" value="<% session.getAttribute("userID");%>" />
+                    <input type="hidden" name="idBuilding" value="<% session.getAttribute("idBuilding");%>"  />
+                    <input type="hidden" name="methodForm" value="finalAddReport"  />
+                </form>
+            </center>
+            <br />
+            <center>
+                Or
+                <form action="Front" method="POST" >
+                    <input type="hidden" name="methodForm" value="closeReport">
+                    <br>
+                    <input type="submit" value="Save Report">
+                </form>
+            </center>
+        </div>
+    </body>
 </html>
 
