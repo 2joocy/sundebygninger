@@ -4,15 +4,14 @@
 <%@page import="DbHandler.DBBuildingHandler"%>
 <!DOCTYPE html>
 <%
-    
-    
-DBBuildingHandler db = new DBBuildingHandler();
-DBUserHandler dbb = new DBUserHandler();
-User user = (User) session.getAttribute("user");
-String idBuilding = (String) session.getAttribute("idBuilding");
-String idReport = (String) session.getAttribute("idReport");
-if(user == null){
-    response.sendRedirect("index.jsp");
+
+    DBBuildingHandler db = new DBBuildingHandler();
+    DBUserHandler dbb = new DBUserHandler();
+    User user = (User) session.getAttribute("user");
+    int idBuilding = Integer.parseInt(((String) session.getAttribute("idBuilding")).replaceAll(" ", ""));
+    int idReport = Integer.parseInt(((String) session.getAttribute("idReport")).replaceAll(" ", ""));
+    if (user == null) {
+        response.sendRedirect("index.jsp");
     }
 %>
 <html lang="en">
@@ -27,15 +26,31 @@ if(user == null){
     <body style="height: 92%;">
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
-            <%
-            out.print(db.createMenu(user.getStatus()));
-            %>
+                <%
+                    out.print(db.createMenu(user.getStatus()));
+                %>
         </ul>
         <div class="edit" style="margin-top: 4%; padding-left: 10px;">
             <center>
-            <%
-              out.print(idReport + idBuilding);
-            %>
+                <div class='roomReport'>
+                    <br />
+                    <h2 style="color: white;">
+                    Building Report:
+                    </h2>
+                        
+                    <%
+                        out.print(db.getReportOverviewWithReportID(idReport));
+                    %>
+                    <br />
+                    <br />
+                </div>
+                <br />
+                <br />
+                <div class='roomReport'>
+                    <%                        
+                        out.print(db.showRoomReport(idReport));
+                    %>
+                </div>
             </center>
         </div>
     </body>

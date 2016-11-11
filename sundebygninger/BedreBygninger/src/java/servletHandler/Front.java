@@ -186,7 +186,7 @@ public class Front extends HttpServlet {
                 response.sendRedirect("index.jsp");
                 break;
             case "editBuilding":
-                request.getSession().setAttribute("building", dbB.getBuilding(Integer.parseInt(idBuilding)));
+                request.getSession().setAttribute("idBuilding", idBuilding);
                 response.sendRedirect("editBuilding.jsp");
                 break;
             case "editBuildingFinal":
@@ -335,8 +335,8 @@ public class Front extends HttpServlet {
                 break;
             case "reviewReviewedService":
                 request.getSession().setAttribute("idReport", dbB.getBuilding(Integer.parseInt(idReport1)));
-                request.getSession().setAttribute("building", dbB.getBuilding(Integer.parseInt(idBuilding)));
-                response.sendRedirect("editBuilding.jsp");
+                request.getSession().setAttribute("idBuilding", idBuilding);
+                response.sendRedirect("reviewBuildingDetail.jsp");
                 break;
             case "newMainImage":
                 filePart = request.getPart("picture");

@@ -375,6 +375,7 @@ public class DBBuildingHandler {
 
     public String getReportOverview(int idBuilding) {
         String data = "";
+        JOptionPane.showMessageDialog(null, "GetReportOverview - IdBuilding is: " + idBuilding);
         try {
             String sql = "SELECT * from report where idReport=(select fk_idReport from building where idBuilding=?)";
             PreparedStatement prepared = conn.prepareStatement(sql);
@@ -669,13 +670,10 @@ public class DBBuildingHandler {
                 String city = myRS.getString("city");
                 String builtYear = myRS.getString("builtYear");
                 if(parameter.equalsIgnoreCase("reviewed")){
-                    tableData += "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='reviewReviewedService'><input type='hidden' name='idBuilding' value='" + idBuilding + "' /><input type='hidden' name='idReport' value='" + idReport + "' /><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td><td>" + idEmployee +"</td><td><button type='submit' class='srvbtn' style='padding: 10px;'>Review Service</button></td></tr>";
+                    tableData += "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='reviewReviewedService' /><input type='hidden' name='idBuilding' value='" + idBuilding + "' /><input type='hidden' name='idReport' value='" + idReport + "' /><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td><td>" + idEmployee +"</td><td><button type='submit' class='srvbtn' style='padding: 10px;'>Review Service</button></td></tr>";
                 }else if (parameter.equalsIgnoreCase("awaiting")) {
                     tableData += "<tr><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td></tr>";
                 }
-                
-                
-
             }
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);

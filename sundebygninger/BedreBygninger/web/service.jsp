@@ -5,7 +5,6 @@
 <%
     DBUserHandler db = new DBUserHandler();
     DBBuildingHandler dbB = new DBBuildingHandler();
-
     User user = (User) session.getAttribute("user");
     String searchParameter = (String) session.getAttribute("searchParameter");
     if (searchParameter == null) {
