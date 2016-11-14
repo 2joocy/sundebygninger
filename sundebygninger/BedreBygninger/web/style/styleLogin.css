@@ -42,6 +42,11 @@ body{
 }
 
 .header{
+    background: url('pictures/nylogo.svg') no-repeat fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     position: absolute;
     top: 42%;
     left: 25%;
@@ -84,7 +89,7 @@ body{
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
     text-decoration: none;
-     opacity: 0.5;
+    opacity: 0.5;
 
 }
 
@@ -136,7 +141,7 @@ body{
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
     text-decoration: none;
-  
+
 }
 
 .login button:active{
@@ -189,7 +194,7 @@ body{
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
     text-decoration: none;
-     opacity: 0.5;
+    opacity: 0.5;
 
 }
 
@@ -242,7 +247,7 @@ body{
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
     text-decoration: none;
-  
+
 }
 
 .register button:active{

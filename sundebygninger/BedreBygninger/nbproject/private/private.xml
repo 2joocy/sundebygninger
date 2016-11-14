@@ -3,21 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/overviewUsers.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/firstPage.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/overviewAccount.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/overviewBuilding.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/showRoomReport.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/showReportCustomer.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/style/style.css</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/service.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/DBBuildingHandler.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/index.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/editRoom.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/editBuilding.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/entities/Report.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/addReport.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/servletHandler/Front.java</file>
+            <file>file:/C:/Users/William%20Bingo/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/DBBuildingHandler.java</file>
+            <file>file:/C:/Users/William%20Bingo/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/servletHandler/Front.java</file>
+            <file>file:/C:/Users/William%20Bingo/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/showReportCustomer.jsp</file>
+            <file>file:/C:/Users/William%20Bingo/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/service.jsp</file>
+            <file>file:/C:/Users/William%20Bingo/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/ImageHandler.java</file>
+            <file>file:/C:/Users/William%20Bingo/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/editBuilding.jsp</file>
         </group>
     </open-files>
 </project-private>

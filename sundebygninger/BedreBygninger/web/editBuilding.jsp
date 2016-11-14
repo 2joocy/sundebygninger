@@ -15,7 +15,8 @@
     DBBuildingHandler dbb = new DBBuildingHandler();
     DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
-    Building build = (Building) session.getAttribute("building");
+    int idBuilding = Integer.parseInt(((String) session.getAttribute("idBuilding")).replaceAll(" ", ""));
+    Building build = dbb.getBuilding(idBuilding);
     if (user == null) {
         response.sendRedirect("index.jsp");
     }

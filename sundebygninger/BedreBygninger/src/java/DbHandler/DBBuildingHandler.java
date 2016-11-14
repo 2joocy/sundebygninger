@@ -131,7 +131,7 @@ public class DBBuildingHandler {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, idBuilding);
             ResultSet myRS = prepared.executeQuery();
-            while (myRS.next()) {
+            if (myRS.next()) {
                 building = new Building(
                         myRS.getInt("idBuilding"),
                         myRS.getString("address"),
@@ -151,6 +151,7 @@ public class DBBuildingHandler {
             }
 
         } catch (SQLException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, "Error [getBuilding(id)]");
             ex.printStackTrace();
         }
         return building;
@@ -256,6 +257,24 @@ public class DBBuildingHandler {
             ex.printStackTrace();
         }
         return null;
+    }
+    
+    public int getReportCount(int idUser){
+        int counter = 0;
+        try {
+            String sql = "select idReport from building natural join report where fk_idUser=(select idUser from user where idUser=?) and service=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, idUser);
+            prepared.setString(2, "reviewed");
+            ResultSet myRS = prepared.executeQuery();
+            if (myRS.next()) {
+                counter++;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return counter;
     }
 
     public Report getReportFromBuildingId(int buildingId) {
@@ -394,7 +413,7 @@ public class DBBuildingHandler {
         }
         return data;
     }
-    
+
     public String getReportOverviewWithReportID(int idReport) {
         String data = "";
         try {
@@ -627,21 +646,21 @@ public class DBBuildingHandler {
         return count;
     }
 
-    public int getEmployeeFromIdBuilding(int idBuilding){
+    public int getEmployeeFromIdBuilding(int idBuilding) {
         try {
             String sql = "SELECT fk_idEmployee FROM report WHERE idReport=(select fk_idReport from building where idBuilding=?)";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, idBuilding);
             ResultSet myRS = prepared.executeQuery();
-            if(myRS.next()) {
-               return myRS.getInt("fk_idEmployee");
+            if (myRS.next()) {
+                return myRS.getInt("fk_idEmployee");
             }
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
         return -1;
     }
-    
+
     public String getAwaitingServiceCustomer(String parameter, int id) {
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
@@ -669,11 +688,16 @@ public class DBBuildingHandler {
                 String address = myRS.getString("address");
                 String city = myRS.getString("city");
                 String builtYear = myRS.getString("builtYear");
-                if(parameter.equalsIgnoreCase("reviewed")){
-                    tableData += "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='reviewReviewedService' /><input type='hidden' name='idBuilding' value='" + idBuilding + "' /><input type='hidden' name='idReport' value='" + idReport + "' /><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td><td>" + idEmployee +"</td><td><button type='submit' class='srvbtn' style='padding: 10px;'>Review Service</button></td></tr>";
-                }else if (parameter.equalsIgnoreCase("awaiting")) {
-                    tableData += "<tr><td>"+ idBuilding +"</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td></tr>";
+                if (parameter.equalsIgnoreCase("reviewed")) {
+                    tableData += "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='reviewReviewedService' /><input type='hidden' name='idBuilding' value='" + idBuilding + "' /><input type='hidden' name='idReport' value='" + idReport + "' /><td>" + idBuilding + "</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td><td>" + idEmployee + "</td><td><button type='submit' class='srvbtn' style='padding: 10px;'>Review Service</button></td></tr></form>";
+                } else if (parameter.equalsIgnoreCase("awaiting")) {
+                    tableData += "<tr><td>" + idBuilding + "</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td></tr>";
+                } else if (parameter.equalsIgnoreCase("finished")) {
+                    tableData += "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='reviewReviewedService' /><input type='hidden' name='idBuilding' value='" + idBuilding + "' /><input type='hidden' name='idReport' value='" + idReport + "' /><td>" + idBuilding + "</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td><td>" + idEmployee + "</td><td><button type='submit' class='srvbtn' style='padding: 10px;'>Review Service</button></td></tr></form>";
+                } else if (parameter.equalsIgnoreCase("denied")) {
+                    tableData += "<tr><td>" + idBuilding + "</td><td>" + address + "</td><td>" + city + "</td><td>" + builtYear + "</td></tr>";
                 }
+
             }
         } catch (SQLException | HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);

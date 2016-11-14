@@ -49,17 +49,29 @@
     </head>
 
 
-    <body onload="document.getElementById(body).style.opacity='1'">
+    <body onload="document.getElementById(body).style.opacity = '1'">
 
         <div class="body" style="background-image: url(pictures/bghd.jpg); -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;"></div>
+             -moz-background-size: cover;
+             -o-background-size: cover;
+             background-size: cover;"></div>
         <div class="grad"></div>
         <div class="header">
-            <img src="pictures/nylogo.png" alt=""/>
         </div>
         <br>
+        <script type="text/javascript">
+            $(function () {
+                $('form').each(function () {
+                    $(this).find('button').keypress(function (e) {
+                        if (e.which == 10 || e.which == 13) {
+                            this.form.submit();
+                        }
+                    });
+
+                    $(this).find('button[type=submit]').hide();
+                });
+            });
+        </script>
         <div class="login">
             <form action="Front" method="POST">
                 <input type="text" placeholder="Email..." name="email"><br>
@@ -71,16 +83,15 @@
             <a style="padding-left: 50px;" href="register.jsp">Apply For Membership</a><br><br>
             <a style="padding-left: 65px;" href="forgotPass.jsp">Forgot Password?</a><br>
             <%
-                
+
                 if (session.getAttribute("failure") == null) {
-                    //out.print("<script>alert('No failure')</script>");
                 } else {
                     out.print("<script>alert('" + session.getAttribute("failure") + "')</script>");
                     session.setAttribute("failure", null);
                 }
 
             %>
-<br><br />
+            <br><br />
             <a><h2>PS: Siden virker kun med en opløsning af 1920x1080!</h2></a>
         </div>
         <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>

@@ -38,6 +38,8 @@
                     <select name="typesearch">
                         <option value="awaiting">Awaiting Service</option>
                         <option value="reviewed">Reviewed</option>
+                        <option value="denied">Denied</option>
+                        <option value="finished">Finished</option>
                         <option value="other">Other</option>
                     </select>
                     <input type="hidden" name="methodForm" value="filterServiceCustomer">
