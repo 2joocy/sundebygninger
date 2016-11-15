@@ -93,6 +93,7 @@
                         <input type="hidden" name="methodForm" value="newMainImage"/>
                         <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>
                         <input type="hidden" name="fk_idMainPicture" value="<%=build.getFk_idMainPicture()%>"/>
+                        <input type="hidden" name="redirect" value="reviewBuildingDetail.jsp"/>
                         <td><input style="length: 300px; padding: 15px; border: 0px solid black; border-radius: 3px;" type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
                         <button style="padding: 15px; width: 150px; border: 0px solid black; border-radius: 3px;" type="submit">Upload New Main Image</button>
                     </form>

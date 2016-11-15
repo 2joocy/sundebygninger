@@ -50,7 +50,7 @@
                 </p> 
 
                 <%  
-                    out.print(dbB.getAwaitingServiceCustomer(searchParameter, user.getIdUser()));
+                    out.print(dbB.getAwaitingServiceCustomer(searchParameter, user.getIdUser(), user.getStatus()));
                 %>
             </center>
         </div>

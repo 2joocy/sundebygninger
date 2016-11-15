@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DbHandler;
 
 import java.awt.HeadlessException;
@@ -14,23 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.servlet.http.Part;
-import javax.swing.JOptionPane;
 
-/**
- *
- * @author CHRIS
- */
 public class ImageHandler {
  
-    
-    public static String getImageHTML(int id) {
-        return "<img src=\"ImageServlet?id=" + id + "\"/>";
-    }
-
-    public static String getImageHTML(int id, int width, int height) {
-        return "<img src=\"ImageServlet?id=" + id + "\" height=\"" + height + "\" width=\"" + width + "\"/>";
-    }
-
     public static int uploadImage(Connection conn, String description, String type, Part filePart) {
         try {
             String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
@@ -69,11 +50,8 @@ public class ImageHandler {
                 prepared.setInt(2, buildingID);
                 prepared.executeUpdate();
                 return returnValue;
-            } else {
-                JOptionPane.showMessageDialog(null, "[ImageHandler.uploadMainImage] Error, returnValue: " + returnValue);
             }
         } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(null, "[ImageHandler.uploadMainImage] " + e.getMessage());
             e.printStackTrace();
         }
         return -1;
@@ -103,11 +81,8 @@ public class ImageHandler {
                 prepared.setInt(2, reportID);
                 prepared.executeUpdate();
                 return returnValue;
-            } else {
-                JOptionPane.showMessageDialog(null, "[ImageHandler.uploadRoofImage] Error, returnValue: " + returnValue);
             }
         } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(null, "[ImageHandler.uploadRoofImage] " + e.getMessage());
             e.printStackTrace();
         }
         return -1;
@@ -137,11 +112,8 @@ public class ImageHandler {
                 prepared.setInt(2, reportID);
                 prepared.executeUpdate();
                 return returnValue;
-            } else {
-                JOptionPane.showMessageDialog(null, "[ImageHandler.uploadOuterRoofImage] Error, returnValue: " + returnValue);
             }
         } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(null, "[ImageHandler.uploadOuterRoofImage] " + e.getMessage());
             e.printStackTrace();
         }
         return -1;

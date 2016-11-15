@@ -107,6 +107,8 @@ public class Front extends HttpServlet {
         String newEmail = request.getParameter("newEmail");
         String fk_idMainPicture = request.getParameter("fk_idMainPicture");
         String typeSearch = request.getParameter("typesearch");
+        String redirect = request.getParameter("redirect");
+        
         boolean outerWallRemark = false;
         boolean remark = false;
         boolean damage = false;
@@ -224,11 +226,11 @@ public class Front extends HttpServlet {
             case "finalAddReport":
                 boolean roofRemark1 = false;
 
-                if (roofRemarks.equalsIgnoreCase("1")) {
+                if (roofRemarks != null && roofRemarks.equalsIgnoreCase("1")) {
                     roofRemark1 = true;
                 }
 
-                if (outerWallRemarks.equalsIgnoreCase("1")) {
+                if (outerWallRemarks != null && outerWallRemarks.equalsIgnoreCase("1")) {
                     outerWallRemark = true;
                 }
 
@@ -343,6 +345,10 @@ public class Front extends HttpServlet {
                 int newImageID = Integer.parseInt(idBuilding);
                 int fk_mainImage = Integer.parseInt(fk_idMainPicture);
                 imageId = ImageHandler.uploadMainImage(DBConnection.getConnection(), "", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+                if (redirect != null) {
+                    response.sendRedirect(redirect);
+                    break;
+                }
                 response.sendRedirect("overviewBuilding.jsp");
                 break;
             case "uploadReportOuterRoofImage":

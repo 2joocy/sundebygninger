@@ -210,46 +210,6 @@ public class DBUserHandler {
         }
     }
     
-    public String getUnConfirmed() {
-        String tableData = "<table class='table table-hover'>\n"
-                + "    <thead>\n"
-                + "      <tr>\n"
-                + "        <th>ID</th>\n"
-                + "        <th>Email</th>\n"
-                + "        <th>Business Name</th>\n"
-                + "         <th>Confirm User</th>\n"
-                + "         <th>Deny User</th>\n"
-                + "      </tr>\n"
-                + "    </thead>\n"
-                + "    <tbody>";
-        try {
-            String sql = "SELECT idUser, email, businessName FROM user WHERE status='not'";
-            //System.out.println(sql);
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            ResultSet myRS = prepared.executeQuery();
-            while (myRS.next()) {
-                String email = myRS.getString("email");
-                String businessName = myRS.getString("businessName");
-                int id = myRS.getInt("idUser");
-
-                tableData += "<tr><form method ='POST' action='Front'><td>" + id 
-                        + "</td><td>" + email + "</td><td>" + businessName + 
-                        "<input type='hidden' name='methodForm' value='confirmUsers'><input type='hidden' name='userID' value='" 
-                        + id + "'></td><td><button type='submit'>Confirm User</button></td></form><td>"
-                        + "<form method ='POST' action='Front'><input type='hidden' name='methodForm' value='denyUsers'>"
-                        + "<input type='hidden' name='userID' value='" + id + "'><button type='submit'>Deny User</button></form></td></tr>";
-
-            }
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
-        tableData += "</tbody>\n"
-                + "  </table>";
-        return tableData;
-    }
-
     public void updatePassword(String username, String password) {
         password = this.encryptPassword(password);
         try {
