@@ -1,3 +1,7 @@
+<%@page import="controller.DBController"%>
+<%@page import="controller.DBController"%>
+<%@page import="DbHandler.DBConnection"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="entities.Report"%>
 <%@page import="DbHandler.DBUserHandler"%>
 <%@page import="entities.User"%>
@@ -5,8 +9,10 @@
 <!DOCTYPE html>
 <%
 
-    DBBuildingHandler db = new DBBuildingHandler();
-    DBUserHandler dbb = new DBUserHandler();
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
+    DBBuildingHandler dbb = new DBBuildingHandler();
+    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
     int idBuilding = Integer.parseInt(((String) session.getAttribute("idBuilding")).replaceAll(" ", ""));
     int idReport = Integer.parseInt(((String) session.getAttribute("idReport")).replaceAll(" ", ""));
@@ -27,7 +33,7 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(db.createMenu(user.getStatus()));
+                    out.print(con.createMenu(dbb, db, user.getStatus()));
                 %>
         </ul>
         <div class="edit" style="margin-top: 4%; padding-left: 10px;">
@@ -39,7 +45,7 @@
                     </h2>
                         
                     <%
-                        out.print(db.getReportOverviewWithReportID(idReport));
+                        out.print(con.getReportOverviewWithReportID(idReport));
                     %>
                     <br />
                     <br />
@@ -48,7 +54,7 @@
                 <br />
                 <div class='roomReport'>
                     <%                        
-                        out.print(db.showRoomReport(idReport));
+                        out.print(con.showRoomReport(idReport));
                     %>
                 </div>
             </center>

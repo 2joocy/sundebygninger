@@ -1,14 +1,17 @@
+<%@page import="java.sql.Connection"%>
+<%@page import="controller.DBController"%>
+<%@page import="DbHandler.*"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
-<%@page import="DbHandler.DBUserHandler"%>
 <!DOCTYPE html>
 <%
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
+    DBBuildingHandler dbb = new DBBuildingHandler();
     DBUserHandler db = new DBUserHandler();
-    DBBuildingHandler dbB = new DBBuildingHandler();
-    
     User user = (User) session.getAttribute("user");
-    
-    if(!user.getStatus().equalsIgnoreCase("worker")){
+
+    if (user == null) {
         response.sendRedirect("index.jsp");
     }
 %>
@@ -27,14 +30,14 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(dbB.createMenu(user.getStatus()));
+                    out.print(con.createMenu(dbb, db, user.getStatus()));
                 %>
         </ul>
 
         <div id="edit" style="margin-top: 4%;">
             
             <%
-            out.print(db.getUnConfirmed());
+            out.print(con.getUnConfirmed());
             %>
             
         </div>

@@ -5,13 +5,16 @@
 --%>
 
 
-<%@page import="DbHandler.DBUserHandler"%>
-<%@page import="DbHandler.DBBuildingHandler"%>
-<%@page import="DbHandler.ImageHandler"%>
 <%@page import="entities.Building"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="controller.DBController"%>
+<%@page import="DbHandler.*"%>
 <%@page import="entities.User"%>
+<%@page import="DbHandler.DBBuildingHandler"%>
 <!DOCTYPE html>
 <%
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
     DBBuildingHandler dbb = new DBBuildingHandler();
     DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
@@ -21,6 +24,7 @@
         response.sendRedirect("index.jsp");
     }
 %>
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -59,7 +63,7 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(dbb.createMenu(user.getStatus()));
+                    out.print(con.createMenu(dbb, db, user.getStatus()));
                 %>
         </ul>
 
@@ -74,21 +78,16 @@
                         
 
                         <%
-                            out.print(dbb.getReportOverview(build.getIdBuilding()));
+                            out.print(con.getReportOverview(build.getIdBuilding()));
                         %>
                         <br> <br>
                         
                         </center>
-                        <!-- Modal -->
-
-
-
                 </div>
                 </form>
-                
                 <div class="pictureBox">
                     <h2>Picture</h2>
-                    <%= ImageHandler.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
+                    <%= con.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
                     <form action="Front" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="methodForm" value="newMainImage"/>
                         <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>

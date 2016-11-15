@@ -1,18 +1,17 @@
-<%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.text.DateFormat"%>
-<%@page import="entities.Building"%>
-<%@page import="entities.User"%>
-<%@page import="DbHandler.DBBuildingHandler"%>
-<%@page import="DbHandler.DBUserHandler"%>
-<%@page import="DbHandler.DBUserHandler"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="controller.DBController"%>
+<%@page import="DbHandler.*"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
 <!DOCTYPE html>
 <%
-
-    DBBuildingHandler db = new DBBuildingHandler();
-    DBUserHandler dbb = new DBUserHandler();
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
+    DBBuildingHandler dbb = new DBBuildingHandler();
+    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
 
     if (user == null) {
@@ -40,8 +39,8 @@
         <%
             if (user.getStatus().equalsIgnoreCase("worker")) {
 
-                if (dbb.countUnConfirmed() > 0) {
-                    out.print("<script>alert('You have new unconfirmed accounts to review!(" + dbb.countUnConfirmed() + ")');</script>");
+                if (con.countUnConfirmed() > 0) {
+                    out.print("<script>alert('You have new unconfirmed accounts to review!(" + con.countUnConfirmed() + ")');</script>");
                 }
 
             }
@@ -50,13 +49,13 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(db.createMenu(user.getStatus()));
+                    out.print(con.createMenu(dbb, db, user.getStatus()));
                 %>
         </ul>
 
         <div id="edit" style="margin-top: 4%;">
             <%
-                out.print(db.getBuildings(user.getIdUser()));
+                out.print(con.getBuildings(user.getIdUser()));
             %>
             <br />
             <center>

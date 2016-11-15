@@ -1,10 +1,16 @@
+<%@page import="DbHandler.DBConnection"%>
+<%@page import="controller.DBController"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
 <%@page import="DbHandler.DBUserHandler"%>
 <!DOCTYPE html>
 <%
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
+    DBBuildingHandler dbb = new DBBuildingHandler();
     DBUserHandler db = new DBUserHandler();
-    DBBuildingHandler dbB = new DBBuildingHandler();
     User user = (User) session.getAttribute("user");
     String searchParameter = (String) session.getAttribute("searchParameter");
     if (searchParameter == null) {
@@ -26,7 +32,7 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(dbB.createMenu(user.getStatus()));
+                    out.print(con.createMenu(dbb, db, user.getStatus()));
                 %>
         </ul>
 
@@ -50,7 +56,7 @@
                 </p> 
 
                 <%  
-                    out.print(dbB.getAwaitingServiceCustomer(searchParameter, user.getIdUser(), user.getStatus()));
+                    out.print(con.getAwaitingServiceCustomer(dbb, searchParameter, user.getIdUser(), user.getStatus()));
                 %>
             </center>
         </div>
