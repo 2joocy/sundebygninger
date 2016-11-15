@@ -134,7 +134,7 @@ public class DBBuildingHandler {
         return building;
     }
 
-    public int submitReport(int buildingId, String buildingUsage, boolean roofRemarks,
+    private int submitReport(int buildingId, String buildingUsage, boolean roofRemarks,
             int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
         try {
             String sql = "INSERT INTO report (buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible) VALUES "
@@ -239,7 +239,7 @@ public class DBBuildingHandler {
         return null;
     }
 
-    public void insertFkReport(int buildingId, int idReport) {
+    private void insertFkReport(int buildingId, int idReport) {
         try {
             String sql = "UPDATE building set fk_idReport=? where idBuilding=?";
             PreparedStatement prepared = conn.prepareStatement(sql);

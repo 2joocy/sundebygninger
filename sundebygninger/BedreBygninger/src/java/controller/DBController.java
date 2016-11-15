@@ -1,21 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import DbHandler.*;
 import entities.Building;
 import entities.Report;
+import entities.User;
 import exceptions.DatabaseConnectionException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.servlet.http.Part;
 
-/**
- *
- * @author CHRIS
- */
 public class DBController {
  
     Connection conn;
@@ -33,7 +26,6 @@ public class DBController {
         img = new ImageHandler(conn);
     }
     
- 
     /**
      * DBBuildingHandler functions
      */
@@ -52,11 +44,6 @@ public class DBController {
         return dbb.getBuilding(address);
     }
     
-    public int submitReport(int buildingId, String buildingUsage, boolean roofRemarks,
-                int fk_idPictureRoof, String roofText, boolean outerWallRemarks, int fk_idPictureOuterRoof, String outerWallText, int fk_idEmployee, String buildingResponsible) {
-        return dbb.submitReport(buildingId, buildingUsage, roofRemarks, fk_idPictureRoof, roofText, outerWallRemarks, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible);
-    }
-
     public int getFkIdReport(int BuildingId) {
         return dbb.getFkIdReport(BuildingId);
     }
@@ -71,10 +58,6 @@ public class DBController {
     
     public Report getReportFromBuildingId(int buildingId) {
         return dbb.getReportFromBuildingId(buildingId);
-    }
-    
-    public void insertFkReport(int buildingId, int idReport) {
-        dbb.insertFkReport(buildingId, idReport);
     }
     
     public void editReport(Report report) {
@@ -145,6 +128,70 @@ public class DBController {
      * DBUserHandler functions
      */
     
+    public User checkLogin(String email, String password) {
+        return dbu.checkLogin(email, password);
+    }
+    
+    public String registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) {
+        return dbu.registerUser(email, password, businessName, phone, status, fullName, createdDate);
+    }
+    
+    public boolean userExists(String username) {
+        return dbu.userExists(username);
+    }
+    
+    public String getUserFromDB(int id){
+        return dbu.getUserFromDB(id);
+    }
+    
+    public int countUnConfirmed() {
+        return dbu.countUnConfirmed();
+    }
+    
+    public void confirmUser(int id) {
+        dbu.confirmUser(id);
+    }
+    
+    public void confirmUser(String email) {
+        dbu.confirmUser(email);
+    }
+    
+    public void removeUser(int id){
+        dbu.removeUser(id);
+    }
+    
+    public void removeUser(String email){
+        dbu.removeUser(email);
+    }
+    
+    public void denyUser(int id) {
+        dbu.denyUser(id);
+    }
+    
+    public void denyUser(String email) {
+        dbu.denyUser(email);
+    }
+    
+    public void updatePassword(String username, String password) {
+        dbu.updatePassword(username, password);
+    }
+    
+    public String forgotPass(String email, String businessName) {
+        return dbu.forgotPass(email, businessName);
+    }
+    
+    public String encryptPassword(String password) {
+        return dbu.encryptPassword(password);
+    }
+    
+    public boolean correctPass(String password, String email) {
+        return dbu.correctPass(password, email);
+    }
+    
+    public void updateEmail(String email, int id) {
+        dbu.updateEmail(email, id);
+    }
+    
     /**
      * DBHTMLPresenter functions
      */
@@ -204,5 +251,21 @@ public class DBController {
     /**
      * ImageHandler functions
      */
+    
+    public int uploadImage(String description, String type, Part filePart) {
+        return img.uploadImage(description, type, filePart);
+    }
+    
+    public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
+        return img.uploadMainImage(description, type, filePart, buildingID, fk_idMainPicture);
+    }
+    
+    public int uploadRoofImage(String description, String type, Part filePart, int reportID) {
+        return img.uploadRoofImage(description, type, filePart, reportID);
+    }
+    
+    public int uploadOuterRoofImage(String description, String type, Part filePart, int reportID) {
+        return img.uploadOuterRoofImage(description, type, filePart, reportID);
+    }
     
 }

@@ -236,7 +236,7 @@ public class DBUserHandler {
         return randomPass + "      hashed: " + encrypted + "                        " + status;
     }
 
-    String randomString(int len) {
+    private String randomString(int len) {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         SecureRandom rnd = new SecureRandom();
         StringBuilder sb = new StringBuilder(len);
