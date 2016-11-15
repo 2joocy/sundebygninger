@@ -17,7 +17,20 @@ import java.sql.SQLException;
  */
 public class DBHTMLPresenter {
     
-    public String getBuildings(Connection conn, int idUser) throws SQLException, DatabaseConnectionException {
+    Connection conn;
+    
+    public DBHTMLPresenter() {
+        conn = DBConnection.getConnection();
+    }
+    
+    public DBHTMLPresenter(Connection conn) {
+        this.conn = conn;
+    }
+    
+    public String getBuildings(int idUser) throws SQLException, DatabaseConnectionException {
+        if (conn == null) {
+            throw new DatabaseConnectionException("Connection to DB is undefined.");
+        }
         String tableData = "<table class='table table-hover'>\n"
                 + "    <thead>\n"
                 + "      <tr>\n"
@@ -33,9 +46,6 @@ public class DBHTMLPresenter {
                 + "    <tbody>";
         
         String sql = "SELECT * FROM building WHERE fk_idUser=?";
-        if (conn == null) {
-            throw new DatabaseConnectionException("Connection to DB is undefined.");
-        }
         PreparedStatement prepared = conn.prepareStatement(sql);
         prepared.setInt(1, idUser);
         ResultSet myRS = prepared.executeQuery();
@@ -72,7 +82,7 @@ public class DBHTMLPresenter {
     }
 
     
-    public String getReportOverview(Connection conn, int idBuilding) throws DatabaseConnectionException, SQLException {
+    public String getReportOverview(int idBuilding) throws DatabaseConnectionException, SQLException {
         String data = "";
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
@@ -92,7 +102,7 @@ public class DBHTMLPresenter {
         return data;
     }
 
-    public String getReportOverviewWithReportID(Connection conn, int idReport) throws DatabaseConnectionException, SQLException {
+    public String getReportOverviewWithReportID(int idReport) throws DatabaseConnectionException, SQLException {
         String data = "";
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
@@ -111,7 +121,7 @@ public class DBHTMLPresenter {
     }
 
     
-    public String getRooms(Connection conn, int id) throws DatabaseConnectionException, SQLException {
+    public String getRooms(int id) throws DatabaseConnectionException, SQLException {
         String roomData = "";
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
@@ -134,7 +144,7 @@ public class DBHTMLPresenter {
         return roomData;
     }
 
-    public String showRoomReport(Connection conn, int id) throws SQLException, DatabaseConnectionException {
+    public String showRoomReport(int id) throws SQLException, DatabaseConnectionException {
         String tableData = "";
         int counter = 0;
         if (conn == null) {
@@ -174,7 +184,7 @@ public class DBHTMLPresenter {
         return tableData;
     }
 
-    public String getService(Connection conn, int idUser) throws SQLException, DatabaseConnectionException {
+    public String getService(int idUser) throws SQLException, DatabaseConnectionException {
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
         }
@@ -223,7 +233,7 @@ public class DBHTMLPresenter {
         return "";
     }
 
-    public String getAwaitingServiceCustomer(Connection conn, DBBuildingHandler dbb, String parameter, int id, String userRole) throws DatabaseConnectionException, SQLException {
+    public String getAwaitingServiceCustomer(DBBuildingHandler dbb, String parameter, int id, String userRole) throws DatabaseConnectionException, SQLException {
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
         }
@@ -273,7 +283,7 @@ public class DBHTMLPresenter {
         return tableData;
     }
 
-    public String printAwaitingService(Connection conn) throws DatabaseConnectionException, SQLException {
+    public String printAwaitingService() throws DatabaseConnectionException, SQLException {
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
         }
@@ -301,7 +311,7 @@ public class DBHTMLPresenter {
         return tableData;
     }
 
-    public String printAwaitingReview(Connection conn, int id) throws DatabaseConnectionException, SQLException {
+    public String printAwaitingReview(int id) throws DatabaseConnectionException, SQLException {
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
         }
@@ -329,7 +339,7 @@ public class DBHTMLPresenter {
         return tableData;
     }
     
-    public String getUnConfirmed(Connection conn) throws DatabaseConnectionException, SQLException {
+    public String getUnConfirmed() throws DatabaseConnectionException, SQLException {
         if (conn == null) {
             throw new DatabaseConnectionException("Connection to DB is undefined.");
         }
@@ -366,11 +376,11 @@ public class DBHTMLPresenter {
         return tableData;
     }
 
-    public static String getImageHTML(int id) {
+    public String getImageHTML(int id) {
         return "<img src=\"ImageServlet?id=" + id + "\"/>";
     }
 
-    public static String getImageHTML(int id, int width, int height) {
+    public String getImageHTML(int id, int width, int height) {
         return "<img src=\"ImageServlet?id=" + id + "\" height=\"" + height + "\" width=\"" + width + "\"/>";
     }
 

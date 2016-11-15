@@ -25,7 +25,10 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.swing.JOptionPane;
 import DbHandler.*;
+import controller.DBController;
 import entities.Report;
+import exceptions.DatabaseConnectionException;
+import java.sql.SQLDataException;
 
 /**
  *
@@ -39,6 +42,7 @@ public class Front extends HttpServlet {
 
     private DBUserHandler db;
     private DBBuildingHandler dbB;
+    private DBController dbc;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,6 +56,7 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        dbc = new DBController(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
         db = new DBUserHandler(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
         dbB = new DBBuildingHandler(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
 
@@ -202,7 +207,7 @@ public class Front extends HttpServlet {
             case "uploadPicture":
                 Part filePart = request.getPart("picture");
                 Building building = (Building) request.getSession().getAttribute("building");
-                int imageId = ImageHandler.uploadImage(DBConnection.getConnection(), "", filePart.getContentType(), filePart);
+                int imageId = dbc.uploadImage("", filePart.getContentType(), filePart);
                 String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
                 request.getSession().setAttribute("imageMessage", "" + imageMessage);
                 request.getSession().setAttribute("imageId", "" + imageId);

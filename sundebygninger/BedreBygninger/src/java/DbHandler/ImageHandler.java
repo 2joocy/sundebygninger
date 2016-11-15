@@ -12,7 +12,17 @@ import javax.servlet.http.Part;
 
 public class ImageHandler {
  
-    public static int uploadImage(Connection conn, String description, String type, Part filePart) {
+    Connection conn;
+    
+    public ImageHandler() {
+        conn = DBConnection.getConnection();
+    }
+    
+    public ImageHandler(Connection conn) {
+        this.conn = conn;
+    }
+   
+    public int uploadImage(String description, String type, Part filePart) {
         try {
             String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
             PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -36,13 +46,13 @@ public class ImageHandler {
         return -1;
     }
     
-    public static int uploadMainImage(Connection conn, String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
+    public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
         try {
             String sql = "DELETE FROM picture WHERE idPicture=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, fk_idMainPicture);
             prepared.executeUpdate();
-            int returnValue = uploadImage(conn, description, type, filePart);
+            int returnValue = uploadImage(description, type, filePart);
             if (returnValue >= 0) {
                 sql = "UPDATE building SET fk_idMainPicture = ? WHERE idBuilding = ?";
                 prepared = conn.prepareStatement(sql);
@@ -57,7 +67,7 @@ public class ImageHandler {
         return -1;
     }
 
-    public static int uploadRoofImage(Connection conn, String description, String type, Part filePart, int reportID) {
+    public int uploadRoofImage(String description, String type, Part filePart, int reportID) {
         try {
             String sql = "SELECT fk_idPictureRoof FROM picture WHERE idReport=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
@@ -73,7 +83,7 @@ public class ImageHandler {
                 prepared.setInt(1, pictureID);
                 prepared.executeUpdate();
             }
-            int returnValue = uploadImage(conn, description, type, filePart);
+            int returnValue = uploadImage(description, type, filePart);
             if (returnValue >= 0) {
                 sql = "UPDATE report SET fk_idPictureRoof = ? WHERE idReport = ?";
                 prepared = conn.prepareStatement(sql);
@@ -88,7 +98,7 @@ public class ImageHandler {
         return -1;
     }
 
-    public static int uploadOuterRoofImage(Connection conn, String description, String type, Part filePart, int reportID) {
+    public int uploadOuterRoofImage(String description, String type, Part filePart, int reportID) {
         try {
             String sql = "SELECT fk_idPictureOuterRoof FROM picture WHERE idReport=?";
             PreparedStatement prepared = conn.prepareStatement(sql);
@@ -104,7 +114,7 @@ public class ImageHandler {
                 prepared.setInt(1, pictureID);
                 prepared.executeUpdate();
             }
-            int returnValue = uploadImage(conn, description, type, filePart);
+            int returnValue = uploadImage(description, type, filePart);
             if (returnValue >= 0) {
                 sql = "UPDATE report SET fk_idPictureOuterRoof = ? WHERE idReport = ?";
                 prepared = conn.prepareStatement(sql);

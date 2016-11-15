@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package exceptions;
 
 /**
  *
  * @author CHRIS
  */
-public class HTMLController {
+public class ViktorException extends Exception {
+    
+    public ViktorException(String reason) {
+        super(reason);
+    }
     
 }
