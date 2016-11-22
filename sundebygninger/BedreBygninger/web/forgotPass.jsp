@@ -70,12 +70,9 @@
             <center><p><a href="index.jsp">Didn't forget your password anyway?</a></p></center>
             <%
             
-            if (session.getAttribute("failure") == null ) {
-                
-            } else {
+            if (session.getAttribute("failure") != null ) {
                 out.print("<script>alert('"+ session.getAttribute("failure") +"')</script>");
             }
-
         %>
             <p><input type="submit" value="Send Request"></p>
         </form>

@@ -18,12 +18,12 @@ import javax.mail.internet.MimeMessage;
 
 <span class="nc" id="L19">public class SendMailTLS {</span>
 
-    private final static String username = &quot;bingobangomail@gmail.com&quot;;
-    private final static String password = &quot;bingopassword&quot;;
+    private final static String USERNAME = &quot;bingobangomail@gmail.com&quot;;
+    private final static String PASSWORD = &quot;bingopassword&quot;;
 
     public static String sendMessage(String toEmail, String subject, String message) {
-<span class="fc" id="L25">        Session s = getSession(username, password);</span>
-<span class="fc" id="L26">        Message m = createMessage(s, username, toEmail, subject, message);</span>
+<span class="fc" id="L25">        Session s = getSession(USERNAME, PASSWORD);</span>
+<span class="fc" id="L26">        Message m = createMessage(s, USERNAME, toEmail, subject, message);</span>
         try {
 <span class="fc" id="L28">            Transport.send(m);</span>
 <span class="nc" id="L29">        } catch (MessagingException e) {</span>
@@ -44,24 +44,25 @@ import javax.mail.internet.MimeMessage;
 
     private static Authenticator getAuthenticator(String username, String password) {
 <span class="fc" id="L46">        return new javax.mail.Authenticator() {</span>
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-<span class="fc" id="L48">                return new PasswordAuthentication(username, password);</span>
+<span class="fc" id="L49">                return new PasswordAuthentication(username, password);</span>
             }
         };
     }
 
     private static Message createMessage(Session session, String fromEmail, String toEmail, String subject, String body) {
         try {
-<span class="fc" id="L55">            Message message = new MimeMessage(session);</span>
-<span class="fc" id="L56">            message.setFrom(new InternetAddress(fromEmail));</span>
-<span class="fc" id="L57">            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));</span>
-<span class="fc" id="L58">            message.setSubject(subject);</span>
-<span class="fc" id="L59">            message.setText(body);</span>
-<span class="fc" id="L60">            return message;</span>
-<span class="nc" id="L61">        } catch (Exception e) {</span>
-<span class="nc" id="L62">            e.printStackTrace();</span>
+<span class="fc" id="L56">            Message message = new MimeMessage(session);</span>
+<span class="fc" id="L57">            message.setFrom(new InternetAddress(fromEmail));</span>
+<span class="fc" id="L58">            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));</span>
+<span class="fc" id="L59">            message.setSubject(subject);</span>
+<span class="fc" id="L60">            message.setText(body);</span>
+<span class="fc" id="L61">            return message;</span>
+<span class="nc" id="L62">        } catch (Exception e) {</span>
+<span class="nc" id="L63">            e.printStackTrace();</span>
         }
-<span class="nc" id="L64">        return null;</span>
+<span class="nc" id="L65">        return null;</span>
     }
 
 }

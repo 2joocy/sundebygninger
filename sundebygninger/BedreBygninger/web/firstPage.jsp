@@ -1,16 +1,16 @@
-<%@page import="DbHandler.DBUserHandler"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="controller.DBController"%>
+<%@page import="DbHandler.*"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
 <!DOCTYPE html>
 <%
-    
-    
-DBBuildingHandler db = new DBBuildingHandler();
-DBUserHandler dbb = new DBUserHandler();
-User user = (User) session.getAttribute("user");
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
+    User user = (User) session.getAttribute("user");
 
-if(user == null){
-    response.sendRedirect("index.jsp");
+    if (user == null) {
+        response.sendRedirect("index.jsp");
     }
 %>
 <html lang="en">
@@ -24,31 +24,35 @@ if(user == null){
     </head>
     <body style="height: 92%;">
         <%
-        if(user.getStatus().equalsIgnoreCase("worker")){
-    
-            if(dbb.countUnConfirmed() > 0) {
-                out.print("<script>alert('You have new unconfirmed accounts to review!(" + dbb.countUnConfirmed() + ")');</script>");
+            if (user.getStatus().equalsIgnoreCase("worker")) {
+
+                if (con.countUnConfirmed() > 0) {
+                    out.print("<script>alert('You have new unconfirmed accounts to review!(" + con.countUnConfirmed() + ")');</script>");
+                }
+
+                if (con.getAwaitingService() > 0) {
+                    out.print("<script>alert('You have new services to review!(" + con.getAwaitingService() + ")');</script>");
+                }
+
             }
-            
-            if(db.getAwaitingService() > 0){
-                out.print("<script>alert('You have new services to review!(" + db.getAwaitingService() + ")');</script>");
-            }
-       
-        }
         %>
 
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
-            <%
-            out.print(db.createMenu(user.getStatus()));
-            %>
+                <%
+                    out.print(con.createMenu(user.getStatus()));
+                %>
         </ul>
 
         <div class="edit" style="margin-top: 4%; padding-left: 10px;">
             <br>
             <center><p><h2>Statistics:</h2></P>
-        <p><h3>Estates Owned: <%out.print(db.getBuildingCount(user.getIdUser())); %></h3></P> 
-        </center>
+            <%
+                out.print(user.getIdUser());
+            %>
+                <p><h3>Estates Owned: <%out.print(con.getBuildingCount(user.getIdUser())); %></h3></P> 
+                <p><h3>Reports: <%out.print(con.getReportCount(user.getIdUser()));%></h3></P> 
+            </center>
         </div>
 
     </body>

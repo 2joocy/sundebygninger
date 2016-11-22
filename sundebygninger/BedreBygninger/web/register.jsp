@@ -1,9 +1,3 @@
-
-<%@page import="entities.Building"%>
-<%@page import="entities.User"%>
-<%@page import="DbHandler.DBBuildingHandler"%>
-<%@page import="DbHandler.DBUserHandler"%>
-
 <!DOCTYPE html>
 <html >
     <head>
