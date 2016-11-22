@@ -6,6 +6,7 @@
 package DbHandler;
 
 import entities.Building;
+import entities.Report;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,10 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author CHRIS
- */
 public class DBBuildingHandlerTest {
     
     public DBBuildingHandlerTest() {
@@ -58,43 +55,17 @@ public class DBBuildingHandlerTest {
     @Test
     public void testAddBuilding() {
         System.out.println("addBuilding");
-        DBBuildingHandler instance = new DBBuildingHandler(DBConnection.getTestConnection());
-        String address = "aa123123123";
-        String cadastral = "a";
-        String builtYear = "a";
-        String area = "a";
-        String zipcode = "a";
-        String city = "a";
-        String conditionText = "a";
-        String service = "a";
-        String extraText = "a";
-        String dateCreated = "a";
-        int idBuilding = instance.getBuildingCount();
-        int fk_idUser = 1;
-        int fk_idMainPicture = 0;
-        int fk_idReport = 0;
-        Building b = new Building(idBuilding, address, cadastral, area, zipcode, city, conditionText, service, extraText, builtYear, fk_idUser, fk_idMainPicture, fk_idReport, dateCreated);
-        instance.addBuilding(b);    //Add building to DB
-        Building loaded = instance.getBuilding(address);    //Retrieve building from DB
-        assertEquals(b, loaded);      //Check if the two buildings have same info
-        System.out.println("Building was loaded correctly.");
-        instance.removeBuilding(loaded.getIdBuilding());        //Delete building from DB
-        Building hopefullyNull = instance.getBuilding(address);
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        int buildingId = dbb.addBuilding("Testvej 1", "a", "1985", "Hedehusene", "2640", "Bingobyen", "", "", "", "85", 1);    //Add building to DB
+        Building loaded = dbb.getBuilding(buildingId);    //Retrieve building from DB
+        Building loaded2 = dbb.getBuilding(loaded.getAddress());    //Retrieve building from DB
+        assertEquals(loaded.getAddress(), loaded2.getAddress()); //Check if the two buildings have same info
+        assertEquals(loaded.getFk_idReport(), dbb.getFkIdReport(loaded.getIdBuilding()));
+        dbb.removeBuilding(buildingId);        //Delete building from DB
+        Building hopefullyNull = dbb.getBuilding(buildingId);
         assertNull(hopefullyNull);
     }
     
-    @Test
-    public void testGetBuildings(){
-        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNotNull(dbb.getBuildings(9));
-    }
-    
-    @Test
-    public void testGetBuilding(){
-        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNotNull(dbb.getBuilding(14));
-        assertNotNull(dbb.getBuilding("YupYup"));
-    }
     
     @Test
     public void testGetRooms(){
@@ -105,14 +76,16 @@ public class DBBuildingHandlerTest {
     @Test
     public void testEditBuilding(){
         DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        dbb.editBuilding("YupYup", "Snask", "123", "Yush", "1337", "YoloSwag", "Harambe", "27/10/2016 16:21:00", 15);
+        int buildingID = dbb.addBuilding("Testvej 2", "a", "1985", "Hedehusene", "2640", "Bingobyen", "", "", "", "85", 1);
+        dbb.editBuilding("YupYup", "Snask", "123", "Yush", "1337", "YoloSwag", "Harambe", "27/10/2016 16:21:00", buildingID);
         assertNotNull(dbb.getBuilding("YupYup"));
+        dbb.removeBuilding(buildingID);
     }
     
     @Test
     public void testGetBuildingCount(){
         DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNotNull(dbb.getBuildingCount(9));
+        assertNotEquals(dbb.getBuildingCount(9), 0);
         assertNotNull(dbb.getBuildingCount());
     }
     
@@ -131,12 +104,6 @@ public class DBBuildingHandlerTest {
     }
     
     @Test
-    public void testGetReportField(){
-        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
-        assertNull(dbb.getReportField(7, ""));
-    }
-    
-    @Test
     public void testGetImageHTML(){
         DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
         assertNotNull(ImageHandler.getImageHTML(9));
@@ -144,27 +111,15 @@ public class DBBuildingHandlerTest {
     }
     
     @Test
-    public void testSubmitReport() {
-        DBBuildingHandler handler = new DBBuildingHandler(DBConnection.getTestConnection());
-        String buildingUsage = "Yes.";
-        boolean roofRemarks = false;
-        String roofText = "It's a roof.";
-        String outerWallText = "Yep, definitely a wall.";
-        String buildingResponsible = "Me.";
-        int fk_idPictureRoof = 0;
-        int fk_idPictureOuterRoof = 0;
-        int fk_idEmployee = 15;
-        handler.submitReport(buildingUsage, roofRemarks, fk_idPictureRoof, roofText, true, fk_idPictureOuterRoof, outerWallText, fk_idEmployee, buildingResponsible);
-        assertTrue(true);
-    }
- 
-    @Test
     public void testUploadImage() {
-        DBBuildingHandler handler = new DBBuildingHandler(DBConnection.getTestConnection());
-        int value = ImageHandler.uploadImage(handler.getConn(), "TestImage", "png", getPremadePart());
+        DBBuildingHandler dbb = new DBBuildingHandler(DBConnection.getTestConnection());
+        int value = ImageHandler.uploadImage(dbb.getConn(), "TestImage", "png", getPremadePart());
         System.out.println("[testUploadMainImage] " + value);
         assertNotEquals(-1, value);
+        dbb.removePicture(value);
     }
+    
+    
     
     public Part getPremadePart() {
         String path = "extra/Activity Diagram/MembershipApproval.png";
@@ -221,5 +176,6 @@ public class DBBuildingHandlerTest {
             }
         };
     }
+    
     
 }

@@ -1,24 +1,17 @@
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="entities.Building"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="controller.DBController"%>
+<%@page import="DbHandler.*"%>
 <%@page import="entities.User"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
-<%@page import="DbHandler.DBUserHandler"%>
-
-<%-- 
-    Document   : firstPage
-    Created on : 28-09-2016, 19:22:11
-    Author     : William-PC
---%>
+<!DOCTYPE html>
 <%
-
-    DBBuildingHandler db = new DBBuildingHandler();
+    Connection conn = DBConnection.getConnection();
+    DBController con = new DBController(conn);
     User user = (User) session.getAttribute("user");
-    if (session.getAttribute("user") == null) {
+
+    if (user == null) {
         response.sendRedirect("index.jsp");
     }
-
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -35,7 +28,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%            out.print(db.createMenu(user.getStatus()));
+        <%            
+            out.print(con.createMenu(user.getStatus()));
         %>
         <div id="main">
             <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>

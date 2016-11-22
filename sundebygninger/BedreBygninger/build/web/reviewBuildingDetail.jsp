@@ -5,12 +5,14 @@
 --%>
 
 
-<%@page import="entities.Building"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="DbHandler.DBConnection"%>
 <%@page import="controller.DBController"%>
-<%@page import="DbHandler.*"%>
-<%@page import="entities.User"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="DbHandler.DBUserHandler"%>
 <%@page import="DbHandler.DBBuildingHandler"%>
+<%@page import="DbHandler.ImageHandler"%>
+<%@page import="entities.Building"%>
+<%@page import="entities.User"%>
 <!DOCTYPE html>
 <%
     Connection conn = DBConnection.getConnection();
@@ -22,6 +24,8 @@
         response.sendRedirect("index.jsp");
     }
 %>
+
+
 
 <html lang="en">
     <head>
@@ -76,13 +80,18 @@
                         
 
                         <%
-                            out.print(con.getReportOverview(build.getIdBuilding()));
+                            out.print(con.getReportOverview(idBuilding));
                         %>
                         <br> <br>
                         
                         </center>
+                        <!-- Modal -->
+
+
+
                 </div>
                 </form>
+                
                 <div class="pictureBox">
                     <h2>Picture</h2>
                     <%= con.getImageHTML(build.getFk_idMainPicture(), 350, 370) %>
@@ -90,6 +99,7 @@
                         <input type="hidden" name="methodForm" value="newMainImage"/>
                         <input type="hidden" name="idBuilding" value="<%=build.getIdBuilding()%>"/>
                         <input type="hidden" name="fk_idMainPicture" value="<%=build.getFk_idMainPicture()%>"/>
+                        <input type="hidden" name="redirect" value="reviewBuildingDetail.jsp"/>
                         <td><input style="length: 300px; padding: 15px; border: 0px solid black; border-radius: 3px;" type="file" accept=".jpg, .jpeg, .png" name="picture"/></td>
                         <button style="padding: 15px; width: 150px; border: 0px solid black; border-radius: 3px;" type="submit">Upload New Main Image</button>
                     </form>
