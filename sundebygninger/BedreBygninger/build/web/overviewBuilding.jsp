@@ -10,8 +10,6 @@
 <%
     Connection conn = DBConnection.getConnection();
     DBController con = new DBController(conn);
-    DBBuildingHandler dbb = new DBBuildingHandler();
-    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
 
     if (user == null) {
@@ -49,7 +47,7 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(con.createMenu(dbb, db, user.getStatus()));
+                    out.print(con.createMenu(user.getStatus()));
                 %>
         </ul>
 
@@ -72,15 +70,10 @@
                         <div class="modal-body">
 
                             <%
-                                if (session.getAttribute("failure") == null) {
-                                    //out.print("<script>alert('No failure')</script>");
-                                } else {
+                                if (session.getAttribute("failure") != null) {
                                     out.print("<script>alert('" + session.getAttribute("failure") + "')</script>");
                                     session.setAttribute("failure", null);
                                 }
-
-                                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                                Date date = new Date();
 
                             %>
                             <center>

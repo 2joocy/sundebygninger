@@ -7,8 +7,6 @@
 <%
     Connection conn = DBConnection.getConnection();
     DBController con = new DBController(conn);
-    DBBuildingHandler dbb = new DBBuildingHandler();
-    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
 
     if (user == null) {
@@ -30,7 +28,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%            out.print(con.createMenu(dbb, db, user.getStatus()));
+        <%            
+            out.print(con.createMenu(user.getStatus()));
         %>
         <div id="main">
             <img src="pictures/logo-sunde-bygninger-property.png" alt=""/>

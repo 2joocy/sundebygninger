@@ -84,8 +84,7 @@
             <a style="padding-left: 65px;" href="forgotPass.jsp">Forgot Password?</a><br>
             <%
 
-                if (session.getAttribute("failure") == null) {
-                } else {
+                if (session.getAttribute("failure") != null) {
                     out.print("<script>alert('" + session.getAttribute("failure") + "')</script>");
                     session.setAttribute("failure", null);
                 }

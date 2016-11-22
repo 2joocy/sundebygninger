@@ -11,8 +11,6 @@
 
     Connection conn = DBConnection.getConnection();
     DBController con = new DBController(conn);
-    DBBuildingHandler dbb = new DBBuildingHandler();
-    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
     int idBuilding = Integer.parseInt(((String) session.getAttribute("idBuilding")).replaceAll(" ", ""));
     int idReport = Integer.parseInt(((String) session.getAttribute("idReport")).replaceAll(" ", ""));
@@ -33,7 +31,7 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(con.createMenu(dbb, db, user.getStatus()));
+                    out.print(con.createMenu(user.getStatus()));
                 %>
         </ul>
         <div class="edit" style="margin-top: 4%; padding-left: 10px;">

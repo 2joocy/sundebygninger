@@ -8,43 +8,23 @@ package DbHandler;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author CHRIS
- */
 public class DBConnection {
  
     private static Connection con;
     
-    public static Connection getConnection() {
-        if (con == null) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://viter.dk/sundebygninger", "transformer", "bookworm#17laesehest");
-            } catch (ClassNotFoundException | SQLException ex) {
-                System.out.println("hej");
-                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+        if (con == null || con.getMetaData().getURL().contains("test")) {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://viter.dk/sundebygninger", "transformer", "bookworm#17laesehest");
         }
         return con;
     }
     
-    public static Connection getTestConnection() {
-//        if (con == null) 
-        {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                return con = DriverManager.getConnection("jdbc:mysql://viter.dk/testsundebygninger", "transformer", "bookworm#17laesehest");
-            } catch (ClassNotFoundException | SQLException ex) {
-                System.out.println("hej");
-                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public static Connection getTestConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.jdbc.Driver");
+        con = DriverManager.getConnection("jdbc:mysql://viter.dk/testsundebygninger", "transformer", "bookworm#17laesehest");
         return con;
     }
     
 }
-

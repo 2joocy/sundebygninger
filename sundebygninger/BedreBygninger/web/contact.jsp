@@ -1,16 +1,14 @@
-<%@page import="DbHandler.DBUserHandler"%>
+<%@page import="controller.DBController"%>
 <%@page import="entities.User"%>
-<%@page import="DbHandler.DBBuildingHandler"%>
+<%@page import="DbHandler.*"%>
 <!DOCTYPE html>
 <%
-    
-    
-DBBuildingHandler db = new DBBuildingHandler();
-DBUserHandler dbb = new DBUserHandler();
-User user = (User) session.getAttribute("user");
+    DBController con = new DBController(DBConnection.getConnection());
+    DBBuildingHandler db = new DBBuildingHandler();
+    User user = (User) session.getAttribute("user");
 
-if(user == null){
-    response.sendRedirect("index.jsp");
+    if(user == null){
+        response.sendRedirect("index.jsp");
     }
 %>
 <html lang="en">
@@ -26,7 +24,7 @@ if(user == null){
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
             <%
-            out.print(db.createMenu(user.getStatus()));
+            out.print(con.createMenu(user.getStatus()));
             %>
         </ul>
 

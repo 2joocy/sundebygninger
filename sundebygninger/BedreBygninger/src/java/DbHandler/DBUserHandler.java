@@ -23,7 +23,7 @@ public class DBUserHandler {
 
     Connection conn;
     
-    public DBUserHandler() {
+    public DBUserHandler() throws ClassNotFoundException, SQLException {
         this.conn = DBConnection.getConnection();
     }
     

@@ -4,11 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +27,7 @@ public class ImageHandler {
  
     Connection conn;
     
-    public ImageHandler() {
+    public ImageHandler() throws ClassNotFoundException, SQLException {
         conn = DBConnection.getConnection();
     }
     
@@ -30,31 +35,23 @@ public class ImageHandler {
         this.conn = conn;
     }
    
+    public BufferedImage getDefaultImage() throws IOException {
+        URL path = getClass().getClassLoader().getResource("resources\\images\\questionmark.jpg");
+        return ImageIO.read(path);
+    }
+    
     public int uploadImage(String description, String type, Part filePart) {
         try {
-            String sql = "INSERT INTO picture (description, type, image, thumbnail) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
             PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             InputStream inputStream = null;
-            InputStream inputThumb = null;
             if (filePart != null) {
                 inputStream = filePart.getInputStream();
-                inputThumb = filePart.getInputStream();
             }
             if (inputStream != null) {
                 prepared.setString(1, description);
                 prepared.setString(2, type);
-                //Thumbnail
                 prepared.setBlob(3, inputStream);
-                BufferedImage image = ImageIO.read(inputThumb);
-                BufferedImage thumbnail = resize(image, 50, 50);
-                JOptionPane.showMessageDialog(null, thumbnail.getHeight());
-                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-                
-                // Hvor bliver  det skrevet?
-                ImageIO.write(thumbnail, type, byteOut);
-                InputStream is = new ByteArrayInputStream(byteOut.toByteArray());
-
-                prepared.setBlob(4, is);
                 prepared.executeUpdate();
                 ResultSet rs = prepared.getGeneratedKeys();
                 while (rs.next()) {
@@ -65,6 +62,112 @@ public class ImageHandler {
             e.printStackTrace();
         }
         return -1;
+    }
+    
+    /*
+    public int uploadImage(String description, String type, Part filePart) {
+        try {
+            String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";
+            PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            InputStream inputStream = null;
+            InputStreamReader inReader = null;
+            BufferedReader bufReader = null;
+            //InputStream inputThumb = null;
+            if (filePart != null) {
+                JOptionPane.showMessageDialog(null, "Filepart != null");
+                inputStream = filePart.getInputStream();
+                inReader = new InputStreamReader(inputStream);
+                bufReader = new BufferedReader(inReader);
+                bufReader.mark(16100000);
+                JOptionPane.showMessageDialog(null, "Inputstream supports mark: " + inputStream.markSupported());
+
+                if (inputStream != null) {
+                    JOptionPane.showMessageDialog(null, "inputStream != null");
+                    prepared.setString(1, description);
+                    prepared.setString(2, type);
+                    prepared.setBlob(3, getInputStream(bufReader));
+                    prepared.executeUpdate();
+                    ResultSet rs = prepared.getGeneratedKeys();
+                    if (rs.next()) {
+                        int fkKey = rs.getInt(1);
+
+                        JOptionPane.showMessageDialog(null, "Uploaded image, fkKey: " + fkKey);
+
+                        sql = "UPDATE picture SET thumbnail = ? WHERE idPicture = ?";
+                        bufReader.reset();
+                        
+                        for (int i = 0; i < 5; i++) {
+                            int length = 10 + 10*i;
+                            String data = getData(getInputStream(bufReader), length);
+                            JOptionPane.showMessageDialog(null, data);
+                        }
+                        bufReader.reset();
+                        prepared = conn.prepareStatement(sql);
+
+                        JOptionPane.showMessageDialog(null, "Reset the inputstream");
+
+                        BufferedImage image = ImageIO.read(getInputStream(bufReader));
+
+                        JOptionPane.showMessageDialog(null, "Image is null? " + (image == null));
+                        
+                        BufferedImage thumbnail = resize(image, 50, 50);
+                        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+
+                        ImageIO.write(thumbnail, type, byteOut);
+                        InputStream is = new ByteArrayInputStream(byteOut.toByteArray());
+                        JOptionPane.showMessageDialog(null, "New inputStream created");
+
+                        prepared.setBlob(1, is);
+                        prepared.setInt(2, fkKey);
+                        prepared.executeUpdate();
+
+                        return fkKey;
+                    }
+
+                }
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    */
+    
+    public String getData(InputStream in, int len) throws IOException {
+        byte[] bytes = new byte[len];
+        for (int i = 0; i < len; i++) {
+            bytes[i] = (byte) in.read();
+        }
+        return new String(bytes);
+    }
+    
+    public InputStream getInputStream(BufferedReader buffered) throws IOException {
+        
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = buffered.readLine()) != null) {
+            builder.append(line);
+        }
+        return new ByteArrayInputStream(builder.toString().getBytes(StandardCharsets.UTF_8));
+    }
+    
+    public void testInputStream(InputStream in) throws IOException {
+        char c = (char) in.read();
+        while (c != -1) {
+            System.out.print("" + c);
+            c = (char) in.read();
+        }
+        System.out.println("");
+    }
+    
+    public byte[] getData(InputStream input) throws IOException {
+        byte[] bytes = new byte[input.available()];
+        int count = 0;
+        byte b = (byte) input.read();
+        while (b > 0) {
+            bytes[count] = b;
+        }
+        return bytes;
     }
     
     public BufferedImage resize(BufferedImage img, int newW, int newH) { 

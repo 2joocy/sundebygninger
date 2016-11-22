@@ -29,6 +29,7 @@ import controller.DBController;
 import entities.Report;
 import exceptions.DatabaseConnectionException;
 import java.sql.SQLDataException;
+import java.sql.SQLException;
 
 /**
  *
@@ -54,7 +55,14 @@ public class Front extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        controller = new DBController(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
+        try {
+            controller = new DBController(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
+        } catch (Exception e) {
+            String msg = "Error connecting to database, please try again later";
+            request.getSession().invalidate();
+            request.getSession().setAttribute("failure", msg);
+            return;
+        }
 
         //String username = request.getParameter("username");
         String failure = "";
@@ -179,8 +187,15 @@ public class Front extends HttpServlet {
                 controller.forgotPass(email, businessName);
                 break;
             case "registerBuilding":
-                int idB = controller.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id));
-                response.sendRedirect("overviewBuilding.jsp");
+                try {
+                    controller.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id));
+                    response.sendRedirect("overviewBuilding.jsp");
+                } catch (SQLException ex) {
+                    String msg = "Database connection error, please try again later."; //ex.getMessage();
+                    request.getSession().invalidate();
+                    request.getSession().setAttribute("failure", msg);
+                    response.sendRedirect("index.jsp");
+                }
                 break;
             case "logout":
                 request.getSession().invalidate();

@@ -32,7 +32,7 @@ public class DBController {
     
     public int addBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String conditionText,
-            String service, String extraText, String dateCreated, int fk_idUser) {
+            String service, String extraText, String dateCreated, int fk_idUser) throws SQLException {
         return dbb.addBuilding(address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser);
     }
     
@@ -220,11 +220,11 @@ public class DBController {
         return dbhtml.getService(idUser);
     }
     
-    public String createMenu(DBBuildingHandler dbb, DBUserHandler dbu, String status) throws DatabaseConnectionException {
+    public String createMenu(String status) throws DatabaseConnectionException {
         return dbhtml.createMenu(dbb, dbu, status);
     }
     
-    public String getAwaitingServiceCustomer(DBBuildingHandler dbb, String parameter, int id, String userRole) throws DatabaseConnectionException, SQLException {
+    public String getAwaitingServiceCustomer(String parameter, int id, String userRole) throws DatabaseConnectionException, SQLException {
         return dbhtml.getAwaitingServiceCustomer(dbb, parameter, id, userRole);
     }
     

@@ -7,8 +7,6 @@
 <%
     Connection conn = DBConnection.getConnection();
     DBController con = new DBController(conn);
-    DBBuildingHandler dbb = new DBBuildingHandler();
-    DBUserHandler db = new DBUserHandler();
     User user = (User) session.getAttribute("user");
 
     if (user == null) {
@@ -30,14 +28,14 @@
         <ul class="topnav">
             <a href="firstPage.jsp" style="float:left; padding-right: 25px; padding-left: 10px;"><img src="pictures/menu-logo.png" alt=""/></a>
                 <%
-                    out.print(con.createMenu(dbb, db, user.getStatus()));
+                    out.print(con.createMenu(user.getStatus()));
                 %>
         </ul>
 
         <div id="edit" style="margin-top: 4%;">
             
             <%
-            out.print(con.getUnConfirmed());
+                out.print(con.getUnConfirmed());
             %>
             
         </div>

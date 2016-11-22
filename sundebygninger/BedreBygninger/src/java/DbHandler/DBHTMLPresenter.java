@@ -19,7 +19,7 @@ public class DBHTMLPresenter {
     
     Connection conn;
     
-    public DBHTMLPresenter() {
+    public DBHTMLPresenter() throws ClassNotFoundException, SQLException {
         conn = DBConnection.getConnection();
     }
     

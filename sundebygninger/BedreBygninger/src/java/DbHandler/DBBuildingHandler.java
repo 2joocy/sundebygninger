@@ -19,7 +19,7 @@ public class DBBuildingHandler {
 
     private Connection conn;
 
-    public DBBuildingHandler() {
+    public DBBuildingHandler() throws ClassNotFoundException, SQLException {
         this.conn = DBConnection.getConnection();
     }
 
@@ -27,44 +27,38 @@ public class DBBuildingHandler {
         this.conn = conn;
     }
 
-    public int addBuilding(Building b) {
+    public int addBuilding(Building b) throws SQLException {
         return addBuilding(b.getAddress(), b.getCadastral(), b.getBuiltYear(), b.getArea(), b.getZipcode(), b.getCity(),
                 b.getCondition(), b.getService(), b.getExtraText(), b.getDateCreated(), b.getFk_idUser());
     }
 
     public int addBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String conditionText,
-            String service, String extraText, String dateCreated, int fk_idUser) {
+            String service, String extraText, String dateCreated, int fk_idUser) throws SQLException {
 
-        try {
-            String sql = "INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser)"
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,(select idUser from user where idUser=?))";
-            PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        String sql = "INSERT INTO building (address, cadastral, builtYear, area, zipcode, city, conditionText, service, extraText, dateCreated, fk_idUser)"
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,(select idUser from user where idUser=?))";
+        PreparedStatement prepared = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            prepared.setString(1, address);
-            prepared.setString(2, cadastral);
-            prepared.setString(3, builtYear);
-            prepared.setString(4, area);
-            prepared.setString(5, zipcode);
-            prepared.setString(6, city);
-            prepared.setString(7, conditionText);
-            prepared.setString(8, service);
-            prepared.setString(9, extraText);
-            prepared.setString(10, dateCreated);
-            prepared.setInt(11, fk_idUser);
+        prepared.setString(1, address);
+        prepared.setString(2, cadastral);
+        prepared.setString(3, builtYear);
+        prepared.setString(4, area);
+        prepared.setString(5, zipcode);
+        prepared.setString(6, city);
+        prepared.setString(7, conditionText);
+        prepared.setString(8, service);
+        prepared.setString(9, extraText);
+        prepared.setString(10, dateCreated);
+        prepared.setInt(11, fk_idUser);
 
-            prepared.executeUpdate();
+        prepared.executeUpdate();
 
-            ResultSet myRS = prepared.getGeneratedKeys();
-            if (myRS.next()) {
-                int buildingId = myRS.getInt(1);
-                submitReport(buildingId, "", false, 0, "", false, 0, "", 0, "");
-                return buildingId;
-            }
-
-        } catch (SQLException | HeadlessException ex) {
-            ex.printStackTrace();
-            //JOptionPane.showMessageDialog(null, "[DBBuiling.addBuilding] " + ex);
+        ResultSet myRS = prepared.getGeneratedKeys();
+        if (myRS.next()) {
+            int buildingId = myRS.getInt(1);
+            submitReport(buildingId, "", false, 0, "", false, 0, "", 0, "");
+            return buildingId;
         }
         return -1;
     }
