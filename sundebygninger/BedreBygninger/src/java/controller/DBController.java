@@ -228,11 +228,11 @@ public class DBController {
         return dbhtml.getAwaitingServiceCustomer(dbb, parameter, id, userRole);
     }
     
-    public String printAwaitingService() throws DatabaseConnectionException, SQLException {
+    public String printAwaitingService() throws DatabaseConnectionException, SQLException, ClassNotFoundException {
         return dbhtml.printAwaitingService();
     }
     
-    public String printAwaitingReview(int id) throws DatabaseConnectionException, SQLException {
+    public String printAwaitingReview(int id) throws DatabaseConnectionException, SQLException, ClassNotFoundException {
         return dbhtml.printAwaitingReview(id);
     }
     

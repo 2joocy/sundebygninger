@@ -34,6 +34,48 @@ a{
     height: 100%;
 
 }
+.addReport{
+    width: 100%;
+    background-color: white;
+    height: 100%;
+
+}
+
+.addReport input{
+    background: #F5F5F5;
+    border-radius: 3px 3px 3px 3px;
+    border-color: white;
+    color: #555;   
+}
+
+.addReportReport input{
+    box-sizing: border-box;
+    display: block;
+    width: 20%;
+    border-width: 1px;
+    border-style: solid;
+    padding: 16px;
+    outline: 0;
+    font-size: 0.95em;
+    
+}
+
+.addReportInput{
+    
+}
+
+.addReportInput input{
+    border: 1px solid #DDDDDD;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  
+    
+}
 
 .roomReport{
     border: 0px solid black;
