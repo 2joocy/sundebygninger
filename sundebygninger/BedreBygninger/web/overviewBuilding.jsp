@@ -53,7 +53,7 @@
 
         <div id="edit" style="margin-top: 4%;">
             <%
-                out.print(con.getBuildings(user.getIdUser()));
+                out.print(con.getBuildings(user.getIdUser(), user.getStatus()));
             %>
             <br />
             <center>

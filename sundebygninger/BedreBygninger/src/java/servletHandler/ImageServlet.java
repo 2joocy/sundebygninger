@@ -29,24 +29,22 @@ public class ImageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+       
         int id = Integer.parseInt(request.getParameter("id"));
         Connection myConn = null;
         try {
             myConn = DBConnection.getConnection();
         } catch (Exception e) {
-            
-        }
-        if (myConn == null) {
             try {
                 test(response);
-            } catch (Exception e) {
-                
+                return;
+            } catch (Exception ex) {
+                throw new RuntimeException("Unable to access default img");
             }
-            return;
         }
+       
         String sql = "SELECT * FROM picture WHERE idPicture=?";
-        
+       
         try {
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setInt(1, id);
@@ -66,9 +64,12 @@ public class ImageServlet extends HttpServlet {
             try (OutputStream output = response.getOutputStream()) {
                 output.write(bArr);
             }
-        }
-        catch(SQLException | IOException e){
-            e.printStackTrace();
+        } catch(SQLException | IOException e){
+            try {
+                test(response);
+            } catch (Exception ex) {
+                throw new RuntimeException("Unable to access default img");
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import DbHandler.DBConnection;
 import entities.Building;
 import entities.Report;
 import entities.User;
+import java.sql.SQLException;
 import javax.servlet.http.Part;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,6 +13,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 
 public class DBControllerTest {
@@ -21,6 +24,10 @@ public class DBControllerTest {
     public DBControllerTest() {
     }
     
+    @Rule
+    public ExpectedException excThrow = ExpectedException.none();
+    
+   
     @BeforeClass
     public static void setUpClass() {
     }
@@ -54,14 +61,16 @@ public class DBControllerTest {
         ctrl.removeBuilding(buildingId); //Delete building from DB
     }
     
+    
      /**
      * Test of addBuilding method throwing an exception, of class DBController.
      */
-    @Test
-    public void testAddBuildingFail() throws Exception {
-        System.out.println("TING HER TING HER");
-        assertNull(null);
-    }
+//    @Test
+//    public void testAddBuildingFail() throws Exception {
+//        excThrow.expect(SQLException.class);
+//        excThrow.
+//        assertNull(null);
+//    }
     
     
     

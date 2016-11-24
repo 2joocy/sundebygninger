@@ -46,6 +46,7 @@ public class DBController {
     @param dateCreated Specific date of creation of the server
     @param fk_idUser The user ID, of the user that the building belongs to
      * @return
+     * @throws java.sql.SQLException
     
     */
     public int addBuilding(String address, String cadastral, String builtYear,
@@ -353,8 +354,17 @@ public class DBController {
      * DBHTMLPresenter functions
      */
     
-    public String getBuildings(int idUser) throws SQLException, DatabaseConnectionException {
-        return dbhtml.getBuildings(idUser);
+    /**
+     * 
+     * @param idUser
+     * @param role
+     * @return
+     * @throws SQLException
+     * @throws DatabaseConnectionException 
+     */
+    
+    public String getBuildings(int idUser, String role) throws SQLException, DatabaseConnectionException {
+        return dbhtml.getBuildings(idUser, role);
     }
     
     public String getReportOverview(int idBuilding) throws DatabaseConnectionException, SQLException {
