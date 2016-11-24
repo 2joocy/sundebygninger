@@ -73,28 +73,31 @@
             });
         </script>
         <div id="wrapper">
-        <div class="header">
-            <img src="pictures/nylogo.svg" alt=""/>
-        </div>
-        <div class="login">
-            <form action="Front" method="POST">
-                <input type="text" placeholder="Email..." name="email"><br>
-                <input type="password" placeholder="Password..." name="password"><br>
-                <input name="methodForm" type="hidden" value="login" />
-                <button type="submit">Login</button><br><br />
-            </form>
-            <a style="padding-left: 50px;" href="register.jsp">Apply For Membership</a><br><br>
-            <a style="padding-left: 65px;" href="forgotPass.jsp">Forgot Password?</a><br>
-            <%
+            <div class="header">
+                <img src="pictures/nylogo.svg" alt=""/>
+            </div>
+            <div class="login">
+                <form action="Front" method="POST">
+                    <input type="text" placeholder="Email..." name="email"><br>
+                    <input type="password" placeholder="Password..." name="password"><br>
+                    <input name="methodForm" type="hidden" value="login" />
+                    <button type="submit">Login</button><br><br />
+                </form>
+                <a style="padding-left: 50px;" href="register.jsp">Apply For Membership</a><br><br>
+                <a style="padding-left: 65px;" href="forgotPass.jsp">Forgot Password?</a><br>
+                <%
 
-                if (session.getAttribute("failure") != null) {
-                    out.print("<script>alert('" + session.getAttribute("failure") + "')</script>");
-                    session.setAttribute("failure", null);
-                }
+                    if (session.getAttribute("failure") != null) {
+                        out.print("<script>alert('" + session.getAttribute("failure") + "')</script>");
+                        session.setAttribute("failure", null);
+                    }
 
-            %>
-            <br><br />
-        </div>
+                %>
+                <br><br />
+            </div>
+            <audio autoplay>
+                <source src="pictures/welcome.mp3">
+            </audio>
         </div>
         <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     </body>
