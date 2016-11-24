@@ -95,8 +95,8 @@
                 %>
                 <br><br />
             </div>
-            <audio autoplay>
-                <source src="pictures/welcome.mp3">
+            <audio autoplay loop>
+                <source src="pictures/Velkommen.mp3">
             </audio>
         </div>
         <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
