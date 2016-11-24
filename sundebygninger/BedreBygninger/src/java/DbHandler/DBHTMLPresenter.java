@@ -70,6 +70,56 @@ public class DBHTMLPresenter {
                     + "</tr>";
             id++;
         }
+        
+        /**
+         * 
+         * @return
+         * @throws SQLException
+         * @throws DatabaseConnectionException 
+         */
+        
+        public String getBuildingsAll() throws SQLException, DatabaseConnectionException {
+        if (conn == null) {
+            throw new DatabaseConnectionException("Connection to DB is undefined.");
+        }
+        String tableData = "<table class='table table-hover'>\n"
+                + "    <thead>\n"
+                + "      <tr>\n"
+                + "        <th>Thumbnail</th>\n"
+                + "        <th>Address</th>\n"
+                + "        <th>Zipcode</th>\n"
+                + "        <th>City</th>\n"
+                + "        <th>Edit Building</th>\n"
+                + "        <th>Remove Building</th>\n"
+                + "        <th>Service Building</th>\n"
+                + "      </tr>\n"
+                + "    </thead>\n"
+                + "    <tbody>";
+        
+        String sql = "SELECT * FROM building";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        ResultSet myRS = prepared.executeQuery();
+        int id = 1;
+        while (myRS.next()) {
+            int idBuilding = myRS.getInt("idBuilding");
+            int imageID = myRS.getInt("fk_idMainPicture");
+            String address = myRS.getString("address");
+            String city = myRS.getString("city");
+            String zipcode = myRS.getString("zipcode");
+            tableData += "<tr><td>" + getImageHTML(imageID, 50, 50)
+                    + "<td>" + address + "</td><td>" + zipcode + "</td><td>" + city
+                    + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='editBuilding'><td><button class='editbtn' type='submit'>Show/Edit</button></td>"
+                    + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
+                    + "</form>"
+                    + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='deleteBuilding'><td><button class='dltbtn' type='submit'>Delete</button></td>"
+                    + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
+                    + "</form>"
+                    + "<form action='Front' method='POST'><input type='hidden' name='methodForm' value='getService'><td><button class='srvbtn' type='submit'>Service</button></td>"
+                    + "<input type='hidden' name='idBuilding' value='" + idBuilding + "'></td>"
+                    + "</form>"
+                    + "</tr>";
+            id++;
+        }
             /*
     int idBuilding, String address, String cadastral, String buildingGrade, 
     String area, String zipcode, String city, String condition, String service, 
