@@ -30,6 +30,8 @@ import entities.Report;
 import exceptions.DatabaseConnectionException;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -40,7 +42,7 @@ import java.sql.SQLException;
 public class Front extends HttpServlet {
 
     public static boolean test;
-
+    private servletMapper serv;
     private DBController controller;
 
     /**
@@ -54,345 +56,114 @@ public class Front extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         try {
             controller = new DBController(test ? DBConnection.getTestConnection() : DBConnection.getConnection());
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             String msg = "Error connecting to database, please try again later";
             request.getSession().invalidate();
             request.getSession().setAttribute("failure", msg);
             return;
         }
+        serv = new servletMapper(request, response, controller);
 
-        //String username = request.getParameter("username");
-        String failure = "";
-        String action = request.getParameter("action");
-        String password = request.getParameter("password");
-        String id = request.getParameter("userID");
-        String idUser = request.getParameter("idUser");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String fullName = request.getParameter("fullName");
-        String businessName = request.getParameter("businessName");
         String method = request.getParameter("methodForm");
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date datePre = new Date();
-        String date = dateFormat.format(datePre);
-        String address = request.getParameter("address");
-        String cadastral = request.getParameter("cadastral");
-        String builtYear = request.getParameter("builtYear");
-        String area = request.getParameter("area");
-        String zipcode = request.getParameter("zipcode");
-        String city = request.getParameter("city");
-        String condition = request.getParameter("condition");
-        String extraText = request.getParameter("extraText");
-        String idBuilding = request.getParameter("idBuilding");
-        String idBuilding2 = request.getParameter("buildingID");
-        String typeDmg = request.getParameter("typeDmg");
-        String remarks = request.getParameter("remarks");
-        String dmg = request.getParameter("damage");
-        String dateDmg = request.getParameter("dateOfDamage");
-        String placeDmg = request.getParameter("placementOfDmg");
-        String descDmg = request.getParameter("descDmg");
-        String reasonDmg = request.getParameter("reasonDmg");
-        String hasWallRemark = request.getParameter("hasWallRemarks");
-        String wallRemark = request.getParameter("wallRemark");
-        String hasRoofRemarks = request.getParameter("hasRoofRemarks");
-        String roofRemarks = request.getParameter("roofRemarks");
-        String hasFloorRemarks = request.getParameter("hasFloorRemark");
-        String floorRemarks = request.getParameter("floorRemarks");
-        String hasMoistureRemark = request.getParameter("hasMoistureRemark");
-        String moistureDesc = request.getParameter("moistureDesc");
-        String moistureMeasure = request.getParameter("moistureMeasure");
-        String conclusion = request.getParameter("conclusion");
-        String buildingUsage = request.getParameter("buildingUsage");
-        String outerWallText = request.getParameter("outerWallText");
-        String roofText = request.getParameter("roofText");
-        String outerWallRemarks = request.getParameter("outerWallRemarks");
-        String reportID = request.getParameter("reportID");
-        String idReport1 = request.getParameter("idReport");
-        String idRoom = request.getParameter("idRoom");
-        String newPassword = request.getParameter("newPass");
-        String newEmail = request.getParameter("newEmail");
-        String fk_idMainPicture = request.getParameter("fk_idMainPicture");
-        String typeSearch = request.getParameter("typesearch");
-        String redirect = request.getParameter("redirect");
-        
-        boolean outerWallRemark = false;
-        boolean remark = false;
-        boolean damage = false;
-        boolean damageWater = false;
-        boolean damageRot = false;
-        boolean damageMold = false;
-        boolean damageFire = false;
-        boolean wallRemarks = false;
-        boolean roofRemark = false;
-        boolean floorRemark = false;
-        boolean moistureScan = false;
-        PrintWriter out = response.getWriter();
-
+       
         switch (method) {
             case "login":
-                User user = controller.checkLogin(email, password);
-                if (user == null) {
-                    //Try to make a pop-up declaring the error (user login incorrect).
-                    //After confirmation from user on the pop-up, redirect to login page, again.
-                    failure = "Account was not found. Please check the entered data!";
-                    request.getSession().setAttribute("failure", failure);
-                    response.sendRedirect("index.jsp");
-                } else if (user.getStatus().equals("not")) {
-                    failure = "Your membership is still under review. If this has been the case for more than 48 hours, please contact Polygon support!";
-                    request.getSession().setAttribute("failure", failure);
-                    response.sendRedirect("index.jsp");
-                } else if (user.getStatus().equalsIgnoreCase("worker")) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", user);
-                    response.sendRedirect("firstPage.jsp");
-                } else if (user.getStatus().equalsIgnoreCase("denied")) {
-                    failure = "Your membership has been denied due to illegitimate info credidencials. If you are unsatisfied with these terms, please contact our support staff.";
-                    request.getSession().setAttribute("failure", failure);
-                    response.sendRedirect("index.jsp");
-                } else {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", user);
-                    response.sendRedirect("firstPage.jsp");
-                }
-                //out.print(user == null ? "User == null" : user.getEmail());
+                serv.login();
                 break;
             case "register":
-                String message = controller.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
-                if (message.contains("Error, ")) {
-                    //request.getSession().setAttribute("failure", message);
-                    response.sendRedirect("register.jsp");
-                } else {
-                    controller.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
-                    response.sendRedirect("awaitingApproval.jsp");
-                }
-
+                serv.register();
                 break;
             case "confirmUsers":
-                controller.confirmUser(Integer.parseInt(id));
-                response.sendRedirect("overviewUsers.jsp");
+                serv.confirmUser();
                 break;
             case "denyUsers":
-                controller.denyUser(Integer.parseInt(id));
-                response.sendRedirect("overviewUsers.jsp");
+                serv.denyUser();
                 break;
             case "forgotPass":
-                if (!controller.userExists(email)) {
-                    out.println("No such user exists.");
-                    return;
-                }
-                out.println("Email sent to " + email + " with new password.");
-                controller.forgotPass(email, businessName);
+                serv.forgotPass();
                 break;
             case "registerBuilding":
-                try {
-                    controller.addBuilding(address, cadastral, builtYear, area, zipcode, city, "", "", extraText, date, Integer.parseInt(id));
-                    response.sendRedirect("overviewBuilding.jsp");
-                } catch (SQLException ex) {
-                    String msg = "Database connection error, please try again later."; //ex.getMessage();
-                    request.getSession().invalidate();
-                    request.getSession().setAttribute("failure", msg);
-                    response.sendRedirect("index.jsp");
-                }
+                serv.registerBuilding();
                 break;
             case "logout":
-                request.getSession().invalidate();
-                failure = "You have successfully been logged out!";
-                request.getSession().setAttribute("failure", failure);
-                response.sendRedirect("index.jsp");
+                serv.logout("Successfully logged out!");
                 break;
             case "editBuilding":
-                request.getSession().setAttribute("idBuilding", idBuilding);
-                response.sendRedirect("editBuilding.jsp");
+                serv.editBuilding();
                 break;
             case "editBuildingFinal":
-                controller.editBuilding(address, cadastral, builtYear, area, zipcode, city, condition, extraText, Integer.parseInt(idBuilding2));
-                response.sendRedirect("overviewBuilding.jsp");
+                serv.editBuildingFinal();
                 break;
             case "deleteBuilding":
-                controller.removeBuilding(Integer.parseInt(idBuilding));
-                response.sendRedirect("overviewBuilding.jsp");
+                serv.deleteBuilding();
                 break;
             case "uploadPicture":
-                Part filePart = request.getPart("picture");
-                Building building = (Building) request.getSession().getAttribute("building");
-                int imageId = controller.uploadImage("", filePart.getContentType(), filePart);
-                String imageMessage = (imageId == -1 ? "Image failed to upload." : "Image uploaded to the database.");
-                request.getSession().setAttribute("imageMessage", "" + imageMessage);
-                request.getSession().setAttribute("imageId", "" + imageId);
-                response.sendRedirect("FileConf.jsp");
+                serv.uploadPicture();
                 break;
-            case "getService":
-                if (controller.getBuilding(Integer.parseInt(idBuilding)).getService().equalsIgnoreCase("awaiting")) {
-                    failure = "You have already requested service for this house!";
-                    request.getSession().setAttribute("failure", failure);
-                    response.sendRedirect("overviewBuilding.jsp");
-                } else {
-                    controller.requestService(Integer.parseInt(idBuilding));
-                    response.sendRedirect("overviewBuilding.jsp");
+            case "getService": {
+                try {
+                    serv.getService();
+                } catch (SQLException ex) {
+                    serv.logout(ex.getMessage());
                 }
-                break;
+            }
+            break;
             case "addReport":
-                request.getSession().setAttribute("idBuilding", idBuilding);
-                request.getSession().setAttribute("idReport", controller.getFkIdReport(Integer.parseInt(idBuilding)));
-                response.sendRedirect("addReport.jsp");
+                serv.addReport();
                 break;
             case "finalAddReport":
-                boolean roofRemark1 = false;
-
-                if (roofRemarks != null && roofRemarks.equalsIgnoreCase("1")) {
-                    roofRemark1 = true;
-                }
-
-                if (outerWallRemarks != null && outerWallRemarks.equalsIgnoreCase("1")) {
-                    outerWallRemark = true;
-                }
-
-                int idBuildingNew = Integer.parseInt((String) request.getSession().getAttribute("idBuilding"));
-                int idNew = (Integer) request.getSession().getAttribute("userID");
-                int reportedID = (Integer) request.getSession().getAttribute("idReport");
-                Report newRep = new Report(reportedID, buildingUsage, roofRemark1, 0, roofText, outerWallRemark, 0, outerWallText, idNew, "");
-                controller.editReport(newRep);
-                controller.setReviewed(idBuildingNew);
-                response.sendRedirect("addReport.jsp");
+                serv.finalAddReport();
                 break;
             case "submitRoom":
-                if (remarks != null && remarks.equals("on")) {
-                    remark = true;
-                }
-
-                if (dmg != null && dmg.equals("on")) {
-                    damage = true;
-                }
-
-                if (hasWallRemark != null && hasWallRemark.equalsIgnoreCase("on")) {
-                    wallRemarks = true;
-                }
-
-                if (hasFloorRemarks != null && hasFloorRemarks.equals("on")) {
-                    floorRemark = true;
-                }
-
-                if (hasRoofRemarks != null && hasRoofRemarks.equalsIgnoreCase("on")) {
-                    roofRemark = true;
-                }
-
-                if (hasMoistureRemark != null && hasMoistureRemark.equalsIgnoreCase("on")) {
-                    moistureScan = true;
-                }
-
-                if (damage && typeDmg != null) {
-                    if (typeDmg.equals("Water Damage")) {
-                        damageWater = true;
-                    } else if (typeDmg.equals("Fire Damage")) {
-                        damageFire = true;
-                    } else if (typeDmg.equals("Mold Damage")) {
-                        damageMold = true;
-                    } else if (typeDmg.equals("Rot Damage")) {
-                        damageRot = true;
-                    }
-                }
-
-                if (hasMoistureRemark != null && hasMoistureRemark.equalsIgnoreCase("on")) {
-                    moistureScan = true;
-                }
-                int fk_idReport = (Integer) request.getSession().getAttribute("idReport");
-                controller.addRoomReport(remark, damage, dateDmg, placeDmg, descDmg, "", damageWater,
-                        damageRot, damageMold, damageFire, reasonDmg, wallRemarks, wallRemark, roofRemark,
-                        roofRemarks, floorRemark, floorRemarks, moistureScan, moistureDesc, moistureMeasure, conclusion, fk_idReport);
-                response.sendRedirect("addReport.jsp");
+                serv.submitRoom();
                 break;
             case "submitReport":
-                Part filePart2 = request.getPart("picture");
-                int imageId2 = controller.uploadImage("", filePart2.getContentType(), filePart2);
-                String imageMessage2 = (imageId2 == -1 ? "Image failed to upload." : "Image uploaded to the database.");
-                request.getSession().setAttribute("imageMessage", "" + imageMessage2);
-                request.getSession().setAttribute("imageId", "" + imageId2);
+                serv.submitReport();
                 break;
             case "overviewReport":
-                request.getSession().setAttribute("idReport", idReport1);
-                request.getSession().setAttribute("idBuilding", idBuilding);
-                
-                response.sendRedirect("showReportCustomer.jsp");
+                serv.overviewReport();
                 break;
             case "showRoomReport":
-                request.getSession().setAttribute("report", controller.getReport(Integer.parseInt(idReport1)));
-                response.sendRedirect("showRoomReport.jsp");
+                serv.showRoomReport();
                 break;
             case "serviceRoom":
                 response.sendRedirect("service.jsp");
                 break;
             case "editRoom":
-                request.getSession().setAttribute("idRoom", idRoom);
-                response.sendRedirect("editRoom.jsp");
+                serv.editRoom();
                 break;
             case "reviewReport":
-                request.getSession().setAttribute("idBuilding", idBuilding);
-                response.sendRedirect("reviewReport.jsp");
+                serv.reviewReport();
                 break;
             case "changeEmail":
-                user = (User) request.getSession().getAttribute("user");
-                controller.updateEmail(newEmail, user.getIdUser());
-                response.sendRedirect("account.jsp");
+                serv.changeEmail();
                 break;
             case "changePass":
-                if (controller.correctPass(password, email) == true) {
-                    controller.updatePassword(email, newPassword);
-                    request.getSession().setAttribute("failure", "Password has been successfully changed!");
-                    response.sendRedirect("account.jsp");
-                } else {
-                    request.getSession().setAttribute("failure", "Password has not been changed due to incorrect password. Please double check your info before typing!");
-                    response.sendRedirect("account.jsp");
-                }
+                serv.changePass();
                 break;
             case "filterServiceCustomer":
-                request.getSession().setAttribute("searchParameter", typeSearch);
-                response.sendRedirect("service.jsp");
+                serv.filterCustomer();
                 break;
-            case "reviewReviewedService":
-                request.getSession().setAttribute("idReport", controller.getBuilding(Integer.parseInt(idReport1)));
-                request.getSession().setAttribute("idBuilding", idBuilding);
-                response.sendRedirect("reviewBuildingDetail.jsp");
-                break;
-            case "newMainImage":
-                filePart = request.getPart("picture");
-                int newImageID = Integer.parseInt(idBuilding);
-                int fk_mainImage = Integer.parseInt(fk_idMainPicture);
-                imageId = controller.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
-                if (redirect != null) {
-                    response.sendRedirect(redirect);
-                    break;
+            case "reviewReviewedService": {
+                try {
+                    serv.reviewReviewedService();
+                } catch (SQLException ex) {
+                    serv.logout(ex.getMessage());
                 }
-                response.sendRedirect("overviewBuilding.jsp");
+            }
+            break;
+            case "newMainImage":
+                serv.newMainImage();
                 break;
             case "uploadReportOuterRoofImage":
-                //Steps
-
-                //1) Get picture into filePart
-                filePart = request.getPart("picture");
-                //2) Get which report we must insert it into
-                int idReport = (Integer) request.getSession().getAttribute("idReport");
-                //3) Which field we must insert it into
-                String insertColumn = "fk_idPictureOuterRoof";
-
-                //imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
-                response.sendRedirect("overviewBuilding.jsp");
+                serv.uploadReportOuterRoofImage();
                 break;
             case "uploadReportRoofImage":
-                //Steps
-
-                //1) Get picture into filePart
-                filePart = request.getPart("picture");
-                //2) Get which report we must insert it into
-                idReport = (Integer) request.getSession().getAttribute("idReport");
-                //3) Which field we must insert it into
-                insertColumn = "fk_idPictureRoof";
-
-                fk_mainImage = Integer.parseInt(fk_idMainPicture);
-                //imageId = dbB.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
-                response.sendRedirect("overviewBuilding.jsp");
+                serv.uploadReportRoofImage();
                 break;
         }
 

@@ -64,7 +64,7 @@ public class DBController {
      * @return 
      */
     
-    public Building getBuilding(int idBuilding) {
+    public Building getBuilding(int idBuilding) throws SQLException {
         return dbb.getBuilding(idBuilding);
     }
     
@@ -75,9 +75,6 @@ public class DBController {
      * @return 
      */
     
-    public Building getBuilding(String address) { 
-        return dbb.getBuilding(address);
-    }
     
     /**
      * Method returns a Integer, given a building ID. It then selects the 

@@ -63,7 +63,7 @@ public class DBBuildingHandler {
         return -1;
     }
 
-    public Building getBuilding(int idBuilding) {
+    public Building getBuilding(int idBuilding) throws SQLException{
         Building building = null;
         try {
             String sql = "SELECT * FROM building WHERE idBuilding=?";
@@ -89,41 +89,8 @@ public class DBBuildingHandler {
                 );
             }
 
-        } catch (SQLException | HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Error [getBuilding(id)]");
-            ex.printStackTrace();
-        }
-        return building;
-    }
-
-    public Building getBuilding(String address) {
-        Building building = null;
-        try {
-            String sql = "SELECT * FROM building WHERE address=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, address);
-            ResultSet myRS = prepared.executeQuery();
-            while (myRS.next()) {
-                building = new Building(
-                        myRS.getInt("idBuilding"),
-                        myRS.getString("address"),
-                        myRS.getString("cadastral"),
-                        myRS.getString("area"),
-                        myRS.getString("zipcode"),
-                        myRS.getString("city"),
-                        myRS.getString("conditionText"),
-                        myRS.getString("service"),
-                        myRS.getString("extraText"),
-                        myRS.getString("builtYear"),
-                        myRS.getInt("fk_idUser"),
-                        myRS.getInt("fk_idMainPicture"),
-                        myRS.getInt("fk_idReport"),
-                        myRS.getString("dateCreated")
-                );
-            }
-
-        } catch (SQLException | HeadlessException ex) {
-            ex.printStackTrace();
+        } catch (SQLException ex) {
+            throw new SQLException("Building does not exist");
         }
         return building;
     }

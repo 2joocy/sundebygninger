@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/test/modafokka/DbControllerTesting.java</file>
             <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/DBBuildingHandler.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/DBHTMLPresenter.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/entities/Building.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/addReport.jsp</file>
             <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/controller/DBController.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/test/Controller/DBControllerTest.java</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/contact.jsp</file>
-            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/style/style.css</file>
+            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/servletHandler/Front.java</file>
+            <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/src/java/servletHandler/servletMapper.java</file>
         </group>
     </open-files>
 </project-private>
