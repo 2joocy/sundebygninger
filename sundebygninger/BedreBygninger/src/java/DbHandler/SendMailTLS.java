@@ -21,6 +21,13 @@ public class SendMailTLS {
     private final static String USERNAME = "bingobangomail@gmail.com";
     private final static String PASSWORD = "bingopassword";
 
+    /**
+     * Send an email to the given address, with the subject and message.
+     * @param toEmail The receiving email address.
+     * @param subject The subject header of the email.
+     * @param message The message that you wish to send.
+     * @return Returns a message, which can include an error.
+     */
     public static String sendMessage(String toEmail, String subject, String message) {
         Session s = getSession(USERNAME, PASSWORD);
         Message m = createMessage(s, USERNAME, toEmail, subject, message);

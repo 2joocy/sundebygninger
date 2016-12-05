@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
+/**
+ * This class contains methods and functions that deliver and retrieve data to- and from the database with regards to any building-related subjects.
+ */
 public class DBBuildingHandler {
 
     private Connection conn;
@@ -32,6 +35,24 @@ public class DBBuildingHandler {
                 b.getCondition(), b.getService(), b.getExtraText(), b.getDateCreated(), b.getFk_idUser());
     }
 
+     /**
+     * This class creates a object, of type Building. 
+     * It afterwards uploads this object to the database accordingly
+    @param address Address of the building
+    @param cadastral Image of district, of the address
+    @param builtYear Year, of making of the building
+    @param area District of the building
+    @param zipcode Zipcode of the building
+    @param city City of the building
+    @param conditionText Grade of the building, described by Polygon worker
+    @param service Service description
+    @param extraText Description text, rather useless
+    @param dateCreated Specific date of creation of the server
+    @param fk_idUser The user ID, of the user that the building belongs to
+     * @return
+     * @throws java.sql.SQLException
+    
+    */
     public int addBuilding(String address, String cadastral, String builtYear,
             String area, String zipcode, String city, String conditionText,
             String service, String extraText, String dateCreated, int fk_idUser) throws SQLException {

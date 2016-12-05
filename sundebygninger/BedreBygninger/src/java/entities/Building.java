@@ -1,17 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entities;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
-
 /**
- *
- * @author William-PC
+ * Custom building object, used when storing or retrieving data from the database, as it is encapsulated properly.
  */
 public class Building {
 
@@ -59,6 +49,10 @@ public class Building {
         return fk_idReport;
     }
 
+    /**
+     * Returns the address of the building you are calling the function on.
+     * @return Building address.
+     */
     public String getAddress() {
         return address;
     }
@@ -103,6 +97,11 @@ public class Building {
         return buildingArea;
     }
     
+    /**
+     * Checks whether the object o, has the same properties as the building, whose equals function is being called upon.
+     * @param o Another building object.
+     * @return True: if o's properties are the same as this buildings, else false.
+     */
     @Override
     public boolean equals(Object o) {
         if (o instanceof Building) {

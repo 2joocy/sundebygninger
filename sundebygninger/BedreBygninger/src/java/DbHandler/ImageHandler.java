@@ -6,12 +6,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -21,8 +17,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.imageio.ImageIO;
 import javax.servlet.http.Part;
-import javax.swing.JOptionPane;
 
+/**
+ * This class contains methods and functions that upload image data to our database.
+ */
 public class ImageHandler {
  
     Connection conn;
@@ -35,11 +33,23 @@ public class ImageHandler {
         this.conn = conn;
     }
    
+    /**
+     * Retrieves a default image if no database connection can be found, or the picture ID requested does not exist.
+     * @return Default "error-handling" image.
+     * @throws IOException Throws IOException if the file cannot be found on the sysstem.
+     */
     public BufferedImage getDefaultImage() throws IOException {
         URL path = getClass().getClassLoader().getResource("resources\\images\\questionmark.jpg");
         return ImageIO.read(path);
     }
     
+    /**
+     * Uploads an image to the database with specified data.
+     * @param description A small description of the image.
+     * @param type Which file format the image is.
+     * @param filePart The image data.
+     * @return Returns the image ID when it is uploaded to the database.
+     */
     public int uploadImage(String description, String type, Part filePart) {
         try {
             String sql = "INSERT INTO picture (description, type, image) VALUES (?, ?, ?)";

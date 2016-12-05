@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javax.servlet.http.Part;
 
+/**
+ * This class is a controller for our mapper classes.
+ */
 public class DBController {
  
     Connection conn;
@@ -336,10 +339,6 @@ public class DBController {
     
     public String forgotPass(String email, String businessName) {
         return dbu.forgotPass(email, businessName);
-    }
-    
-    public String encryptPassword(String password) {
-        return dbu.encryptPassword(password);
     }
     
     public boolean correctPass(String password, String email) {

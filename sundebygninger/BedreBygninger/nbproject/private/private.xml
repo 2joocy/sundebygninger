@@ -12,5 +12,12 @@
             <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/contact.jsp</file>
             <file>file:/C:/Users/William%20Pfaffe/Documents/NetBeansProjects/sundebygninger/sundebygninger/BedreBygninger/web/style/style.css</file>
         </group>
+        <group name="New Group of Tests">
+            <file>file:/D:/Software/Netbeans%20School%20Project%20-%203/sundebygninger/sundebygninger/BedreBygninger/src/java/controller/DBController.java</file>
+            <file>file:/D:/Software/Netbeans%20School%20Project%20-%203/sundebygninger/sundebygninger/BedreBygninger/web/index.jsp</file>
+            <file>file:/D:/Software/Netbeans%20School%20Project%20-%203/sundebygninger/sundebygninger/BedreBygninger/test/Controller/DBControllerTest2.java</file>
+            <file>file:/D:/Software/Netbeans%20School%20Project%20-%203/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/DBConnection.java</file>
+            <file>file:/D:/Software/Netbeans%20School%20Project%20-%203/sundebygninger/sundebygninger/BedreBygninger/src/java/DbHandler/DBBuildingHandler.java</file>
+        </group>
     </open-files>
 </project-private>

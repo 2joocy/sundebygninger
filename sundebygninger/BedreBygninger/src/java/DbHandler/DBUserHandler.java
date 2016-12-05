@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DbHandler;
 
 import entities.User;
@@ -19,6 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
+/**
+ * This class contains methods and functions that deliver and retrieve data to- and from the database with regards to any user-related subjects.
+ */
 public class DBUserHandler {
 
     Connection conn;
@@ -246,7 +244,7 @@ public class DBUserHandler {
         return sb.toString();
     }
 
-    public String encryptPassword(String password) {
+    private String encryptPassword(String password) {
         String encryptedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
