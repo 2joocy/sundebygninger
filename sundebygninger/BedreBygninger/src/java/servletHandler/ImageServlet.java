@@ -1,4 +1,3 @@
-
 package servletHandler;
 
 import DbHandler.DBConnection;

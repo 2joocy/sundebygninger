@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servletHandler;
 
 import controller.DBController;
@@ -25,10 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-/**
- *
- * @author William Pfaffe
- */
 public class ServletMapper {
 
     private final DBController controller;
