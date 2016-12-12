@@ -19,7 +19,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JOptionPane;
 
 @WebServlet(name = "ImageServlet", urlPatterns = {"/ImageServlet"})
 public class ImageServlet extends HttpServlet {
@@ -31,6 +30,8 @@ public class ImageServlet extends HttpServlet {
             throws ServletException, IOException {
        
         int id = Integer.parseInt(request.getParameter("id"));
+        boolean thumbnail = Boolean.parseBoolean(request.getParameter("isThumbnail"));
+        request.setAttribute("isThumbnail", false);
         Connection myConn = null;
         try {
             myConn = DBConnection.getConnection();
@@ -49,17 +50,20 @@ public class ImageServlet extends HttpServlet {
             PreparedStatement prepared = myConn.prepareStatement(sql);
             prepared.setInt(1, id);
             ResultSet rs = prepared.executeQuery();
-            while (rs.next()){
+            if (rs.next()){
                 String type = rs.getString("type");
                 response.setContentType(type);
-                break;
             }
             byte[] bArr;
-            try (InputStream input = rs.getBinaryStream("image")) {
-                bArr = new byte[input.available()];
-                for (int i = 0; i < bArr.length; i++) {
-                    bArr[i] = (byte) input.read();
-                }
+            InputStream input = null;
+            if (thumbnail) {
+                input = rs.getBinaryStream("thumbnail");
+            } else {
+                input = rs.getBinaryStream("image");
+            }
+            bArr = new byte[input.available()];
+            for (int i = 0; i < bArr.length; i++) {
+                bArr[i] = (byte) input.read();
             }
             try (OutputStream output = response.getOutputStream()) {
                 output.write(bArr);

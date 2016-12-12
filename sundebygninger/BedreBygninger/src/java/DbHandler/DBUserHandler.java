@@ -1,6 +1,7 @@
 package DbHandler;
 
 import entities.User;
+import exceptions.UserExistsException;
 import java.awt.HeadlessException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,7 +13,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 /**
  * This class contains methods and functions that deliver and retrieve data to- and from the database with regards to any user-related subjects.
@@ -29,199 +29,129 @@ public class DBUserHandler {
         this.conn = conn;
     }
     
-    private final boolean showJoptionPanes = false;
-
-    public User checkLogin(String email, String password) {
+    public User checkLogin(String email, String password) throws SQLException {
         User newUser = null;
         password = encryptPassword(password);
-        try {
-            String sql = "SELECT idUser, email, businessName, phone, status, fullName, createdDate FROM user WHERE email=? AND password=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.setString(2, password);
-            ResultSet myRS = prepared.executeQuery();
-            while (myRS.next()) {
-                newUser = new User(myRS.getInt("idUser"), myRS.getString("email"), myRS.getString("businessName"), myRS.getString("phone"), myRS.getString("status"), myRS.getString("fullName"), myRS.getString("createdDate"));
-            }
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
+        String sql = "SELECT idUser, email, businessName, phone, status, fullName, createdDate FROM user WHERE email=? AND password=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.setString(2, password);
+        ResultSet myRS = prepared.executeQuery();
+        if (myRS.next()) {
+            newUser = new User(myRS.getInt("idUser"), myRS.getString("email"), myRS.getString("businessName"), myRS.getString("phone"), myRS.getString("status"), myRS.getString("fullName"), myRS.getString("createdDate"));
         }
         return newUser;
     }
 
-    public String registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) {
+    public void registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) throws SQLException, UserExistsException {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date datePre = new Date();
 
         if (userExists(email)) {
-            return "Error, email already in use.";
+            throw new UserExistsException("Email already in use.");
         }
-
-        try {
-            String sql = "INSERT INTO user (email, password, businessName, phone, status, fullName, createdDate)"
+        
+        String sql = "INSERT INTO user (email, password, businessName, phone, status, fullName, createdDate)"
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.setString(2, this.encryptPassword(password));
-            prepared.setString(3, businessName);
-            prepared.setString(4, phone);
-            prepared.setString(5, status);
-            prepared.setString(6, fullName);
-            prepared.setString(7, dateFormat.format(datePre));
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.setString(2, this.encryptPassword(password));
+        prepared.setString(3, businessName);
+        prepared.setString(4, phone);
+        prepared.setString(5, status);
+        prepared.setString(6, fullName);
+        prepared.setString(7, dateFormat.format(datePre));
 
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
-        return "";
+        prepared.executeUpdate();
     }
 
-    public boolean userExists(String username) {
-        try {
-            String sql = "SELECT * FROM user WHERE email=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, username);
-            ResultSet result = prepared.executeQuery();
-            if (result.next()) {
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public boolean userExists(String username) throws SQLException {
+        String sql = "SELECT * FROM user WHERE email=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, username);
+        ResultSet result = prepared.executeQuery();
+        if (result.next()) {
+            return true;
         }
         return false;
     }
     
-    public String getUserFromDB(int id){
+    public String getUserFromDB(int id) throws SQLException{
         String user = ""; 
-        try {
-            String sql = "SELECT businessName FROM user WHERE idUser=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, id);
-            ResultSet result = prepared.executeQuery();
-            if (result.next()) {
-                user = result.getString("businessName");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String sql = "SELECT businessName FROM user WHERE idUser=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setInt(1, id);
+        ResultSet result = prepared.executeQuery();
+        if (result.next()) {
+            user = result.getString("businessName");
         }
-        
         return user;
     }
     
-    public int countUnConfirmed() {
+    public int countUnConfirmed() throws SQLException {
         int count = 0;
-        try {
-            String sql = "SELECT idUser FROM user WHERE status='not'";
-            //System.out.println(sql);
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            ResultSet myRS = prepared.executeQuery();
-            while (myRS.next()) {
-                count++;
-            }
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
+        String sql = "SELECT idUser FROM user WHERE status='not'";
+        //System.out.println(sql);
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        ResultSet myRS = prepared.executeQuery();
+        while (myRS.next()) {
+            count++;
         }
         return count;
     }
 
-    public void confirmUser(int id) {
-        try {
-            String sql = "UPDATE user set status='customer' where idUser=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, id);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+    public void confirmUser(int id) throws SQLException {
+        String sql = "UPDATE user set status='customer' where idUser=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setInt(1, id);
+        prepared.executeUpdate();
     }
     
-    public void confirmUser(String email) {
-        try {
-            String sql = "UPDATE user set status='customer' where email=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+    public void confirmUser(String email) throws SQLException {
+        String sql = "UPDATE user set status='customer' where email=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.executeUpdate();
     }
 
-    public void removeUser(int id){
-        try {
-            String sql = "DELETE FROM user WHERE idUser=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, id);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+    public void removeUser(int id) throws SQLException {
+        String sql = "DELETE FROM user WHERE idUser=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setInt(1, id);
+        prepared.executeUpdate();
     }
     
-    public void removeUser(String email){
-        try {
-            String sql = "DELETE FROM user WHERE email=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+    public void removeUser(String email) throws SQLException {
+        String sql = "DELETE FROM user WHERE email=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.executeUpdate();
     }
     
-    public void denyUser(int id) {
-        try {
-            String sql = "UPDATE user set status='denied' where idUser=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setInt(1, id);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+    public void denyUser(int id) throws SQLException {
+        String sql = "UPDATE user set status='denied' where idUser=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setInt(1, id);
+        prepared.executeUpdate();
     }
 
-    public void denyUser(String email) {
-        try {
-            String sql = "UPDATE user set status='denied' where email=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.executeUpdate();
-        } catch (SQLException | HeadlessException ex) {
-            if (showJoptionPanes) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-        }
+    public void denyUser(String email) throws SQLException {
+        String sql = "UPDATE user set status='denied' where email=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.executeUpdate();
     }
     
-    public void updatePassword(String username, String password) {
+    public void updatePassword(String username, String password) throws SQLException {
         password = this.encryptPassword(password);
-        try {
-            String sql = "UPDATE user set password=? where email=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, password);
-            prepared.setString(2, username);
-            prepared.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String sql = "UPDATE user set password=? where email=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, password);
+        prepared.setString(2, username);
+        prepared.executeUpdate();
     }
 
-    public String forgotPass(String email, String businessName) {
+    public String forgotPass(String email, String businessName) throws SQLException {
         String subject = "Password Reset Request - Sundere Bygninger";
         String randomPass = randomString(12);
         String message = "Hello " + businessName + ". \n You've recently requested "
@@ -246,55 +176,38 @@ public class DBUserHandler {
 
     private String encryptPassword(String password) {
         String encryptedPassword = null;
+        MessageDigest md = null;
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes());
-            byte[] bytes = md.digest();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            encryptedPassword = sb.toString();
+            md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            return null;
         }
+        md.update(password.getBytes());
+        byte[] bytes = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        encryptedPassword = sb.toString();
         return encryptedPassword;
     }
 
-    public boolean correctPass(String password, String email) {
-        boolean isCorrect = false;
+    public boolean correctPass(String password, String email) throws SQLException {
         String password2 = this.encryptPassword(password);
-        int count = 0;
-        try {
-            String sql = "SELECT idUser FROM user WHERE email=? AND password=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.setString(2, password2);
-            ResultSet myRS = prepared.executeQuery();
-            while (myRS.next()) {
-                count++;
-            }
-        } catch (SQLException | HeadlessException ex) {
-
-        }
-
-        if (count > 0) {
-            isCorrect = true;
-        }
-
-        return isCorrect;
+        String sql = "SELECT idUser FROM user WHERE email=? AND password=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.setString(2, password2);
+        ResultSet myRS = prepared.executeQuery();
+        return myRS.next();
     }
 
-    public void updateEmail(String email, int id) {
-        try {
-            String sql = "UPDATE user set email=? where idUser=?";
-            PreparedStatement prepared = conn.prepareStatement(sql);
-            prepared.setString(1, email);
-            prepared.setInt(2, id);
-            prepared.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void updateEmail(String email, int id) throws SQLException {
+        String sql = "UPDATE user set email=? where idUser=?";
+        PreparedStatement prepared = conn.prepareStatement(sql);
+        prepared.setString(1, email);
+        prepared.setInt(2, id);
+        prepared.executeUpdate();
     }
 
     public Connection getConn() {

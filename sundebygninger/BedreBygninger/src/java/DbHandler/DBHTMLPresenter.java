@@ -50,13 +50,13 @@ public class DBHTMLPresenter {
         
         if(role.equalsIgnoreCase("worker")){
             sql = "SELECT * FROM building";
-        }else{
+        } else{
             sql = "SELECT * FROM building WHERE fk_idUser=?";
         }
          
         PreparedStatement prepared = conn.prepareStatement(sql);
         
-        if(role.equalsIgnoreCase("customer")){
+        if (role.equalsIgnoreCase("customer")){
           prepared.setInt(1, idUser);
         }
         
@@ -227,7 +227,7 @@ public class DBHTMLPresenter {
         return tableData;
     }
 
-    public String createMenu(DBBuildingHandler dbb, DBUserHandler dbu, String status) throws DatabaseConnectionException {
+    public String createMenu(DBBuildingHandler dbb, DBUserHandler dbu, String status) throws DatabaseConnectionException, SQLException {
         String menu = "";
         if (status == null) {
             return "Unspecified Login. Please retry!";

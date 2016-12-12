@@ -49,6 +49,7 @@
     </head>
 
 
+    
     <body onload="document.getElementById(body).style.opacity = '1'">
 
         <div class="body" style="background-image: url(pictures/bghd.jpg); -webkit-background-size: cover;
@@ -59,6 +60,7 @@
         <div class="header">
         </div>
         <br>
+        
         <script type="text/javascript">
             $(function () {
                 $('form').each(function () {
@@ -72,6 +74,7 @@
                 });
             });
         </script>
+        
         <div id="wrapper">
             <div class="header">
                 <img src="pictures/nylogo.svg" alt=""/>

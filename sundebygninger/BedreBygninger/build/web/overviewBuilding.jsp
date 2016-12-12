@@ -53,6 +53,7 @@
 
         <div id="edit" style="margin-top: 4%;">
             <%
+                session.setAttribute("isThumbnail", true);
                 out.print(con.getBuildings(user.getIdUser(), user.getStatus()));
             %>
             <br />

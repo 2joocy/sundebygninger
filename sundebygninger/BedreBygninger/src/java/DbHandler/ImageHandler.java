@@ -1,11 +1,16 @@
 package DbHandler;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -15,8 +20,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.servlet.http.Part;
+import javax.swing.JOptionPane;
 
 /**
  * This class contains methods and functions that upload image data to our database.
@@ -180,7 +188,7 @@ public class ImageHandler {
         return bytes;
     }
     
-    public BufferedImage resize(BufferedImage img, int newW, int newH) { 
+    public BufferedImage scale(BufferedImage img, int newW, int newH) { 
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
 
@@ -191,6 +199,23 @@ public class ImageHandler {
         return dimg;
     }  
     
+    public static BufferedImage resize(final Image image, int width, int height) {
+        final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        final Graphics2D graphics2D = bufferedImage.createGraphics();
+        graphics2D.setComposite(AlphaComposite.Src);
+        //below three lines are for RenderingHints for better image quality at cost of higher processing time
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics2D.drawImage(image, 0, 0, width, height, null);
+        graphics2D.dispose();
+        return bufferedImage;
+    }
+    
+    public BufferedImage getImageFromPart(Part imagePart) throws IOException {
+        InputStream in = imagePart.getInputStream();
+        return ImageIO.read(in);
+    }
         
     public int uploadMainImage(String description, String type, Part filePart, int buildingID, int fk_idMainPicture) {
         try {
@@ -212,7 +237,51 @@ public class ImageHandler {
         }
         return -1;
     }
-
+    
+    public void uploadThumbnail(int pictureID, String type, ByteArrayOutputStream os) throws IOException {
+        try {
+            String sql = "UPDATE picture SET thumbnail=? WHERE idPicture=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            for (int i = 0; i < is.available(); i++) {
+                String newS = "";
+                int count = 0;
+                if (count > 10) {
+                    JOptionPane.showMessageDialog(null, newS);
+                }
+                newS += (char) + is.read();
+            }
+            prepared.setBlob(1, is);
+            prepared.setInt(2, pictureID);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "[uploadThumbnail] Error ocurred! " + e.getMessage());
+        }
+    }
+ 
+    public void uploadThumbnail(int pictureID, String type, BufferedImage img) throws IOException {
+        try {
+            String sql = "UPDATE picture SET thumbnail=? WHERE idPicture=?";
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write((RenderedImage) img, type, os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            for (int i = 0; i < is.available(); i++) {
+                String newS = "";
+                int count = 0;
+                if (count > 10) {
+                    JOptionPane.showMessageDialog(null, newS);
+                }
+                newS += (char) + is.read();
+            }
+            prepared.setBlob(1, is);
+            prepared.setInt(2, pictureID);
+            prepared.executeUpdate();
+        } catch (SQLException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "[uploadThumbnail] Error ocurred! " + e.getMessage());
+        }
+    }
+ 
     public int uploadRoofImage(String description, String type, Part filePart, int reportID) {
         try {
             String sql = "SELECT fk_idPictureRoof FROM picture WHERE idReport=?";

@@ -5,8 +5,16 @@ import entities.Building;
 import entities.Report;
 import entities.User;
 import exceptions.DatabaseConnectionException;
+import exceptions.UserExistsException;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.Part;
 
 /**
@@ -14,15 +22,12 @@ import javax.servlet.http.Part;
  */
 public class DBController {
  
-    Connection conn;
-    
     DBBuildingHandler dbb;
     DBUserHandler dbu;
     DBHTMLPresenter dbhtml;
     ImageHandler img;
     
     public DBController(Connection conn) {
-        this.conn = conn;
         dbb = new DBBuildingHandler(conn);
         dbu = new DBUserHandler(conn);
         dbhtml = new DBHTMLPresenter(conn);
@@ -67,7 +72,7 @@ public class DBController {
      * @return 
      */
     
-    public Building getBuilding(int idBuilding) {
+    public Building getBuilding(int idBuilding) throws SQLException {
         return dbb.getBuilding(idBuilding);
     }
     
@@ -78,7 +83,7 @@ public class DBController {
      * @return 
      */
     
-    public Building getBuilding(String address) { 
+    public Building getBuilding(String address) throws SQLException { 
         return dbb.getBuilding(address);
     }
     
@@ -89,7 +94,7 @@ public class DBController {
      * @return 
      */
     
-    public int getFkIdReport(int BuildingId) {
+    public int getFkIdReport(int BuildingId) throws SQLException {
         return dbb.getFkIdReport(BuildingId);
     }
     
@@ -100,7 +105,7 @@ public class DBController {
      * @return 
      */
     
-    public Report getReport(int reportId) {
+    public Report getReport(int reportId) throws SQLException {
         return dbb.getReport(reportId);
     } 
     
@@ -110,7 +115,7 @@ public class DBController {
      * @return 
      */
     
-    public int getReportCount(int idUser){
+    public int getReportCount(int idUser) throws SQLException{
         return dbb.getReportCount(idUser);
     }
     
@@ -120,7 +125,7 @@ public class DBController {
      * @return 
      */
     
-    public Report getReportFromBuildingId(int buildingId) {
+    public Report getReportFromBuildingId(int buildingId) throws SQLException {
         return dbb.getReportFromBuildingId(buildingId);
     }
     
@@ -129,7 +134,7 @@ public class DBController {
      * @param report Report Object
      */
     
-    public void editReport(Report report) {
+    public void editReport(Report report) throws SQLException {
         dbb.editReport(report);
     }
     
@@ -167,7 +172,7 @@ public class DBController {
                 boolean damageFire, String damageOther, boolean wallRemark, String wallText,
                 boolean roofRemark, String roofText, boolean floorRemark, String floorText,
                 boolean moistureScan, String moistureScanText, String moistureScanMeasured,
-                String conclusionText, int idReport) {
+                String conclusionText, int idReport) throws SQLException {
         dbb.addRoomReport(remarks, damage, damageDate, damageWhere, damageHappened, damageRepaired, damageWater, damageRot, damageMold, damageFire, damageOther, wallRemark, wallText, roofRemark, roofText, floorRemark, floorText, moistureScan, moistureScanText, moistureScanMeasured, conclusionText, idReport);
     }
     
@@ -177,7 +182,7 @@ public class DBController {
      * @return 
      */
     
-    public int countRooms(int idReport) {
+    public int countRooms(int idReport) throws SQLException {
         return dbb.countRooms(idReport);
     }
     
@@ -186,7 +191,7 @@ public class DBController {
      * @param reportId Id of the report
      */
     
-    public void removeReport(int reportId) {
+    public void removeReport(int reportId) throws SQLException {
         dbb.removeReport(reportId);
     }
     
@@ -195,7 +200,7 @@ public class DBController {
      * @param id Id of the building
      */
     
-    public void requestService(int id) {
+    public void requestService(int id) throws SQLException {
         dbb.requestService(id);
     }
     
@@ -204,7 +209,7 @@ public class DBController {
      * @param idBuilding ID of the building
      */
     
-    public void setReviewed(int idBuilding) {
+    public void setReviewed(int idBuilding) throws SQLException {
         dbb.setReviewed(idBuilding);
     }
     
@@ -224,7 +229,7 @@ public class DBController {
     
     public void editBuilding(String address, String cadastral, String builtYear,
                 String area, String zipcode, String city, String condition,
-                String extraText, int idBuilding) {
+                String extraText, int idBuilding) throws SQLException {
         dbb.editBuilding(address, cadastral, builtYear, area, zipcode, city, condition, extraText, idBuilding);
     }
     
@@ -234,7 +239,7 @@ public class DBController {
      * @return 
      */
     
-    public int getBuildingCount(int idUser) {
+    public int getBuildingCount(int idUser) throws SQLException {
         return dbb.getBuildingCount(idUser);
     }
     
@@ -243,7 +248,7 @@ public class DBController {
      * @return 
      */
     
-    public int getBuildingCount() {
+    public int getBuildingCount() throws SQLException {
         return dbb.getBuildingCount();
     }
     
@@ -252,7 +257,7 @@ public class DBController {
      * @return 
      */
     
-    public int getAwaitingService() {
+    public int getAwaitingService() throws SQLException {
         return dbb.getAwaitingService();
     }
     
@@ -263,7 +268,7 @@ public class DBController {
      * @return 
      */
     
-    public int getEmployeeFromIdBuilding(int idBuilding) {
+    public int getEmployeeFromIdBuilding(int idBuilding) throws SQLException {
         return dbb.getEmployeeFromIdBuilding(idBuilding);
     }
     
@@ -273,15 +278,15 @@ public class DBController {
      * @return 
      */
     
-    public int getAwaitingReview(int id) {
+    public int getAwaitingReview(int id) throws SQLException {
         return dbb.getAwaitingReview(id);
     }
     
-    public void removeBuilding(int buildingId) {
+    public void removeBuilding(int buildingId) throws SQLException {
         dbb.removeBuilding(buildingId);
     }
     
-    public void removePicture(int pictureId) {
+    public void removePicture(int pictureId) throws SQLException {
         dbb.removePicture(pictureId);
     }
     
@@ -289,63 +294,63 @@ public class DBController {
      * DBUserHandler functions
      */
     
-    public User checkLogin(String email, String password) {
+    public User checkLogin(String email, String password) throws SQLException {
         return dbu.checkLogin(email, password);
     }
     
-    public String registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) {
-        return dbu.registerUser(email, password, businessName, phone, status, fullName, createdDate);
+    public void registerUser(String email, String password, String businessName, String phone, String status, String fullName, String createdDate) throws SQLException, UserExistsException {
+        dbu.registerUser(email, password, businessName, phone, status, fullName, createdDate);
     }
     
-    public boolean userExists(String username) {
+    public boolean userExists(String username) throws SQLException {
         return dbu.userExists(username);
     }
     
-    public String getUserFromDB(int id){
+    public String getUserFromDB(int id) throws SQLException {
         return dbu.getUserFromDB(id);
     }
     
-    public int countUnConfirmed() {
+    public int countUnConfirmed() throws SQLException {
         return dbu.countUnConfirmed();
     }
     
-    public void confirmUser(int id) {
+    public void confirmUser(int id) throws SQLException {
         dbu.confirmUser(id);
     }
     
-    public void confirmUser(String email) {
+    public void confirmUser(String email) throws SQLException {
         dbu.confirmUser(email);
     }
     
-    public void removeUser(int id){
+    public void removeUser(int id) throws SQLException {
         dbu.removeUser(id);
     }
     
-    public void removeUser(String email){
+    public void removeUser(String email) throws SQLException {
         dbu.removeUser(email);
     }
     
-    public void denyUser(int id) {
+    public void denyUser(int id) throws SQLException {
         dbu.denyUser(id);
     }
     
-    public void denyUser(String email) {
+    public void denyUser(String email) throws SQLException {
         dbu.denyUser(email);
     }
     
-    public void updatePassword(String username, String password) {
+    public void updatePassword(String username, String password) throws SQLException {
         dbu.updatePassword(username, password);
     }
     
-    public String forgotPass(String email, String businessName) {
+    public String forgotPass(String email, String businessName) throws SQLException {
         return dbu.forgotPass(email, businessName);
     }
     
-    public boolean correctPass(String password, String email) {
+    public boolean correctPass(String password, String email) throws SQLException {
         return dbu.correctPass(password, email);
     }
     
-    public void updateEmail(String email, int id) {
+    public void updateEmail(String email, int id) throws SQLException {
         dbu.updateEmail(email, id);
     }
     
@@ -386,7 +391,7 @@ public class DBController {
         return dbhtml.getService(idUser);
     }
     
-    public String createMenu(String status) throws DatabaseConnectionException {
+    public String createMenu(String status) throws DatabaseConnectionException, SQLException {
         return dbhtml.createMenu(dbb, dbu, status);
     }
     
@@ -426,12 +431,28 @@ public class DBController {
         return img.uploadMainImage(description, type, filePart, buildingID, fk_idMainPicture);
     }
     
+    public void uploadThumbnail(int pictureID, String type, BufferedImage image) throws IOException {
+        img.uploadThumbnail(pictureID, type, image);
+    }
+    
+    public void uploadThumbnail(int pictureID, String type, ByteArrayOutputStream bOut) throws IOException {
+        img.uploadThumbnail(pictureID, type, bOut);
+    }
+    
     public int uploadRoofImage(String description, String type, Part filePart, int reportID) {
         return img.uploadRoofImage(description, type, filePart, reportID);
     }
     
     public int uploadOuterRoofImage(String description, String type, Part filePart, int reportID) {
         return img.uploadOuterRoofImage(description, type, filePart, reportID);
+    }
+    
+    public BufferedImage resize(BufferedImage image, int width, int height) {
+        return img.resize(image, width, height);
+    }
+    
+    public BufferedImage getImageFromPart(Part imagePart) throws IOException {
+        return img.getImageFromPart(imagePart);
     }
     
 }

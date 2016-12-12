@@ -14,12 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import DbHandler.*;
 import controller.DBController;
+import exceptions.UserExistsException;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author William-PC
- */
 @WebServlet(name = "Front", urlPatterns = {"/Front"})
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
 public class Front extends HttpServlet {
@@ -47,6 +45,7 @@ public class Front extends HttpServlet {
             String msg = "Error connecting to database, please try again later";
             request.getSession().invalidate();
             request.getSession().setAttribute("failure", msg);
+            response.sendRedirect("index.jsp");
             return;
         }
         serv = new ServletMapper(request, response, controller);
@@ -55,19 +54,42 @@ public class Front extends HttpServlet {
        
         switch (method) {
             case "login":
-                serv.login();
+                try {
+                    serv.login();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while logging in. Please try again.");
+                }
                 break;
             case "register":
-                serv.register();
+                try {
+                    serv.register();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while registering. Please try again.");
+                    serv.logout(ex.getMessage());
+                } catch (UserExistsException ex) {
+                    serv.logout("A user already exists with that email.  Please try again.");
+                }
                 break;
             case "confirmUsers":
-                serv.confirmUser();
+                try {
+                    serv.confirmUser();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while confirming the user. Please try again.");
+                }
                 break;
             case "denyUsers":
-                serv.denyUser();
+                try {
+                    serv.denyUser();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while denying the user. Please try again.");
+                }
                 break;
             case "forgotPass":
-                serv.forgotPass();
+                try {
+                    serv.forgotPass();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while resetting password. Please try again.");
+                }
                 break;
             case "registerBuilding":
                 serv.registerBuilding();
@@ -79,10 +101,18 @@ public class Front extends HttpServlet {
                 serv.editBuilding();
                 break;
             case "editBuildingFinal":
-                serv.editBuildingFinal();
+                try {
+                    serv.editBuildingFinal();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while editing the building. Please try again.");
+                }
                 break;
             case "deleteBuilding":
-                serv.deleteBuilding();
+                try {
+                    serv.deleteBuilding();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while deleting the building. Please try again.");
+                }
                 break;
             case "uploadPicture":
                 serv.uploadPicture();
@@ -91,18 +121,30 @@ public class Front extends HttpServlet {
                 try {
                     serv.getService();
                 } catch (SQLException ex) {
-                    serv.logout(ex.getMessage());
+                    serv.logout("An error ocurred while retrieving service data. Please try again.");
                 }
             }
             break;
             case "addReport":
-                serv.addReport();
+                try {
+                    serv.addReport();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while adding report data. Please try again.");
+                }
                 break;
             case "finalAddReport":
-                serv.finalAddReport();
+                try {
+                    serv.finalAddReport();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while adding report data. Please try again.");
+                }
                 break;
             case "submitRoom":
-                serv.submitRoom();
+                try {
+                    serv.submitRoom();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while submitting new room. Please try again.");
+                }
                 break;
             case "submitReport":
                 serv.submitReport();
@@ -111,7 +153,11 @@ public class Front extends HttpServlet {
                 serv.overviewReport();
                 break;
             case "showRoomReport":
-                serv.showRoomReport();
+                try {
+                    serv.showRoomReport();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while showing room report. Please try again.");
+                }
                 break;
             case "serviceRoom":
                 response.sendRedirect("service.jsp");
@@ -123,21 +169,28 @@ public class Front extends HttpServlet {
                 serv.reviewReport();
                 break;
             case "changeEmail":
-                serv.changeEmail();
+                try {
+                    serv.changeEmail();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while changing email. Please try again.");
+                }
                 break;
             case "changePass":
-                serv.changePass();
+                try {
+                    serv.changePass();
+                } catch (SQLException ex) {
+                    serv.logout("An error ocurred while changing password. Please try again.");
+                }
                 break;
             case "filterServiceCustomer":
                 serv.filterCustomer();
                 break;
-            case "reviewReviewedService": {
+            case "reviewReviewedService":
                 try {
                     serv.reviewReviewedService();
                 } catch (SQLException ex) {
-                    serv.logout(ex.getMessage());
+                    serv.logout("An error ocurred while viewing service. Please try again.");
                 }
-            }
             break;
             case "newMainImage":
                 serv.newMainImage();

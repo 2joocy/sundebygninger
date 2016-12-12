@@ -8,12 +8,17 @@ package servletHandler;
 import controller.DBController;
 import entities.Report;
 import entities.User;
+import exceptions.UserExistsException;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +42,7 @@ public class ServletMapper {
         this.response = response;
     }
 
-    public void login() throws IOException {
+    public void login() throws IOException, SQLException {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
 
@@ -65,7 +70,7 @@ public class ServletMapper {
         }
     }
 
-    public void register() throws IOException {
+    public void register() throws IOException, SQLException, UserExistsException {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -74,29 +79,30 @@ public class ServletMapper {
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date datePre = new Date();
-        String message = controller.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
+        controller.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
+        /*
         if (message.contains("Error, ")) {
             response.sendRedirect("register.jsp");
         } else {
             controller.registerUser(email, password, businessName, phone, "not", fullName, dateFormat.format(datePre));
             response.sendRedirect("awaitingApproval.jsp");
         }
-
+        */
     }
 
-    public void confirmUser() throws IOException {
+    public void confirmUser() throws IOException, SQLException {
         String id = request.getParameter("userID");
         controller.confirmUser(Integer.parseInt(id));
         response.sendRedirect("overviewUsers.jsp");
     }
 
-    public void denyUser() throws IOException {
+    public void denyUser() throws IOException, SQLException {
         String id = request.getParameter("userID");
         controller.denyUser(Integer.parseInt(id));
         response.sendRedirect("overviewUsers.jsp");
     }
 
-    public void forgotPass() throws IOException {
+    public void forgotPass() throws IOException, SQLException {
         PrintWriter out = response.getWriter();
         String email = request.getParameter("email");
         String businessName = request.getParameter("businessName");
@@ -134,7 +140,6 @@ public class ServletMapper {
 
     public void logout(String failure) throws IOException {
         request.getSession().invalidate();
-        failure = "You have successfully been logged out!";
         request.getSession().setAttribute("failure", failure);
         response.sendRedirect("index.jsp");
     }
@@ -145,7 +150,7 @@ public class ServletMapper {
         response.sendRedirect("editBuilding.jsp");
     }
 
-    public void editBuildingFinal() throws IOException {
+    public void editBuildingFinal() throws IOException, SQLException {
         String id = request.getParameter("userID");
         String address = request.getParameter("address");
         String cadastral = request.getParameter("cadastral");
@@ -160,7 +165,7 @@ public class ServletMapper {
         response.sendRedirect("overviewBuilding.jsp");
     }
 
-    public void deleteBuilding() throws IOException {
+    public void deleteBuilding() throws IOException, SQLException {
         String idBuilding = request.getParameter("idBuilding");
         controller.removeBuilding(Integer.parseInt(idBuilding));
         response.sendRedirect("overviewBuilding.jsp");
@@ -187,14 +192,14 @@ public class ServletMapper {
         }
     }
 
-    public void addReport() throws IOException {
+    public void addReport() throws IOException, SQLException {
         String idBuilding = request.getParameter("idBuilding");
         request.getSession().setAttribute("idBuilding", idBuilding);
         request.getSession().setAttribute("idReport", controller.getFkIdReport(Integer.parseInt(idBuilding)));
         response.sendRedirect("addReport.jsp");
     }
 
-    public void finalAddReport() throws IOException {
+    public void finalAddReport() throws IOException, SQLException {
         boolean outerWallRemark = false;
         String buildingUsage = request.getParameter("buildingUsage");
         String outerWallText = request.getParameter("outerWallText");
@@ -220,7 +225,7 @@ public class ServletMapper {
         response.sendRedirect("addReport.jsp");
     }
 
-    public void submitRoom() throws IOException {
+    public void submitRoom() throws IOException, SQLException {
         boolean remark = false;
         boolean damage = false;
         boolean damageWater = false;
@@ -311,7 +316,7 @@ public class ServletMapper {
         response.sendRedirect("showReportCustomer.jsp");
     }
 
-    public void showRoomReport() throws IOException {
+    public void showRoomReport() throws IOException, SQLException {
         String idReport1 = request.getParameter("idReport");
         request.getSession().setAttribute("report", controller.getReport(Integer.parseInt(idReport1)));
         response.sendRedirect("showRoomReport.jsp");
@@ -333,14 +338,14 @@ public class ServletMapper {
         response.sendRedirect("reviewReport.jsp");
     }
 
-    public void changeEmail() throws IOException {
+    public void changeEmail() throws IOException, SQLException {
         String newEmail = request.getParameter("newEmail");
         User user = (User) request.getSession().getAttribute("user");
         controller.updateEmail(newEmail, user.getIdUser());
         response.sendRedirect("account.jsp");
     }
 
-    public void changePass() throws IOException {
+    public void changePass() throws IOException, SQLException {
         String password = request.getParameter("password");
         String newPassword = request.getParameter("newPass");
         String email = request.getParameter("email");
@@ -373,10 +378,17 @@ public class ServletMapper {
         String fk_idMainPicture = request.getParameter("fk_idMainPicture");
         String idBuilding = request.getParameter("idBuilding");
         Part filePart = request.getPart("picture");
-        int imageId = controller.uploadImage("", filePart.getContentType(), filePart);
+        Part filePart2 = request.getPart("picture");
+        Image imageNon = controller.getImageFromPart(filePart2).getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        BufferedImage bufferedThumbnail = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
+        bufferedThumbnail.getGraphics().drawImage(imageNon, 0, 0, null);
+        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+        ImageIO.write(bufferedThumbnail, filePart.getContentType(), bOut);
+        controller.uploadThumbnail(99, filePart.getContentType(), bOut);
         int newImageID = Integer.parseInt(idBuilding);
         int fk_mainImage = Integer.parseInt(fk_idMainPicture);
-        imageId = controller.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+        int imageId = controller.uploadMainImage("", filePart.getContentType(), filePart, newImageID, fk_mainImage);
+        //controller.uploadThumbnail(99, filePart.getContentType(), buffered);
         if (redirect != null) {
             response.sendRedirect(redirect);
             return;
